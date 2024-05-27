@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String  @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  
+  access_token       String?  
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  hashedPassword String?
+  email         String?   @unique
+  emailVerified DateTime? 
+  role          String    @default("user")
+  image         String? 
+  bio           String?
+  createdAt     DateTime?  @default(now())
+  accounts      Account[]
+  sessions      Session[]
+  places        Places[]
+  bookings      Bookings[]
+  payments      Payments[]
+  favorites     UserFavorites[]
+}
+
+model Places {
+  id                  String       @id @default(auto()) @map("_id") @db.ObjectId
+  ownerId             String       @db.ObjectId
+  owner               User         @relation(fields: [ownerId], references: [id])
+  title               String 
+  description         String
+  address             String
+  state               String
+  city                String
+  street              String?
+  photos              String[]
+  category            String[]
+  necessary_amenities String[]
+  standout_amenities  String[]
+  safety_amenities    String[]
+  price               String?
+  listTillDate        DateTime?
+  maxGuests           Int?
+  petsAllowed         Boolean
+  checkInTime         DateTime?
+  checkOutTime        DateTime?
+  smokingNotAllowed   Boolean
+  partiesNotAllowed   Boolean
+  photographyNotAllowed Boolean
+  SelfcheckIn         Boolean
+  additionalRules     String?
+  numberOfRooms       String?
+  minimumStay         String @default("1")
+  bookings            Bookings[]
+  favorites           UserFavorites[]
+  status              String      @default("processing")
+  deleterequst        Boolean     @default(false)
+  @@index([title , address], name: "search_index")
+}
+
+
+
+model UserFavorites {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String  @db.ObjectId
+  placeId String  @db.ObjectId
+  user    User    @relation(fields: [userId], references: [id])
+  place   Places  @relation(fields: [placeId], references: [id])
+  @@unique([userId, placeId])
+}
+
+model Bookings {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  placeId   String @db.ObjectId
+  place     Places @relation(fields: [placeId], references: [id])
+  userId    String @db.ObjectId
+  user      User   @relation(fields: [userId], references: [id])
+  checkIn   DateTime
+  checkOut  DateTime
+  guests    Int
+  totalPrice Float
+  status    String @default("processing")
+  date     DateTime @default(now())
+  cancelRequest  Boolean?  @default(false)
+  cancelRejection  Boolean?  @default(false)
+  payment   Payments[]
+
+}
+
+model Payments {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId String @db.ObjectId
+  booking   Bookings @relation(fields: [bookingId], references: [id])
+  userId    String @db.ObjectId
+  user      User   @relation(fields: [userId], references: [id])
+  amount    Float
+  status    String @default("processing")
+  refundRequest  Boolean  @default(false)
+}
+

@@ -1,0 +1,24 @@
+{
+  "name": "Stayz | Holiday rentals, cabins, beach houses &amp; more",
+  "short_name": "Stayz",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa",
+  "display": "standalone",
+  "orientation": "portrait",
+  "description": "Stayz is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.",
+  "categories": ["travel", "accommodation"],
+  "lang": "en-US"
+}
