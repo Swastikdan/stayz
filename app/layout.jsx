@@ -31,7 +31,7 @@ export async function metadata() {
 import SessionProvider from '../providers/SessionProvider';
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning light>
       <>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="en" />
@@ -142,7 +142,7 @@ export default function RootLayout({ children }) {
                 {children}
 
                 <div className="font-heading">
-                  <Toaster richColors position="top-center" />
+                  <Toaster theme={'light'} richColors position="top-center" />
                 </div>
               </main>
               <BottomNav />

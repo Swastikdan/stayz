@@ -117,10 +117,12 @@ const user = session?.user;
           <div className="w-full md:w-auto "></div>
         )}
 
-
-        <div className="hidden py-5 md:flex select-none">
+        <div className="hidden select-none py-5 md:flex">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className="m-auto items-center rounded-3xl">
+            <DropdownMenuTrigger
+              asChild
+              className="m-auto items-center rounded-3xl"
+            >
               <div className="flex cursor-pointer items-center rounded-full shadow-black ring-1 ring-gray-300  hover:shadow-xl dark:shadow-white/10 dark:ring-white md:space-x-3 md:px-2  md:py-1 md:pl-3 ">
                 <AlignJustify
                   width={18}
@@ -129,17 +131,17 @@ const user = session?.user;
                   className="hidden text-gray-600 md:flex"
                 />
                 <Avatar>
-                  {user && user.image && user.name ? (
+                  {userData && userData.image && userData.name ? (
                     <>
                       <AvatarImage
-                        src={user.image.replace(
+                        src={userData.image.replace(
                           '/upload/',
                           '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
                         )}
-                        alt={`${user.name || 'user'} profile image`}
+                        alt={`${userData.name || 'user'} profile image`}
                       />
                       <AvatarFallback className="bg-gray-200 text-black">
-                        {user.name.charAt(0).toUpperCase()}
+                        {userData.name.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </>
                   ) : (
@@ -169,7 +171,7 @@ const user = session?.user;
               <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
 
               {user && user?.role === 'admin' ? (
-                <Link href="/admin/bookings">
+                <Link href="/admin">
                   <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
                     <ShieldCheck width={15} />
                     <span className="pl-2">Admin Pannel</span>
@@ -192,7 +194,7 @@ const user = session?.user;
                     </DropdownMenuItem>
                   </Link>
 
-                  <Link href="/places/add-place">
+                  <Link href="/place/new">
                     <DropdownMenuItem className="flex cursor-pointer items-center rounded-md ">
                       <Plus width={15} />
                       <span className="pl-2">

@@ -130,7 +130,9 @@ model Payments {
   userId    String @db.ObjectId
   user      User   @relation(fields: [userId], references: [id])
   amount    Float
+  razorpayOrderId String
+  razorpayPaymentId String
+  razorpaySignature String
   status    String @default("processing")
   refundRequest  Boolean  @default(false)
 }
-

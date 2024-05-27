@@ -17,7 +17,7 @@ const createPlaceSchema = z.object({
   safety_amenities: z.array(z.string()).optional(),
   price: z.string(), // Changed this line
   listTillDate: z.string().optional().nullable(),
-  maxGuests: z.string(),
+  maxGuests: z.number().gte(1),
   petsAllowed: z.boolean().optional(),
   checkInTime: z.string().nullable(), // Changed this line
   checkOutTime: z.string().nullable(), // Changed this line
