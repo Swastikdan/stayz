@@ -30,16 +30,13 @@ import {
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 
-export default function page() {
+export default function AdminUser() {
   const [users, setUsers] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState([]);
   const [statusLoading, setStatusLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
-
-  const [bookings, setBookings] = useState([]);
-
   const fetchUsers = async () => {
     setRefreshing(true);
     try {

@@ -11,7 +11,7 @@ import {
   ListFilter,
   CircleX,
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useCallback , useMemo} from 'react';
 import {
   Table,
   TableBody,
@@ -34,7 +34,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import Link from 'next/link';
-export default function page() {
+export default function AdminBooking() {
   const [bookings, setBookings] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -44,17 +44,15 @@ export default function page() {
   const router = useRouter();
   const filter = searchParams.get('filter');
 
-  // useEffect(() => {
-  //   router.replace(`/admin/bookings?filter=processing`);
-  // }, []);
-  const filters = [
-    'approved',
-    'cancelled',
-    'processing',
-    'rejected',
-    'expired',
-  ];
-  const isValidFilter = (filter) => filters.includes(filter);
+const filters = useMemo(
+  () => ['approved', 'cancelled', 'processing', 'rejected', 'expired'],
+  [],
+);
+
+const isValidFilter = useCallback(
+  (filter) => filters.includes(filter),
+  [filters],
+);
 
   const fetchData = async () => {
     setRefreshing(true);
@@ -86,7 +84,7 @@ export default function page() {
       filtered = bookings.filter((booking) => booking.status === filter);
     }
     setFilteredBookings(filtered);
-  }, [bookings, filter]);
+  }, [bookings, filter , isValidFilter]);
 
   const handleRefresh = async () => {
     try {
@@ -160,7 +158,7 @@ export default function page() {
                       </DropdownMenuItem>
                       {filters &&
                         filters.map((filtername) => (
-                          <DropdownMenuItem
+                          <DropdownMenuItem key={filtername}
                             className={` capitalize  ${filter == `${filtername}` ? 'bg-gray-100' : ''} `}
                             onClick={() => handleFilter(`${filtername}`)}
                           >

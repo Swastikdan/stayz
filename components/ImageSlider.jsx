@@ -9,14 +9,11 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { toast } from 'sonner';
 import { useLikeContext } from '@/providers/LikeProvider';
 
 export default function ImageSlider({ customButton, images, id }) {
   const { data: session } = useSession();
-  const router = useRouter();
   const { favorites, toggleLike } = useLikeContext();
 
   const [isFavoritePlace, setIsFavoritePlace] = useState(false);
@@ -25,13 +22,13 @@ export default function ImageSlider({ customButton, images, id }) {
     if (favorites.some((favorite) => favorite.id === id)) {
       setIsFavoritePlace(true);
     }
-  }, [favorites]);
+  }, [favorites, id]);
 
   const handleFavoriteClick = () => {
-    if(session){
- setIsFavoritePlace(!isFavoritePlace);
+    if (session) {
+      setIsFavoritePlace(!isFavoritePlace);
     }
- toggleLike(id);
+    toggleLike(id);
   };
 
   return (

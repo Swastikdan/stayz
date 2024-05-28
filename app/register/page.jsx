@@ -6,7 +6,7 @@ import validator from 'validator';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-export default function page() {
+export default function Register() {
      const router = useRouter();
      const [formData, setFormData] = useState({
        name: '',

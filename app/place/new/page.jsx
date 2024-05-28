@@ -24,7 +24,7 @@ import { useParams, useRouter } from 'next/navigation';
 import SelectScroll from '@/components/SelectScroll';
 import Image from 'next/image';
 
-export default function NewPlace() {
+export default function CreatePlace() {
    const [loading, setLoading] = useState(false);
    const [files, setFiles] = useState([]);
    const [photoLink, setPhotoLink] = useState('');

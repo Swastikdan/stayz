@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Star, Trash2, Expand, Link } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/Input'
+import Image from 'next/image';
 export default function PlaceImageUpload({
   files,
   setFiles,
@@ -175,20 +176,6 @@ export default function PlaceImageUpload({
         Images of the Property
       </span>
       <div>
-        {/* <input
-              type="text"
-              placeholder="Add photo by link"
-              value={photoLink}
-              onChange={(e) => setPhotoLink(e.target.value)}
-            />
-
-            <button
-              type="button"
-              onClick={addPhotoByLink}
-              className="rounded bg-blue-500 px-4 py-2 text-white"
-            >
-              Add by link
-            </button> */}
         <div className="w-full">
           <div className="mb-4 flex flex-col">
             <label
@@ -204,26 +191,6 @@ export default function PlaceImageUpload({
               </span>{' '}
             </span>
           </div>
-          {/* <div className="relative">
-            <div className="absolute inset-y-0 start-0 flex cursor-pointer items-center px-3 py-2 pr-5">
-              <Link width={24} height={24} />
-            </div>
-
-            <input
-              className="block w-full   rounded-lg border border-gray-300 bg-gray-50 p-3 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  md:p-4 md:ps-10"
-              placeholder="Add using a link "
-              value={photoLink}
-              onChange={(e) => setPhotoLink(e.target.value)}
-            />
-            <button
-              type="button"
-              className="absolute bottom-2.5 end-2.5 hidden rounded-lg  bg-primary px-4 py-2 text-sm font-medium  text-white hover:opacity-95 focus:outline-none focus:ring-4 md:flex"
-              onClick={addPhotoByLink}
-            >
-              Search
-            </button>
-          </div> */}
-
           <div className="flex items-center justify-between">
             <Input
               name="photoLink"
@@ -298,7 +265,9 @@ export default function PlaceImageUpload({
               key={photo}
               className="group relative block h-44 w-full overflow-hidden rounded-xl  bg-gray-100 sm:h-40 sm:border-2"
             >
-              <img
+              <Image
+                height={400}
+                width={600}
                 src={photo}
                 loading="lazy"
                 alt="Photo by Rachit Tank"

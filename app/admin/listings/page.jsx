@@ -10,7 +10,7 @@ import {
   PenSquare,
   Trash,
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useMemo , useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -33,7 +33,7 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
-export default function page() {
+export default function AdminListing() {
   const [listings, setListings] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
   const [approvedLoading, setApprovedLoading] = useState([]);
@@ -43,12 +43,12 @@ export default function page() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const filter = searchParams.get('filter');
-  const filters = [
-    'approved',
-    'processing',
-    'rejected',
-  ];
-    const isValidFilter = (filter) => filters.includes(filter);
+const filters = useMemo(() => ['approved', 'processing', 'rejected'], []);
+
+const isValidFilter = useCallback(
+  (filter) => filters.includes(filter),
+  [filters],
+);
 
 
     const fetchData = async () => {
@@ -82,7 +82,7 @@ export default function page() {
         filtered = listings.filter((listing) => listing.status === filter);
       }
       setFilteredListings(filtered);
-    }, [listings, filter]);
+    }, [listings, filter , isValidFilter]);
 
     const handleRefresh = async () => {
       try {
@@ -161,7 +161,7 @@ const handleFilter = (filter) => {
                       </DropdownMenuItem>
                       {filters &&
                         filters.map((filtername) => (
-                          <DropdownMenuItem
+                          <DropdownMenuItem key={filtername}
                             className={` capitalize  ${filter == `${filtername}` ? 'bg-gray-100' : ''} `}
                             onClick={() => handleFilter(`${filtername}`)}
                           >
@@ -272,7 +272,7 @@ const handleFilter = (filter) => {
                           </TableHeader>
                           <TableBody>
                             {filteredListings.map((listing) => (
-                              <TableRow>
+                              <TableRow key={listing.id} >
                                 <TableCell className="size-px whitespace-nowrap">
                                   <div className="py-3 pe-6 ps-6 lg:ps-3 xl:ps-0">
                                     <Link target='_blank' href={`/place/${listing.id}`} className="flex items-center gap-x-3">
@@ -431,162 +431,6 @@ const handleFilter = (filter) => {
                                 </TableCell>
                               </TableRow>
                             ))}
-                            {/* {filteredBookings &&
-                                filteredBookings.map((booking) => (
-                                  <TableRow>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <Link
-                                        href={`/place/${booking.place.id}`}
-                                        target="_blank"
-                                        className="text-left hover:opacity-80"
-                                      >
-                                        <span className="text-sm font-medium">
-                                          {booking.place.title}
-                                        </span>
-                                      </Link>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-2 py-1 ">
-                                        <span className="pl-2 text-sm">
-                                          {booking.user.name}
-                                        </span>
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-2 py-1 ">
-                                        <span className="pl-2 text-sm">
-                                          {format(
-                                            new Date(booking.checkIn),
-                                            'dd MMM yyyy',
-                                          ) +
-                                            ' - ' +
-                                            format(
-                                              new Date(booking.checkOut),
-                                              'dd MMM yyyy',
-                                            )}
-                                        </span>
-                                      </div>
-                                    </TableCell>
-
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-2 py-1">
-                                        {booking.status === 'approved' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
-                                            <BadgeCheck width={20} />
-                                            {new Date(booking.checkOut) <
-                                            new Date()
-                                              ? 'Completed'
-                                              : 'Approved'}
-                                          </span>
-                                        ) : booking.status === 'processing' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
-                                            <Loader width={20} />
-                                            Processing
-                                          </span>
-                                        ) : booking.status === 'rejected' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
-                                            <BadgeX width={20} />
-                                            Rejected
-                                          </span>
-                                        ) : booking.status === 'cancelled' ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
-                                            <BadgeX width={20} />
-                                            Canceled
-                                          </span>
-                                        ) : booking.checkOut < new Date() ? (
-                                          <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
-                                            <BadgeX width={20} />
-                                            Expired
-                                          </span>
-                                        ) : null}
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-2 py-1">
-                                        <span className="pl-2 text-sm">
-                                          {booking.totalPrice}
-                                        </span>
-                                      </div>
-                                    </TableCell>
-                                    <TableCell className="size-px whitespace-nowrap">
-                                      <div className="px-2 py-1">
-                                        {booking.status === 'cancelled' ||
-                                        booking.status === 'approved' ||
-                                        booking.status === 'rejected' ||
-                                        new Date(booking.checkin) < new Date() ? (
-                                          <div className="flex items-center space-x-3">
-                                            <div
-                                              disabled
-                                              className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "
-                                            >
-                                              <BadgeCheck width={20} />
-                                              Approve
-                                            </div>
-                                            <div
-                                              disabled
-                                            ></div>
-                                          </div>
-                                        ) : null}
-                                      </div>
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
-                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "
-                                          >
-                                            <Ban width={20} />
-                                            Reject
-                                          </div>
-                                        </div>
-                                      ) : (
-                                        <div className="flex items-center space-x-3">
-                                          <button
-                                            disabled={loading.id == booking.id}
-                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
-                                            onClick={() =>
-                                              handleStatusChange(
-                                                booking.id,
-                                                'approved',
-                                              )
-                                            }
-                                          >
-                                            {loading.id == booking.id &&
-                                            loading.status == 'approved' ? (
-                                              <LoaderCircle
-                                                width={20}
-                                                className="animate-spin"
-                                              />
-                                            ) : (
-                                              <BadgeCheck width={20} />
-                                            )}
-                                            Approve
-                                          </button>
-                                          <button
-                                            disabled={loading.id == booking.id}
-                                            className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
-                                            onClick={() =>
-                                              handleStatusChange(
-                                                booking.id,
-                                                'rejected',
-                                              )
-                                            }
-                                          >
-                                            {loading.id == booking.id &&
-                                            loading.status == 'rejected' ? (
-                                              <LoaderCircle
-                                                width={20}
-                                                className="animate-spin"
-                                              />
-                                            ) : (
-                                              <Ban width={20} />
-                                            )}
-                                            Reject
-                                          </button>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </TableCell>
-                                </TableRow>
-                              ))} */}
                           </TableBody>
                         </Table>
                       </div>

@@ -11,7 +11,7 @@ import {
   ListFilter,
   CircleX,
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Table,
   TableBody,
@@ -35,7 +35,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import Link from 'next/link';
 
-export default function page() {
+export default function DashboardBooking() {
 
     const [bookings, setBookings] = useState([]);
     const [pageloading, setPageLoading] = useState(true);
@@ -46,14 +46,12 @@ export default function page() {
     const router = useRouter();
     const filter = searchParams.get('filter');
 
-    const filters = [
-      'approved',
-      'cancelled',
-      'processing',
-      'rejected',
-      'completed',
-    ];
-  const isValidFilter = (filter) => filters.includes(filter);
+const filters = useMemo(() => ['approved', 'processing', 'rejected'], []);
+
+const isValidFilter = useCallback(
+  (filter) => filters.includes(filter),
+  [filters],
+);
     // filter the data on client side
 
     const fetchBookings = async () => {
@@ -87,7 +85,7 @@ export default function page() {
         filtered = bookings.filter((booking) => booking.status === filter);
       }
       setFilteredBookings(filtered);
-    }, [bookings, filter]);
+    }, [bookings, filter , isValidFilter]);
 
       const handleRefresh = async () => {
         try {
@@ -169,10 +167,6 @@ export default function page() {
                         ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
-                  {/* <button className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-500 bg-white px-2 py-1 text-sm text-gray-600 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50">
-                    <ArrowDownUp width={20} />
-                    <span className="hidden md:flex">Sort</span>
-                  </button> */}
                   <button
                     disabled={refreshing}
                     onClick={handleRefresh}

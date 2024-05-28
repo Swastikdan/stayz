@@ -793,7 +793,9 @@ export default function SearchBar() {
                             className="group flex h-full w-max cursor-pointer flex-col space-y-1 rounded-xl p-2 hover:bg-gray-200/70"
                           >
                             {/* <div className="h-24 w-24 rounded-xl bg-gray-200"></div> */}
-                            <img
+                            <Image
+                              height={96}
+                              width={96}
                               src={city.img}
                               alt={city.title}
                               className="h-full min-h-24 w-full min-w-24 rounded-xl border border-gray-300 bg-gray-100 object-cover object-center group-active:scale-95 "

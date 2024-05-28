@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Input } from '@/components/Input';
 import { Textarea } from '@/components/Textarea';
 import { toast } from 'sonner';
@@ -20,7 +20,7 @@ import { useRouter , useParams } from 'next/navigation';
 import SelectScroll from '@/components/SelectScroll';
 import Image from 'next/image';
 
-export default function NewPlace() {
+export default function EditPlace() {
    const [loading, setLoading] = useState(false);
    const [placeLoading, setplaceLoading] = useState(false);
    const [files, setFiles] = useState([]);
@@ -94,7 +94,7 @@ export default function NewPlace() {
  
   const { id } = useParams();
      
-async function fetchPlace() {
+const fetchPlace = useCallback(async () => {
   setplaceLoading(true);
   const res = await fetch(`/api/places/search?id=${id}`);
   const place = await res.json();
@@ -103,11 +103,11 @@ async function fetchPlace() {
     ...place,
   }));
   setplaceLoading(false);
-}
+}, [id]); // add any other dependencies here
 
 useEffect(() => {
   fetchPlace();
-}, []);
+}, [fetchPlace]);
    
 
    const isValidPlace = () => {

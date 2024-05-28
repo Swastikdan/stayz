@@ -4,7 +4,7 @@ import { signIn  } from 'next-auth/react';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function page() {
+export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
