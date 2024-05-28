@@ -9,7 +9,7 @@ export async function POST(request) {
 const session = await getServerSession();
 
   const headersList = headers();
-  const { order  } = await request.json();
+  const { order, redirecturl, successurl } = await request.json();
   if (!session) {
     return NextResponse.json({ error: 'You must be logged in to make a purchase' });
   }
@@ -39,7 +39,7 @@ const session = await getServerSession();
       line_items: order,
       customer_email: user.email,
       mode: 'payment',
-      // success_url: `${headersList.get('origin')}/thank-you`,
+      success_url: `${successurl}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${headersList.get('origin')}/`,
     });
 

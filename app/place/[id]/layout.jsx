@@ -64,11 +64,11 @@ export default async function layout({ params, children }) {
     });
 
   if (!place) return notFound();
-
+    
   if (place.status != 'approved' && (!session || !session.user.email)) {
     return notFound();
   }
-
+  if(session && session.user.email) {
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
     select: {
@@ -84,6 +84,7 @@ export default async function layout({ params, children }) {
   ) {
     return notFound();
   }
+}
 
   return <>{children}</>;
 }

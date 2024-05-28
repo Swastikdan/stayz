@@ -121,6 +121,7 @@ model Bookings {
   cancelRequest  Boolean?  @default(false)
   cancelRejection  Boolean?  @default(false)
   payment   Payments[]
+  sessionId String?
 
 }
 

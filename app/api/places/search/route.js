@@ -17,7 +17,7 @@ export async function GET(request) {
 
     if (!place) return new Response('Place not found', { status: 404 });
 
-    const bookingWindows = await getBookingWindows(id);
+    // const bookingWindows = await getBookingWindows(id);
 
     if(session && session.user.email) {
       const user = await prisma.user.findUnique({
@@ -25,7 +25,7 @@ export async function GET(request) {
       });
 
       if(user && (user.id === place.ownerId || user.role === 'admin')) {
-        return NextResponse.json({place, bookingWindows},{status: 200});
+        return NextResponse.json(place,{status: 200});
       }
       return NextResponse.json('Unauthorized', { status: 401 });
     } else {

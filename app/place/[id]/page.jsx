@@ -1,14 +1,16 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { loadStripe } from '@stripe/stripe-js';
-// import PlacePageDesktop from './PlacePageDesktop';
+import DesktopPlace from '@/components/place/DesktopPlace';
 // import PlacePageMobile from './PlacePageMobile';
 import { useLikeContext } from '@/providers/LikeProvider';
 
 import { addDays, set } from 'date-fns';
+
+
 export default function PlacePage({ params }) {
   const id = params.id;
   const { data: session } = useSession();
@@ -52,9 +54,13 @@ export default function PlacePage({ params }) {
     toggleLike(id);
   };
 
-  const minimumStay = place?.minimumStay;
+
+
+console.log(place)
+const minimumStay = place?.minimumStay || 1;
+  
   const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
+  const [childrens, setChildrens] = useState(0);
   const [infants, setInfants] = useState(0);
   const [pets, setPets] = useState(0);
   const [bookingdays, setBookingDays] = useState(Number(minimumStay));
@@ -94,15 +100,15 @@ export default function PlacePage({ params }) {
   const [isvalidDates , setIsValidDates] = useState(true);
   const [isvalidBookingWindow, setIsValidBookingWindow] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
-  useEffect(() => {
-    if (date.from && date.to) {
-      if (date.from >= date.to) {
-        setIsValidDates(false);
-      } else {
-        setIsValidDates(true);
-      }
+useEffect(() => {
+  if (date && date.from && date.to) {
+    if (date.from >= date.to) {
+      setIsValidDates(false);
+    } else {
+      setIsValidDates(true);
     }
-  }, [date]);
+  }
+}, [date]);
 
 
 const prevDate = useRef();
@@ -126,7 +132,7 @@ useEffect(() => {
 
       const from = fromDate.toISOString();
       const to = toDate.toISOString();
-
+      setBookingDays(Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24)));
       fetch(`/api/booking/check?placeid=${id}&checkin=${from}&checkout=${to}`)
         .then((res) => res.json())
         .then((data) => {
@@ -145,10 +151,10 @@ useEffect(() => {
     prevId.current = id;
   }
 }, [date, id]);
-
+  console.log(place)
   const user = session?.user;
-  const ordernname = place?.name;
- const orderedImages = place?.images.slice(0, 8);
+  const ordernname = place?.title;
+ const orderedImages = place?.photos.slice(0, 8);
  const orderprice = Number(place?.price * bookingdays)
   const handleBooking = async () => {
     setBookingLoading(true);
@@ -192,7 +198,7 @@ useEffect(() => {
         checkIn: date.from,
         checkOut: date.to,
         adults,
-        children,
+        childrens,
         infants,
         pets,
         price: orderprice,
@@ -200,7 +206,7 @@ useEffect(() => {
       };
 
       try{
-        const response = await fetch('/api/bookings', {
+        const response = await fetch('/api/booking', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -211,26 +217,92 @@ useEffect(() => {
         if (response.ok) {
         const stripeError = await stripe.redirectToCheckout({ sessionId });
         if (stripeError) {
-        toast.error('Something went wrong. Please try again.');
-        console.error(stripeError);
+        toast.error('Booking is not done');
+        console.error(stripeError, 'Stripe error');
       }
 
         } else {
-          toast.error('Something went wrong. Please try again.');
+          toast.error('Stripe error');
         }
       } 
       catch (error) {
         console.error(error);
-        toast.error('Something went wrong. Please try again.');
+        toast.error(error);
       }
     } catch (error) {
       console.error(error);
-      toast.error('Something went wrong. Please try again.');
+      toast.error(error);
     }
   }
 
 
+  // const session_id = searchParams.get('session_id');
+  // const [verifyBooking, setVerifyBooking] = useState(false);
+  // useEffect(() => {
+  //   if (session_id) {
+  //     setVerifyBooking(true);
+
+  //     fetch(`/api/booking/verify?session_id=${session_id}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data) {
+  //           toast.success('Booking successful');
+  //           router.push(`/booking/${data.id}`);
+  //         } else {
+  //           toast.error('Booking failed');
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //         toast.error('Booking failed');
+  //       });
+      
 
 
-  return <div>{id}</div>;
+
+
+
+  if (placeLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="loader" />
+      </div>
+    );
+  }
+
+  if (errorloading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p>Something went wrong. Please try again.</p>
+      </div>
+    );
+  }
+
+console.log(bookingdays);
+
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full">
+      <DesktopPlace
+        place={place}
+        isFavoritePlace={isFavoritePlace}
+        handleFavoriteClick={handleFavoriteClick}
+        adults={adults}
+        setAdults={setAdults}
+        childrens={childrens}
+        setChildrens={setChildrens}
+        infants={infants}
+        setInfants={setInfants}
+        pets={pets}
+        setPets={setPets}
+        date={date}
+        setDate={setDate}
+        bookingdays={bookingdays}
+        setBookingDays={setBookingDays}
+        handleBooking={handleBooking}
+        isvalidDates={isvalidDates}
+
+      />
+    </div>
+  );
 }
