@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLikeContext } from '@/providers/LikeProvider';
 
-export default function ImageSlider({ customButton, images, id }) {
+export default function ImageSlider({ customButton, images, id , link }) {
   const { data: session } = useSession();
   const { favorites, toggleLike } = useLikeContext();
 
@@ -58,7 +58,7 @@ export default function ImageSlider({ customButton, images, id }) {
         >
           {images.map((img, index) => (
             <SwiperSlide key={index} className="overflow-hidden">
-              <Link href={`/place/${id}`}>
+              <Link href={link}>
                 <Avatar className="flex h-full w-full rounded-none">
                   <AvatarImage
                     className="h-[300px] w-full rounded-none object-cover"

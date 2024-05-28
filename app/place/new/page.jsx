@@ -259,24 +259,7 @@ export default function CreatePlace() {
 
      // prepare the data to send to the server and send a post request to /api/places/create
 
-     if (pathname !== '/places/add-place') {
-       const id = formdata.id;
-       const res = await fetch(`/api/places/edit/${id}`, {
-         method: 'POST',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify(formdata),
-       });
-       if (!res.ok) {
-         toast.error('Failed to update place');
-         setLoading(false);
-         return;
-       } else {
-         toast.success('Place updated successfully');
-         setLoading(false);
-       }
-     } else {
+ 
        const res = await fetch('/api/places/create', {
          method: 'POST',
          headers: {
@@ -293,7 +276,7 @@ export default function CreatePlace() {
          toast.success('Place created successfully');
          router.push(`/places/new/${formdata.id}/`);
          setLoading(false);
-       }
+       
      }
    };
 

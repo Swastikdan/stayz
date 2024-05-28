@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef} from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 // import getPlaces from '@/app/server/places/getPlaces';
@@ -25,8 +25,6 @@ useEffect(() => {
     router.replace('/');
   }
 }, [logintype, login, router]); 
- useEffect(() => {
-   setLoading(true);
    const category = searchParams.get('category') || '';
    const sort = searchParams.get('sort') || '';
    const sortType = searchParams.get('sortType') || '';
@@ -35,6 +33,11 @@ useEffect(() => {
    const checkout = searchParams.get('checkout') || '';
    const adults = searchParams.get('adults') || '';
    const children = searchParams.get('children') || '';
+   const infants = searchParams.get('infants') || '';
+   const pets = searchParams.get('pets') || '';
+ useEffect(() => {
+   setLoading(true);
+
    let query = '';
    if (category) query += `category=${category}&`;
    if (sort) query += `sort=${sort}&`;
@@ -45,6 +48,9 @@ useEffect(() => {
    if (adults) query += `adults=${adults}&`;
    if (children) query += `children=${children}&`;
    query = query.endsWith('&') ? query.slice(0, -1) : query;
+   // add checkin and checkout dates, adults, children, and infants to placequary string
+
+
 
    fetch(`/api/places?${query}`)
      .then((res) => res.json())
@@ -56,8 +62,21 @@ useEffect(() => {
        console.error(error);
        setLoading(false);
      });
- }, [searchParams]);
+ }, [category, sort, sortType, location, checkin, checkout, adults, children]);
 
+const query = useRef('');
+
+useEffect(() => {
+  if (checkin) query.current += `checkin=${checkin}&`;
+  if (checkout) query.current += `checkout=${checkout}&`;
+  if (adults) query.current += `adults=${adults}&`;
+  if (children) query.current += `children=${children}&`;
+  if (infants) query.current += `infants=${infants}&`;
+  if (pets) query.current += `pets=${pets}&`;
+  query.current = query.current.endsWith('&')
+    ? query.current.slice(0, -1)
+    : query.current;
+}, [checkin, checkout, adults, children, infants, pets]);
 
   if(loading) {
     return (
@@ -107,11 +126,12 @@ useEffect(() => {
                   images={place.photos}
                   customButton={place.id}
                   id={place.id}
+                  link={`/place/${place.id}?${query.current}`}
                   isFavorite={place.isFavorite}
                 />
 
                 <Link
-                  href={`/place/${place.id}`}
+                  href={`/place/${place.id}?${query.current}`}
                   className="tex-sm flex flex-col px-2"
                 >
                   <div className="flex items-center justify-between ">

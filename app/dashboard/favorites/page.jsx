@@ -4,6 +4,7 @@ import { Link as LinkIcon, Trash } from 'lucide-react';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLikeContext } from '@/providers/LikeProvider';
+import { toast } from 'sonner';
 export default function UserFavorites() {
   const {
     favorites: favoritesFromContext,
@@ -60,6 +61,7 @@ export default function UserFavorites() {
         body: JSON.stringify({ placeId: id }),
       });
       const data = await response.json();
+      toast.success(data.message);
       if (!response.ok) {
         throw new Error(data.message || 'Failed to remove favorite');
       }
@@ -70,33 +72,6 @@ export default function UserFavorites() {
       setFavoritesFromContext(previousFavoritesFromContext);
     }
   };
-
-  // if (isLoading) {
-  //   return (
-  //     <div class="grid gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-  //       {Array.from({ length: 6 }).map((_, index) => (
-  //         <div
-  //           key={index}
-  //           class="group flex animate-pulse flex-col rounded-xl border border-gray-300 bg-gray-50 shadow-md"
-  //         >
-  //           <div class="p-2 md:p-3">
-  //             <div class="flex items-center space-x-4">
-  //               <div class="h-20 w-32 rounded-lg bg-gray-200"></div>
-  //               <div class="flex flex-col items-start space-y-2">
-  //                 <div class="h-4 w-48 rounded bg-gray-300"></div>
-  //                 <div class="h-3 w-24 rounded bg-gray-300"></div>
-  //                 <div class="flex items-center space-x-3 pt-2">
-  //                   <div class="inline-flex h-6 w-20 select-none items-center gap-x-2 rounded-lg  bg-transparent px-3 py-1 text-sm"></div>
-  //                   <div class="inline-flex h-6 w-20 select-none items-center gap-x-2 rounded-lg  bg-transparent px-3 py-1 text-sm text-gray-600"></div>
-  //                 </div>
-  //               </div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // }
   return (
     <>
       {isLoading ? (
