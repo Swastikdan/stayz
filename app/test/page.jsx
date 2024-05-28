@@ -1,32 +1,35 @@
 'use client'
 import { loadStripe } from "@stripe/stripe-js";
-
+import { useSession } from "next-auth/react";
 export default function CheckoutButton() {
+  const { data: session } = useSession();
+const user = session?.user;
   const redirectToCheckout = async () => {
     try {
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_TEST_STRIPE_PUBLISHABLE_KEY);
 
       if (!stripe) throw new Error('Stripe failed to initialize.');
 
-      const line_items = [{
-        price_data: {
-          currency: 'inr',
-          product_data: {
-            name: 'Room Booking',
-          },
-          unit_amount: 1000, // Rs. 1000
-        },
-        quantity: 1,
-      }];
+const order = [{
+  price_data: {
+    currency: 'inr',
+    product_data: {
+      name: 'Room Booking',
+    },
+    unit_amount: 1000, // Rs. 1000
+  },
+  quantity: 1,
+}];
 
-      const customer_email = 'customer@example.com'; // replace with the actual customer email
+  
 
       const checkoutResponse = await fetch('/api/checkout_sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+
         },
-        body: JSON.stringify({ line_items, customer_email }),
+        body: JSON.stringify({ order , user }),
       });
 
       const { sessionId } = await checkoutResponse.json();

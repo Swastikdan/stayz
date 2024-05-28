@@ -12,12 +12,12 @@ export default function SecondaryNav({navItems , pageName}) {
         {pageName}
       </h1>
       <div className="flex w-full items-center justify-center">
-        <nav className="flex w-min items-start rounded-md bg-gray-200/70 p-1">
+        <nav className="flex w-min items-start rounded-full bg-gray-100 p-1.5">
           {navItems.map((item, index) => (
             <Link
               key={index}
               href={item.href}
-              className={`rounded-sm bg-transparent  px-4 py-1 text-[16px] ${pathname === item.href ? 'bg-white shadow-sm' : ''}`}
+              className={`rounded-full bg-transparent  px-6 py-1.5 text-[16px] ${pathname === item.href ? 'bg-white shadow-md' : ''}`}
             >
               {item.name}
             </Link>

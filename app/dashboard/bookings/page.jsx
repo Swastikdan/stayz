@@ -75,7 +75,7 @@ const isValidFilter = useCallback(
     fetchBookings();
   }, []);
 
-  console.log(bookings);
+
 
     const [filteredBookings, setFilteredBookings] = useState([]);
 
@@ -257,7 +257,17 @@ const isValidFilter = useCallback(
                               >
                                 <div className="flex items-center gap-x-2 ps-6">
                                   <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                    Price
+                                    Payment
+                                  </span>
+                                </div>
+                              </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-2 py-1 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Invoice
                                   </span>
                                 </div>
                               </TableHead>
@@ -378,6 +388,32 @@ const isValidFilter = useCallback(
                                       ) : null}
                                     </div>
                                   </TableCell>
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-2 py-1">
+                                      {booking.payment.status === 'paid' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
+                                          <BadgeCheck width={20} />
+                                          Paid
+                                        </span>
+                                      ) : booking.payment.status === 'pending' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
+                                          <Loader width={20} />
+                                          Pending
+                                        </span>
+                                      ) : booking.payment.status === 'failed' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
+                                          <BadgeX width={20} />
+                                          Failed
+                                        </span>
+                                      ) : (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
+                                          <Badge width={20} />
+                                          Unpaid
+                                        </span>
+                                      )}
+                                    </div>
+                                  </TableCell>
+
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
                                       <span className="pl-2 text-sm">

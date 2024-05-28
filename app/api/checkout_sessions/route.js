@@ -1,27 +1,54 @@
 import {NextResponse } from "next/server";
 import { headers } from "next/headers";
 import stripe from "@/utils/stripe";
+import { getServerSession } from 'next-auth';
+import prisma from "@/lib/prisma";
 
 export async function POST(request) {
+
+const session = await getServerSession();
+
   const headersList = headers();
-  const { line_items, customer_email } = await request.json();
+  const { order  } = await request.json();
+  if (!session) {
+    return NextResponse.json({ error: 'You must be logged in to make a purchase' });
+  }
+  const user = session.user;
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: line_items,
-      customer_email: customer_email,
-      mode: "payment",
-      success_url: `${headersList.get("origin")}/thank-you`,
-      cancel_url: `${headersList.get("origin")}/`,
+    // Check if customer already exists
+    let customers = await stripe.customers.list({ email: user.email });
+    let customerId;
+
+    if (customers.data.length) {
+      customerId = customers.data[0].id;
+    } else {
+      // Create customer if not exists
+      const customer = await stripe.customers.create({
+        email: user.email,
+        name: user.name,
+      });
+
+      console.log(customer); // log the customer data
+      customerId = customer.id;
+    }
+      console.log(customers); // log the customer data
+    // Create checkout session
+    const checkoutSession = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: order,
+      customer_email: user.email,
+      mode: 'payment',
+      // success_url: `${headersList.get('origin')}/thank-you`,
+      cancel_url: `${headersList.get('origin')}/`,
     });
 
-    console.log(session); // log the session data
-
-    return NextResponse.json({ sessionId: session.id });
+    // console.log(checkoutSession); // log the session data
+    
+    return NextResponse.json({ sessionId: checkoutSession.id });
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ error: "Error creating checkout session" });
+    return NextResponse.json({ error: 'Error creating checkout session' });
   }
 }
 
