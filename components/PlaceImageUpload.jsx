@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Star, Trash2, Expand, Link } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/Input'
-import Image from 'next/image';
+import NextImage from 'next/image';
 export default function PlaceImageUpload({
   files,
   setFiles,
@@ -211,7 +211,7 @@ export default function PlaceImageUpload({
           </div>
 
           <span className="py-1 text-[10px] font-light text-gray-700 md:text-xs">
-           {` To upload multiple images using links, separate them with a comma (
+            {` To upload multiple images using links, separate them with a comma (
             ' , ' ). For example: https://link1.jpg,https://link2.png`}
           </span>
         </div>
@@ -265,7 +265,7 @@ export default function PlaceImageUpload({
               key={photo}
               className="group relative block h-44 w-full overflow-hidden rounded-xl  bg-gray-100 sm:h-40 sm:border-2"
             >
-              <Image
+              <NextImage
                 height={400}
                 width={600}
                 src={photo}

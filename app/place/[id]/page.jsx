@@ -174,22 +174,60 @@ useEffect(() => {
        },
      ];
 
+      const redirecturl = `${window.location.origin}/place/${id}`;
+      const successurl = `${window.location.origin}/place/${id}?`;
+
       const checkoutResponse = await fetch('/api/checkout_sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ order, user }),
+        body: JSON.stringify({ order, redirecturl, successurl}),
       });
 
       const { sessionId } = await checkoutResponse.json();
-      const stripeError = await stripe.redirectToCheckout({ sessionId });
 
-      if (stripeError) {
+      const bookingData = {
+        placeId: id,
+        checkIn: date.from,
+        checkOut: date.to,
+        adults,
+        children,
+        infants,
+        pets,
+        price: orderprice,
+        sessionId,
+      };
+
+      try{
+        const response = await fetch('/api/bookings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bookingData),
+        });
+
+        if (response.ok) {
+        const stripeError = await stripe.redirectToCheckout({ sessionId });
+        if (stripeError) {
         toast.error('Something went wrong. Please try again.');
         console.error(stripeError);
       }
-      
+
+        } else {
+          toast.error('Something went wrong. Please try again.');
+        }
+      } 
+      catch (error) {
+        console.error(error);
+        toast.error('Something went wrong. Please try again.');
+      }
+
+   
+
+   
+   
     
     } catch (error) {
       console.error(error);
