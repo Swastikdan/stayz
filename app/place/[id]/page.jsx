@@ -223,12 +223,6 @@ useEffect(() => {
         console.error(error);
         toast.error('Something went wrong. Please try again.');
       }
-
-   
-
-   
-   
-    
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong. Please try again.');

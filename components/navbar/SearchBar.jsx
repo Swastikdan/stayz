@@ -272,9 +272,12 @@ export default function SearchBar() {
                 align="start"
                 className="w-[424px]  rounded-3xl p-5 "
               >
-                <div className="mb-3 flex w-full items-center rounded-full border-2 border-gray-300 text-[13px] font-medium text-black placeholder:text-[13px] placeholder:text-black focus:border-black ">
+                <div class="relative h-auto">
+                  <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                    <Search size={24} className="text-black" />
+                  </div>
                   <input
-                    type="text"
+                    type="search"
                     name="search-location"
                     id="search-location"
                     value={inputValue}
@@ -283,14 +286,14 @@ export default function SearchBar() {
                       setInputValue(value);
                       handleLLocationSearch(value);
                     }}
-                    placeholder="Search Destinations"
-                    className="w-full rounded-full p-2 text-black placeholder-black outline-none "
+                    class="block w-full rounded-xl  bg-gray-100 px-3.5 py-2.5 ps-10 text-sm text-gray-900 focus:border-[0px] focus:outline-none "
+                    placeholder="Search destinations"
                   />
                   <div>
                     {inputValue ? (
                       <X
-                        size={32}
-                        className="mr-1 cursor-pointer rounded-3xl bg-gray-200 p-1"
+                        size={28}
+                        className="absolute bottom-[6px] end-2.5 mr-1 cursor-pointer rounded-3xl bg-gray-200 p-1 text-black"
                         onClick={() => {
                           setInputValue('');
                           setSearchCities([]);

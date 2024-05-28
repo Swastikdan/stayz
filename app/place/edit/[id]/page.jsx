@@ -639,10 +639,10 @@ useEffect(() => {
                    </li>
                  ))}
                </ul>
-               <div className="py-3 font-semibold  text-gray-700 ">
+               {/* <div className="py-3 font-semibold  text-gray-700 ">
                  {' '}
                  Checking in and out
-               </div>
+               </div> */}
 
                <div>
                  <input
