@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 export async function POST(request) {
   const body = await request.text();
-  const endpointSecret = process.env.STRIPE_SECRET_WEBHOOK_KEY;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const sig = headers().get("stripe-signature");
   let event;
 
