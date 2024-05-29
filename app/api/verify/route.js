@@ -1,6 +1,6 @@
 import stripe from '@/utils/stripe';
 import { headers } from 'next/headers';
-import prisma from '@/utils/prisma';
+import prisma from '@/lib/prisma';
 export async function POST(request) {
  let body = await request.text();
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
