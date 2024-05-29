@@ -39,7 +39,7 @@ const session = await getServerSession();
       line_items: order,
       customer_email: user.email,
       mode: 'payment',
-      success_url: `${headersList.get('origin')}/bookinsg/${checkoutSession.id}`,
+      success_url: `${headersList.get('origin')}/bookings/{CHECKOUT_SESSION_ID}`,
       cancel_url: redirecturl,
     });
 
