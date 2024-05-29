@@ -400,7 +400,7 @@ const handleBooking = async () => {
     return notFound();
   }
 
-  console.log(state);
+
 
   return (
     <div className="flex w-full flex-col items-center justify-center">

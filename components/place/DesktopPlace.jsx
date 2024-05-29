@@ -80,7 +80,7 @@ export default function DesktopPlace({
     deleterequst,
     deletedstataus,
   },
-  handleFavoriteClick,
+  onFavoriteClick,
   isFavoritePlace,
   adults,
   setAdults,
@@ -99,7 +99,6 @@ export default function DesktopPlace({
   isvalidDates,
   isValidBookingWindow,
 }) {
- 
   const renderAmenities = (amenities, placeAmenities, include) => {
     return amenities
       .filter((amenity) => include === placeAmenities.includes(amenity.value))
@@ -166,12 +165,7 @@ export default function DesktopPlace({
       <span className="text-gray-800">{label}</span>
     </div>
   );
-  const checkAmenity = (amenityId) => {
-    const hasAmenity =
-      safetyamenities.find((amenity) => amenity.value === amenityId) ||
-      safety_amenities.find((amenity) => amenity.value === amenityId);
-    return hasAmenity ? `${amenityId}` : `No ${amenityId}`;
-  };
+
   return (
     <section className="max-w-6xl px-10">
       <div className="flex items-center justify-between">
@@ -181,7 +175,7 @@ export default function DesktopPlace({
         <div className="flex items-center space-x-8 ">
           <div
             className="  flex cursor-pointer items-center  gap-1.5 text-center"
-            onClick={handleFavoriteClick}
+            onClick={onFavoriteClick}
           >
             <Heart
               width={20}
@@ -220,7 +214,7 @@ export default function DesktopPlace({
         images={photos}
         id={id}
         isFavoritePlace={isFavoritePlace}
-        onClick={handleFavoriteClick}
+        onClick={onFavoriteClick}
       />
       <div className="py-5">
         <div className="flex flex-col space-y-1">
@@ -740,12 +734,7 @@ export default function DesktopPlace({
                           const hasAmenity = safety_amenities.includes(
                             amenity.value,
                           );
-                          console.log(
-                            'Checking amenity:',
-                            amenity.value,
-                            'Found:',
-                            hasAmenity,
-                          );
+
                           return hasAmenity ? (
                             <div
                               key={amenity.value}
@@ -797,39 +786,44 @@ export default function DesktopPlace({
                         <span className="pb-3 text-lg font-semibold text-black">
                           Cancel By{' '}
                         </span>
-                        <div className="flex flex-col space-y-3 ">
-                          <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
-                            <span className=" w-20 text-start  font-medium">
-                              {new Date(
-                                date.to.getTime() - 24 * 60 * 60 * 1000,
-                              ).toLocaleDateString(undefined, {
-                                day: 'numeric',
-                                month: 'short',
-                              })}
-                            </span>
-
-                            <span>
-                              Full refund: Get back 100% of what you paid.
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
-                            <span className=" w-20 text-start  font-medium">
-                              {new Date(date.to.getTime()).toLocaleDateString(
-                                undefined,
-                                {
+                        {date &&
+                        date.to &&
+                        date.to instanceof Date &&
+                        !isNaN(date.to.getTime()) ? (
+                          <div className="flex flex-col space-y-3 ">
+                            <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
+                              <span className=" w-20 text-start  font-medium">
+                                {new Date(
+                                  date.to.getTime() - 24 * 60 * 60 * 1000,
+                                ).toLocaleDateString(undefined, {
                                   day: 'numeric',
                                   month: 'short',
-                                },
-                              )}
-                            </span>
+                                })}
+                              </span>
 
-                            <span>
-                              Partial refund: Get back every night but the first
-                              one. No refund of the first night or the service
-                              fee.
-                            </span>
+                              <span>
+                                Full refund: Get back 100% of what you paid.
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
+                              <span className=" w-20 text-start  font-medium">
+                                {new Date(date.to.getTime()).toLocaleDateString(
+                                  undefined,
+                                  {
+                                    day: 'numeric',
+                                    month: 'short',
+                                  },
+                                )}
+                              </span>
+
+                              <span>
+                                Partial refund: Get back every night but the
+                                first one. No refund of the first night or the
+                                service fee.
+                              </span>
+                            </div>
                           </div>
-                        </div>
+                        ) : null}
                       </div>
                     </ScrollArea>
                   </DialogDescription>
