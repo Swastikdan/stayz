@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 export async function GET(request) {
     const searchParams = request.nextUrl.searchParams;
 
