@@ -53,10 +53,17 @@ async function getBookingWindows(id) {
 
   if (!place) return [];
 
-  const bookings = await prisma.bookings.findMany({
-    where: { placeId: String(id) },
-    orderBy: { checkIn: 'asc' },
-  });
+const bookings = await prisma.bookings.findMany({
+  where: { 
+    placeId: String(id),
+    NOT: [
+      { status: 'canceled' },
+      { status: 'rejected' },
+      { status: 'paymentfalse' },
+    ],
+  },
+  orderBy: { checkIn: 'asc' },
+});
 
   if (bookings.length === 0) {
     return [];

@@ -67,17 +67,20 @@ useEffect(() => {
 const query = useRef('');
 
 useEffect(() => {
+  // Reset the query string at the beginning of each execution
+  query.current = '';
+
   if (checkin) query.current += `checkin=${checkin}&`;
   if (checkout) query.current += `checkout=${checkout}&`;
   if (adults) query.current += `adults=${adults}&`;
   if (children) query.current += `children=${children}&`;
   if (infants) query.current += `infants=${infants}&`;
   if (pets) query.current += `pets=${pets}&`;
+
   query.current = query.current.endsWith('&')
     ? query.current.slice(0, -1)
     : query.current;
 }, [checkin, checkout, adults, children, infants, pets]);
-
   if(loading) {
     return (
       <div className="mx-auto   my-5 max-w-[1440px] px-4 md:px-8  ">

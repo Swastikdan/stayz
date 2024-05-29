@@ -39,8 +39,8 @@ const session = await getServerSession();
       line_items: order,
       customer_email: user.email,
       mode: 'payment',
-      success_url: `${successurl}?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${headersList.get('origin')}/`,
+      success_url: `${headersList.get('origin')}/bookinsg/${checkoutSession.id}`,
+      cancel_url: redirecturl,
     });
 
     // console.log(checkoutSession); // log the session data

@@ -327,9 +327,9 @@ export default function DesktopPlace({
                     </div>
                   </div>
                   <div className="text-[10px] font-light">
-                    This place has a maximum of 6 guests, not including infants.
+                    {`This place has a maximum of 6 guests, not including infants.
                     If you're bringing more than 2 pets, please let your Host
-                    know.
+                    know.`}
                   </div>
                   <DropdownMenuItem className="w-fit cursor-pointer items-center border border-input px-5 text-center text-base">
                     Close
@@ -347,7 +347,7 @@ export default function DesktopPlace({
                 Reserve
               </button>
               <div className="pt-2 text-center text-sm font-light">
-                You won't be charged yet
+               {` You won't be charged yet`}
               </div>
             </>
           ) : null}

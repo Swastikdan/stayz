@@ -20,12 +20,21 @@ const {
   pets,
   price,
   sessionId,
+  userId,
 } = data;
 
-if (!placeId || !checkIn || !checkOut || !adults || !childrens || !infants || !pets || !price || !sessionId) {
+if (
+  !placeId ||
+  !userId ||
+  !sessionId ||
+  !checkIn ||
+  !checkOut ||
+  !adults ||
+  adults < 1
+) {
   return NextResponse.json({
     code: 400,
-    message: 'All fields are required',
+    message: 'All fields are required and adults must be more than 1',
   });
 }
 
@@ -45,7 +54,7 @@ if (checkInDate >= checkOutDate) {
 const newBooking = await prisma.bookings.create({
   data: {
     placeId,
-    userId: sessionId, // Assuming sessionId is the userId
+    userId: userId,
     checkIn: checkInDate,
     checkOut: checkOutDate,
     guests: adults + childrens + infants, // Assuming guests is the total of adults, childrens, and infants
@@ -58,7 +67,7 @@ return NextResponse.json({
   code: 200,
   message: 'Booking created successfully',
   booking: newBooking,
-});
+}, { status: 200});
 } catch (error) {
   return NextResponse.json({ error: error.message }, { status: 500 });
 }

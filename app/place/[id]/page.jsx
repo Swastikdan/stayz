@@ -58,6 +58,7 @@ export default function PlacePage({ params }) {
 
 console.log(place)
 const minimumStay = place?.minimumStay || 1;
+const maxGuests = place?.maxGuests || 16 ;
   
   const [adults, setAdults] = useState(1);
   const [childrens, setChildrens] = useState(0);
@@ -80,22 +81,50 @@ const minimumStay = place?.minimumStay || 1;
   const searchCheckin = searchParams.get('checkin');
   const searchCheckout = searchParams.get('checkout');
 
-  useEffect(() => {
-    if (searchAdults) setAdults(Number(searchAdults));
-    if (searchChildren) setChildren(Number(searchChildren));
-    if (searchInfants) setInfants(Number(searchInfants));
-    if (searchPets) setPets(Number(searchPets));
-    if (searchCheckin) setDate({ ...date, from: new Date(searchCheckin) });
-    if (searchCheckout) setDate({ ...date, to: new Date(searchCheckout) });
-  }, [
-    searchAdults,
-    searchChildren,
-    searchInfants,
-    searchPets,
-    searchCheckin,
-    searchCheckout,
-    date,
-  ]);
+
+
+useEffect(() => {
+
+
+const   defaultRoute = `/place/${id}`;
+
+  // Check if the values are numbers and not exceeding the maximum allowed guests
+  if (
+    !Number.isInteger(Number(searchAdults)) || Number(searchAdults) > maxGuests ||
+    !Number.isInteger(Number(searchChildren)) || Number(searchChildren) > maxGuests ||
+    !Number.isInteger(Number(searchInfants)) || Number(searchInfants) > maxGuests ||
+    !Number.isInteger(Number(searchPets)) || Number(searchPets) > maxGuests
+  ) {
+    router.replace(defaultRoute);
+    return;
+  }
+
+  // Check if the dates are valid
+  const checkinDate = new Date(searchCheckin);
+  const checkoutDate = new Date(searchCheckout);
+  if (checkinDate.getTime() >= checkoutDate.getTime()) {
+    router.replace(defaultRoute);
+    return;
+  }
+
+  // If all values are valid, update the state
+  setAdults(Number(searchAdults));
+  setChildrens(Number(searchChildren));
+  setInfants(Number(searchInfants));
+  setPets(Number(searchPets));
+  setDate({ ...date, from: checkinDate, to: checkoutDate });
+}, [
+  searchAdults,
+  searchChildren,
+  searchInfants,
+  searchPets,
+  searchCheckin,
+  searchCheckout,
+  date,
+  router,
+  id,
+  maxGuests,
+]);
 
   const [isvalidDates , setIsValidDates] = useState(true);
   const [isvalidBookingWindow, setIsValidBookingWindow] = useState(true);
@@ -203,6 +232,7 @@ useEffect(() => {
         pets,
         price: orderprice,
         sessionId,
+        userId: user.id,
       };
 
       try{
@@ -214,15 +244,17 @@ useEffect(() => {
           body: JSON.stringify(bookingData),
         });
 
-        if (response.ok) {
+        const data = await response.json();
+
+        if (data.code === 200) {
         const stripeError = await stripe.redirectToCheckout({ sessionId });
         if (stripeError) {
-        toast.error('Booking is not done');
+        toast.error(stripeError);
         console.error(stripeError, 'Stripe error');
       }
 
         } else {
-          toast.error('Stripe error');
+          toast.error('Booking Error. Please try again.');
         }
       } 
       catch (error) {
@@ -256,7 +288,9 @@ useEffect(() => {
   //         console.error(error);
   //         toast.error('Booking failed');
   //       });
-      
+  //   }
+  // }, [session_id , router]);
+
 
 
 

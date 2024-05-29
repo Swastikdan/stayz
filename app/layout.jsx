@@ -31,7 +31,7 @@ export async function metadata() {
 import SessionProvider from '../providers/SessionProvider';
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning light>
+    <html lang="en" suppressHydrationWarning>
       <>
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="en" />
@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-title" content="Urban Utopia" />
         <meta name="application-name" content="Urban Utopia" />
         <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#F1FFFF" />
         <link
           rel="manifest"
           href="/site.webmanifest"
@@ -55,77 +55,77 @@ export default function RootLayout({ children }) {
         <link
           rel="apple-touch-icon-precomposed"
           sizes="57x57"
-          href="apple-touch-icon-57x57.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-57x57.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="114x114"
-          href="apple-touch-icon-114x114.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-114x114.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="72x72"
-          href="apple-touch-icon-72x72.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-72x72.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="144x144"
-          href="apple-touch-icon-144x144.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-144x144.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="60x60"
-          href="apple-touch-icon-60x60.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-60x60.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="120x120"
-          href="apple-touch-icon-120x120.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-120x120.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="76x76"
-          href="apple-touch-icon-76x76.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-76x76.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="152x152"
-          href="apple-touch-icon-152x152.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/apple-touch-icon-152x152.png"
         />
         <link
           rel="icon"
           type="image/png"
-          href="favicon-196x196.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/favicon-196x196.png"
           sizes="196x196"
         />
         <link
           rel="icon"
           type="image/png"
-          href="favicon-96x96.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/favicon-96x96.png"
           sizes="96x96"
         />
         <link
           rel="icon"
           type="image/png"
-          href="favicon-128.png"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/favicon-128.png"
           sizes="128x128"
         />
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/favicon.ico" type="image/x-icon" />
         <meta name="application-name" content="&nbsp;" />
         <meta name="msapplication-TileColor" content="#FFFFFF" />
-        <meta name="msapplication-TileImage" content="mstile-144x144.png" />
-        <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+        <meta name="msapplication-TileImage" content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-144x144.png" />
+        <meta name="msapplication-square70x70logo" content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-70x70.png" />
         <meta
           name="msapplication-square150x150logo"
-          content="mstile-150x150.png"
+          content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-150x150.png"
         />
         <meta
           name="msapplication-wide310x150logo"
-          content="mstile-310x150.png"
+          content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-310x150.png"
         />
         <meta
           name="msapplication-square310x310logo"
-          content="mstile-310x310.png"
+          content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-310x310.png"
         />
       </>
       <head />
