@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import RefreshButton from '@/components/RefreshButton';
 export default function errorpage() {
   return (
     <>
@@ -13,11 +14,15 @@ export default function errorpage() {
             Uh-oh!
           </p>
           <p className="mt-4 text-gray-500 dark:text-gray-400">
-           {` We can't find that page.`}
+            {` We can't find that page.`}
           </p>
-          <Link href="/">
-            <Button className="mt-8 sm:mt-10">Go to Homepage</Button>
-          </Link>
+          <div className='flex items-center space-x-5 mt-8 sm:mt-10'>
+            <Link href="/">
+              <Button >Go to Homepage</Button>
+            </Link>
+
+            <RefreshButton />
+          </div>
         </div>
       </div>
     </>

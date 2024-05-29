@@ -21,19 +21,15 @@ export const UserProvider = ({ children }) => {
   });
 
 
-  // fist time on load get user data for the api 
-  useEffect(() => {
-    if (session) {
-      fetch(`/api/user/${session.user.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setUserData(data);
-        });
-    }
-  }, [session]);
-
-  
-
+useEffect(() => {
+  if (session && session.user.id) {
+    fetch(`/api/user/${session.user.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserData(data);
+      });
+  }
+}, [session]);
 
   return (
     <UserContext.Provider value={{ user: session?.user, userImage, userData, setUserData }}>

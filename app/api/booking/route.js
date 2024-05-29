@@ -21,6 +21,7 @@ const {
   price,
   sessionId,
   userId,
+  paymnetLink,
 } = data;
 
 if (
@@ -30,6 +31,7 @@ if (
   !checkIn ||
   !checkOut ||
   !adults ||
+  !paymnetLink ||
   adults < 1
 ) {
   return NextResponse.json({
@@ -60,6 +62,7 @@ const newBooking = await prisma.bookings.create({
     guests: adults + childrens + infants, // Assuming guests is the total of adults, childrens, and infants
     totalPrice: price,
     sessionId: sessionId,
+    paymnetLink: paymnetLink,
   },
 });
 

@@ -13,7 +13,7 @@ export const LikeProvider = ({ children }) => {
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const [message, setMessage] = useState('');
   useEffect(() => {
-    if (session) {
+    if (session && session.user) {
       setFavoriteLoading(true);
       fetch('/api/user/favorites')
         .then((res) => res.json())

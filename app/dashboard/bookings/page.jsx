@@ -118,11 +118,18 @@ const isValidFilter = useCallback(
         }
       }
 
+
+    //     for that booking here to fix this "payment": [
+    //   {
+    //     "status": "paid"
+    //   }
+    // ],
+
         const handleFilter = (filter) => {
           if (isValidFilter(filter)) {
-            router.push(`/admin/bookings?filter=${filter}`);
+            router.push(`/dashboard/bookings?filter=${filter}`);
           } else {
-            router.push(`/admin/bookings`);
+            router.push(`/dashboard/bookings`);
           }
         };
 
@@ -395,15 +402,17 @@ const isValidFilter = useCallback(
                                           <BadgeCheck width={20} />
                                           Paid
                                         </span>
-                                      ) : booking.payment.status === 'pending' ? (
+                                      ) : booking.payment.status ===
+                                        'processing' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
                                           <Loader width={20} />
                                           Pending
                                         </span>
-                                      ) : booking.payment.status === 'failed' ? (
+                                      ) : booking.payment.status ===
+                                        'failed' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
                                           <BadgeX width={20} />
-                                          Failed
+                                          Payment Failed
                                         </span>
                                       ) : (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">

@@ -29,23 +29,23 @@ const session = await getServerSession();
         name: user.name,
       });
 
-      console.log(customer); // log the customer data
+      
       customerId = customer.id;
     }
-      console.log(customers); // log the customer data
-    // Create checkout session
-    const checkoutSession = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: order,
-      customer_email: user.email,
-      mode: 'payment',
-      success_url: `${headersList.get('origin')}/bookings/{CHECKOUT_SESSION_ID}`,
-      cancel_url: redirecturl,
-    });
-
-    // console.log(checkoutSession); // log the session data
+  // log the customer data
+// Create checkout session
+// Create checkout session
+const checkoutSession = await stripe.checkout.sessions.create({
+  payment_method_types: ['card'],
+  line_items: order,
+  customer_email: user.email,
+  mode: 'payment',
+  success_url: `${headersList.get('origin')}/bookings/verify/{CHECKOUT_SESSION_ID}/success`,
+  cancel_url: `${headersList.get('origin')}/bookings/verify/{CHECKOUT_SESSION_ID}/cancel`,
+});
+    console.log(checkoutSession); // log the session data
     
-    return NextResponse.json({ sessionId: checkoutSession.id });
+    return NextResponse.json({ sessionId: checkoutSession.id , paymentLink: checkoutSession.url});
   } catch (err) {
     console.log(err);
     return NextResponse.json({ error: 'Error creating checkout session' });

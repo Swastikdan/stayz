@@ -122,6 +122,7 @@ model Bookings {
   cancelRejection  Boolean?  @default(false)
   payment   Payments[]
   sessionId String @unique
+  paymnetLink String?
 
 }
 
