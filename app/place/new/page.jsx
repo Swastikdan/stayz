@@ -98,125 +98,136 @@ export default function CreatePlace() {
    const pathname = usePathname();
 
 
-   const isValidPlace = () => {
-     const fields = [
-       { value: formdata.title, name: 'Title', min: 10, max: 100 },
-       {
-         value: formdata.description,
-         name: 'Description',
-         min: 100,
-         max: 2500,
-         isWordCount: true,
-       },
-       { value: formdata.address, name: 'Address' },
-       { value: formdata.state, name: 'State' },
-       { value: formdata.city, name: 'City' },
-       { value: formdata.street, name: 'Street', optional: true },
-       { value: formdata.category, name: 'Category' },
-       {
-         value: formdata.necessary_amenities,
-         name: 'Necessary amenities',
-         optional: true,
-       },
-       {
-         value: formdata.standout_amenities,
-         name: 'Standout amenities',
-         optional: true,
-       },
-       {
-         value: formdata.safety_amenities,
-         name: 'Safety amenities',
-         optional: true,
-       },
-       { value: formdata.photos, name: 'Photos', min: 1 },
-       { value: formdata.maxGuests, name: 'Max guests' },
-       { value: formdata.price, name: 'Price' },
-       { value: formdata.listTillDate, name: 'List Till Date', optional: true },
-       { value: formdata.petsAllowed, name: 'Pets Allowed', optional: true },
-       { value: formdata.checkInTime, name: 'Check In Time', optional: true },
-       { value: formdata.checkOutTime, name: 'Check Out Time', optional: true },
-       {
-         value: formdata.smokingNotAllowed,
-         name: 'Smoking Not Allowed',
-         optional: true,
-       },
-       {
-         value: formdata.partiesNotAllowed,
-         name: 'Parties Not Allowed',
-         optional: true,
-       },
-       {
-         value: formdata.photographyNotAllowed,
-         name: 'Photography Not Allowed',
-         optional: true,
-       },
-       { value: formdata.SelfcheckIn, name: 'Self Check In', optional: true },
-       {
-         value: formdata.additionalRules,
-         name: 'Additional Rules',
-         optional: true,
-       },
-       { value: formdata.numberOfRooms, name: 'Number Of Rooms' },
-       { value: formdata.minimumStay, name: 'Minimum Stay' },
-     ];
+  const isValidPlace = () => {
+    const fields = [
+      { value: formdata.title, name: 'Title', min: 10, max: 100 },
+      {
+        value: formdata.description,
+        name: 'Description',
+        min: 100,
+        max: 2500,
+        isWordCount: true,
+      },
+      { value: formdata.address, name: 'Address' },
+      { value: formdata.state, name: 'State' },
+      { value: formdata.city, name: 'City' },
+      { value: formdata.street, name: 'Street', optional: true },
+      { value: formdata.category, name: 'Category' },
+      {
+        value: formdata.necessary_amenities,
+        name: 'Necessary amenities',
+        optional: true,
+      },
+      {
+        value: formdata.standout_amenities,
+        name: 'Standout amenities',
+        optional: true,
+      },
+      {
+        value: formdata.safety_amenities,
+        name: 'Safety amenities',
+        optional: true,
+      },
+      { value: formdata.photos, name: 'Photos', min: 1 },
+      { value: formdata.maxGuests, name: 'Max guests' },
+      { value: formdata.price, name: 'Price' },
+      { value: formdata.listTillDate, name: 'List Till Date', optional: true },
+      { value: formdata.petsAllowed, name: 'Pets Allowed', optional: true },
+      { value: formdata.checkInTime, name: 'Check In Time', optional: true },
+      { value: formdata.checkOutTime, name: 'Check Out Time', optional: true },
+      {
+        value: formdata.smokingNotAllowed,
+        name: 'Smoking Not Allowed',
+        optional: true,
+      },
+      {
+        value: formdata.partiesNotAllowed,
+        name: 'Parties Not Allowed',
+        optional: true,
+      },
+      {
+        value: formdata.photographyNotAllowed,
+        name: 'Photography Not Allowed',
+        optional: true,
+      },
+      { value: formdata.SelfcheckIn, name: 'Self Check In', optional: true },
+      {
+        value: formdata.additionalRules,
+        name: 'Additional Rules',
+        optional: true,
+      },
+      { value: formdata.numberOfRooms, name: 'Number Of Rooms' },
+      { value: formdata.minimumStay, name: 'Minimum Stay' },
+    ];
 
-     for (let field of fields) {
-       if (
-         !field.optional &&
-         (field.value === undefined ||
-           field.value === null ||
-           (typeof field.value === 'string' && !field.value.trim()))
-       ) {
-         toast.error(`${field.name} can't be empty!`);
-         return false;
-       }
+    for (let field of fields) {
+      if (
+        !field.optional &&
+        (field.value === undefined ||
+          field.value === null ||
+          (typeof field.value === 'string' && !field.value.trim()))
+      ) {
+        toast.error(`${field.name} can't be empty!`);
+        return false;
+      }
 
-       const length = field.isWordCount
-         ? field.value.split(/\s+/).length
-         : typeof field.value === 'string'
-           ? field.value.length
-           : undefined;
+      const length = field.isWordCount
+        ? field.value.split(/\s+/).length
+        : typeof field.value === 'string'
+          ? field.value.length
+          : undefined;
 
-       if (field.min && length < field.min) {
-         toast.error(
-           `${field.name} can't be less than ${field.min} ${field.isWordCount ? 'words' : 'characters'}`,
-         );
-         return false;
-       }
+      if (field.min && length < field.min) {
+        toast.error(
+          `${field.name} can't be less than ${field.min} ${field.isWordCount ? 'words' : 'characters'}`,
+        );
+        return false;
+      }
 
-       if (field.max && length > field.max) {
-         toast.error(
-           `${field.name} can't be more than ${field.max} ${field.isWordCount ? 'words' : 'characters'}`,
-         );
-         return false;
-       }
-     }
+      if (field.max && length > field.max) {
+        toast.error(
+          `${field.name} can't be more than ${field.max} ${field.isWordCount ? 'words' : 'characters'}`,
+        );
+        return false;
+      }
+    }
 
-     if (
-       formdata.checkInTime &&
-       formdata.checkOutTime &&
-       formdata.checkInTime >= formdata.checkOutTime
-     ) {
-       toast.error('Check In Time must be less than Check Out Time');
-       return false;
-     }
+    if (
+      formdata.checkInTime &&
+      formdata.checkOutTime &&
+      formdata.checkInTime >= formdata.checkOutTime
+    ) {
+      toast.error('Check In Time must be less than Check Out Time');
+      return false;
+    }
 
-     if (formdata.listTillDate && formdata.listTillDate < new Date()) {
-       toast.error('List Till Date must be a future date');
-       return false;
-     }
-     if (formdata.minimumStay < 1) {
-       toast.error('Minimum Stay must be atleast 1 day');
-       return false;
-     }
-     if (formdata.minimumStay > 30) {
-       toast.error('Minimum Stay must be less than 30 days');
-       return false;
-     }
+    if (formdata.listTillDate && formdata.listTillDate < new Date()) {
+      toast.error('List Till Date must be a future date');
+      return false;
+    }
+    if (formdata.minimumStay < 1) {
+      toast.error('Minimum Stay must be atleast 1 day');
+      return false;
+    }
+    if (formdata.minimumStay > 30) {
+      toast.error('Minimum Stay must be less than 30 days');
+      return false;
+    }
+    if (formdata.numberOfRooms < 1) {
+      toast.error('Number of rooms must be atleast 1');
+      return false;
+    }
+    if (formdata.numberOfRooms > 10) {
+      toast.error('Number of rooms must be less than 10');
+      return false;
+    }
+    if (fomdata.price < 100) {
+      toast.error('Price must be atleast 100');
+      return false;
+    }
 
-     return true;
-   };
-
+    return true;
+  };
    const handleChange = (key, value) => {
      if (
        [

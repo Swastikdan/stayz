@@ -100,7 +100,7 @@ const fetchPlace = useCallback(async () => {
   const place = await res.json();
   setFormData((prevState) => ({
     ...prevState,
-    ...place,
+    ...place.place,
   }));
   setplaceLoading(false);
 }, [id]); // add any other dependencies here
@@ -225,6 +225,17 @@ useEffect(() => {
        toast.error('Minimum Stay must be less than 30 days');
        return false;
      }
+     if(formdata.numberOfRooms < 1){
+        toast.error('Number of rooms must be atleast 1');
+        return false;
+      } if(formdata.numberOfRooms > 10){
+        toast.error('Number of rooms must be less than 10');
+        return false;
+      }
+      if(fomdata.price < 100){
+        toast.error('Price must be atleast 100');
+        return false;
+      }
 
      return true;
    };
@@ -358,7 +369,7 @@ useEffect(() => {
                items={states}
                setSelectedData={handleStateChnage}
                label="State"
-               placeholder="Select State"
+               placeholder={formdata.state || 'Select State'}
                className="my-3"
                type="states"
              />
@@ -367,7 +378,7 @@ useEffect(() => {
                items={cities}
                setSelectedData={handleCitiesChnage}
                label="City"
-               placeholder="Select City"
+               placeholder={formdata.city || 'Select City'}
                className="my-3  disabled:cursor-none disabled:opacity-50  "
                disabled={formdata.state === ''}
                type="cities"
@@ -644,7 +655,7 @@ useEffect(() => {
                  Checking in and out
                </div> */}
 
-               <div>
+               {/* <div>
                  <input
                    className="peer hidden"
                    required=""
@@ -736,7 +747,7 @@ useEffect(() => {
                      </li>
                    </ul>
                  )}
-               </div>
+               </div> */}
                <div className="flex w-full items-center justify-start space-x-10 py-3">
                  <div className=" w-full  max-w-max font-semibold text-gray-700">
                    {' '}

@@ -100,7 +100,7 @@ export default function UserFavorites() {
       ) : (
         <div class="flex w-full items-center text-center ">
           {favorites.length != 0 ?  (
-            <div class="grid gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+            <div class="grid gap-3 md:grid-cols-2 md:gap-6 lg:grid-cols-3 w-full items-center justify-center content-center">
               {favorites.map((place) => (
                 <div
                   key={place.id}

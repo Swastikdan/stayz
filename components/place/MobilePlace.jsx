@@ -143,26 +143,26 @@ export default function MobilePlace({
     </div>
   );
 
-    const IconLabel = ({ svgPath, label }) => (
-      <div className="flex items-center space-x-3 border-b border-gray-300 pb-5 text-base font-light text-black last:border-none">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 32 32"
-          aria-hidden="true"
-          role="presentation"
-          focusable="false"
-          style={{
-            display: 'block',
-            height: '24px',
-            width: '24px',
-            fill: 'currentColor',
-          }}
-        >
-          <path d={svgPath}></path>
-        </svg>
-        <span className="text-gray-800">{label}</span>
-      </div>
-    );
+  const IconLabel = ({ svgPath, label }) => (
+    <div className="flex items-center space-x-3 border-b border-gray-300 pb-5 text-base font-light text-black last:border-none">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 32 32"
+        aria-hidden="true"
+        role="presentation"
+        focusable="false"
+        style={{
+          display: 'block',
+          height: '24px',
+          width: '24px',
+          fill: 'currentColor',
+        }}
+      >
+        <path d={svgPath}></path>
+      </svg>
+      <span className="text-gray-800">{label}</span>
+    </div>
+  );
   return (
     <section>
       <div className="w-full max-w-[100vw] overflow-hidden sm:hidden ">
@@ -232,7 +232,7 @@ export default function MobilePlace({
               <DrawerDescription className="text-wrap pt-5 text-start text-base">
                 <ScrollArea className="h-[100vh] w-full  pb-40 ">
                   <div className="pb-40">
-                    {' '}
+        
                     <MarkdownViewer markdown={description} />
                   </div>
                 </ScrollArea>
