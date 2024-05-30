@@ -28,27 +28,17 @@ useEffect(() => {
 
     if (response.ok) {
       setMessage(data.message);
-      setRedirecturl(data.redirecturl);
       setLoading(false);
-
-      // after 3 s redirect to the booking page
-      setTimeout(() => {
-        router.push(redirecturl);
-      }, 3000);
-
+      router.push(data.redirecturl);
     } else {
       setMessage(data.message);
       setLoading(false);
-
-      // after 3 s display not found page
-      setTimeout(() => {
-        return notFound();
-      }, 3000);
+      router.push(data.errorUrl);
     }
   };
 
   fetchData();
-}, [params, router, redirecturl]);
+});
   return (
     <div>
       <div className="flex min-h-[90vh] flex-col">

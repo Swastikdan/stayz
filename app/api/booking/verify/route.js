@@ -3,14 +3,18 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
+    console.log("POST request received");
     const data = await request.json();
     const { sessionId, type } = data;
+    console.log(`Session ID: ${sessionId}, Type: ${type}`);
     const session = await getServerSession();
     if (!session) {
+        console.log("No session found");
         return NextResponse.json({message: "Unauthorized" } , {status: 401});
     }
 
     if (!sessionId || !type) {
+        console.log("Session ID or type missing");
         return NextResponse.json({
             message: "All fields are required",
         }, { status: 400 });
@@ -20,9 +24,13 @@ export async function POST(request) {
         where: { sessionId: sessionId },
     });
 
+    const errorurl = `/place/${tempBooking.placeId}?bookingStatus=error`;
+
     if (!tempBooking) {
+        console.log("Temp booking not found");
         return NextResponse.json({
             message: "Temp booking not found",
+            errorurl
         }, { status: 404 });
     }
 
@@ -32,14 +40,18 @@ export async function POST(request) {
         });
 
         if (!user) {
+            console.log("User not found");
             return NextResponse.json({
                 message: "User not found",
+                    errorurl
             }, { status: 404 });
         }
 
         if (user.id !== tempBooking.userId) {
+            console.log("User not matched");
             return NextResponse.json({
                 message: "User not matched",
+                    errorurl
             }, { status: 404 });
         }
     }
@@ -49,14 +61,18 @@ export async function POST(request) {
     });
 
     if(booking && type === 'cancel') {
+        console.log("Booking already exists");
         return NextResponse.json({
             message: "Booking already exists",
+            errorurl
         }, { status: 400 });
     }
 
     if(!booking && type === 'success') {
+        console.log("Booking not found");
         return NextResponse.json({
             message: "Booking not found",
+            errorurl
         }, { status: 404 });
     }
 
@@ -68,11 +84,13 @@ export async function POST(request) {
                 where: { sessionId },
             });
 
+            console.log("Order Cancelled");
             return NextResponse.json({redirecturl , message:"Order Cancelled"} , {status: 200});
         } catch (e) {
-            console.log(e);
+            console.log("Error cancelling booking: ", e);
             return NextResponse.json({
                 message: "Error cancelling booking",
+                errorurl
             }, { status: 500 });
         }
     }
@@ -84,19 +102,29 @@ export async function POST(request) {
             });
 
             if(paymentinfo) {
+                console.log("Order Successfully Processed");
                 return NextResponse.json({redirecturl , message:"Order Sucessfully Processed"}, { status: 200 });
             } else {
-                return NextResponse.json({
-                    message: "Payment info not found",
-                }, { status: 200 });
+                console.log("Payment info not found");
+                return NextResponse.json(
+                  {
+                    redirecturl,
+                    message: 'Payment info not found',
+                  },
+                  { status: 200 },
+                );
             }
         } catch (e) {
-            console.log(e);
+            console.log("Error verifying booking: ", e);
             return NextResponse.json({
                 message: "Error verifying booking",
+                errorurl
             }, { status: 500 });
         }
     }
+
+    console.log(redirecturl);
+    console.log(errorurl);
 }
 
 
