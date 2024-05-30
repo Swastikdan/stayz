@@ -96,37 +96,46 @@ async function getBookingWindows(id) {
 
   if (!place) return [];
 
+  const listTillDate = place.listTillDate ? new Date(place.listTillDate) : new Date('2027-12-31');
+
   const bookings = await prisma.bookings.findMany({
-    where: { placeId: String(id) },
+    where: { 
+      placeId: String(id),
+      NOT: [
+        { status: 'canceled' },
+        { status: 'rejected' },
+        { status: 'paymentfalse' },
+      ],
+    },
     orderBy: { checkIn: 'asc' },
   });
 
   if (bookings.length === 0) {
-    return [];
+    return [{ availableFrom: new Date(), availableTo: listTillDate }];
   }
 
   let bookingWindows = [];
-  let lastCheckOut = new Date();
+  let lastCheckOut = new Date(bookings[0].checkIn);
 
   for (let i = 0; i < bookings.length; i++) {
-    const availableFrom = new Date(bookings[i].checkOut);
-    const availableTo =
-      i < bookings.length - 1
-        ? new Date(bookings[i + 1].checkIn)
-        : new Date(place.listTillDate);
+    let availableFrom = new Date(lastCheckOut);
+    let availableTo = new Date(bookings[i].checkIn);
     let diffTime = Math.abs(availableTo - availableFrom);
     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays >= place.minimumStay) {
+      if (availableFrom > availableTo) {
+        [availableFrom, availableTo] = [availableTo, availableFrom];
+      }
       bookingWindows.push({ availableFrom, availableTo });
     }
-    lastCheckOut = availableTo;
+    lastCheckOut = new Date(bookings[i].checkOut);
   }
 
-  if (lastCheckOut < new Date(place.listTillDate)) {
+  if (lastCheckOut < listTillDate) {
     bookingWindows.push({
       availableFrom: lastCheckOut,
-      availableTo: new Date(place.listTillDate),
+      availableTo: listTillDate,
     });
   }
 

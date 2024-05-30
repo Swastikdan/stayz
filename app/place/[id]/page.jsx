@@ -380,12 +380,18 @@ const handleBooking = async () => {
   const bookingStatus = searchParams.get('bookingStatus');
 
   useEffect(() => {
-    if (bookingStatus === 'cancelled') {
+    if (bookingStatus === 'cancel') {
       toast.error('Booking Unsuccessful');
       router.replace(`/place/${id}`);
     } else if (bookingStatus === 'success') {
       toast.success('Booking successful');
       router.replace(`/place/${id}`);
+    } 
+      else if (bookingStatus === 'error') {
+      toast.error('Booking failed');
+    }
+    else if (bookingStatus) {
+      toast.error('Booking failed');
     }
   }, [bookingStatus , router , id]);
 

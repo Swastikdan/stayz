@@ -21,9 +21,13 @@ export async function GET(request) {
 
  try {
   const bookingWindows = await getBookingWindows(placeid);
+   console.log(new Date());
   if (checkin && checkout) {
-    const checkinDate = new Date(checkin);
-    const checkoutDate = new Date(checkout);
+  const checkinDate = new Date(checkin);
+  checkinDate.setDate(checkinDate.getDate() + 1);
+
+  const checkoutDate = new Date(checkout);
+  checkoutDate.setDate(checkoutDate.getDate() + 1);
 
     if (bookingWindows.length === 0) {
       return NextResponse.json({ isAvailable: true }, { status: 200 }); // The place is available as there are no booking windows
@@ -39,7 +43,7 @@ export async function GET(request) {
 
     return NextResponse.json({ isAvailable: isAvailable }, { status: 200 });
   }
-
+ 
   return NextResponse.json(
     { error: 'Checkin and checkout dates are required' },
     { status: 400 },
