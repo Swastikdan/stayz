@@ -176,33 +176,65 @@ useEffect(() => {
     }));
   }, [favorites, id]);
 
-  // Validate search parameters when they change
-  const adults = searchParams.get('adults');
-  const children = searchParams.get('children');
-  const infants = searchParams.get('infants');
-  const pets = searchParams.get('pets');
-  const checkin = searchParams.get('checkin');
-  const checkout = searchParams.get('checkout');
+const [adults, setAdults] = useState(searchParams.get('adults')||1);
+const [children, setChildren] = useState(searchParams.get('children')||0);
+const [infants, setInfants] = useState(searchParams.get('infants')||0);
+const [pets, setPets] = useState(searchParams.get('pets')||0);
+const [checkin, setCheckin] = useState(searchParams.get('checkin'));
+const [checkout, setCheckout] = useState(searchParams.get('checkout'));
 
-  const validateSearchParams = useCallback(async () => {
-    // Add your validation logic here
-    if (!adults || !children || !infants || !pets || !checkin || !checkout) {
-      console.error('Invalid search parameters');
+const validateSearchParams = useCallback(async () => {
+  let newAdults = adults;
+  let newChildren = children;
+  let newCheckin = checkin;
+  let newCheckout = checkout;
+
+  if(newAdults < 1) {
+    newAdults = 1;
+  }
+
+  if((Number(newAdults) + Number(newChildren)) > state.place?.maxGuests) {
+    newChildren = 0;
+    newAdults = 1;
+  }
+
+  // check the validation of the dates
+  const checkinDate = new Date(newCheckin);
+  const checkoutDate = new Date(newCheckout);
+  if (checkinDate.getTime() >= checkoutDate.getTime()) {
+    newCheckin = new Date();
+    newCheckout = addDays(new Date(), Number(state.place?.minimumStay) || 1);
+  }
+
+  setAdults(newAdults);
+  setChildren(newChildren);
+  setCheckin(newCheckin);
+  setCheckout(newCheckout);
+
+  setState(prevState => ({
+    ...prevState,
+    adults: parseInt(newAdults),
+    childrens: parseInt(newChildren),
+    infants: parseInt(infants),
+    pets: parseInt(pets),
+    date: {
+      from: new Date(newCheckin),
+      to: new Date(newCheckout)
     }
-  }, [adults, children, infants, pets, checkin, checkout]);
+  }));
+}, [adults, children, infants, pets, checkin, checkout , state.place?.maxGuests , state.place?.minimumStay]);
 
-  useEffect(() => {
-    validateSearchParams();
-  }, [
-    adults,
-    children,
-    infants,
-    pets,
-    checkin,
-    checkout,
-    validateSearchParams,
-  ]);
-
+useEffect(() => {
+  validateSearchParams();
+}, [
+  adults,
+  children,
+  infants,
+  pets,
+  checkin,
+  checkout,
+  validateSearchParams,
+]);
   // Check booking availability when date or id changes
   useEffect(() => {
     checkBookingAvailability();

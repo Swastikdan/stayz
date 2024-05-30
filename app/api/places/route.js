@@ -56,8 +56,10 @@ export async function GET(request) {
 
     if (checkin && checkout) {
       const checkinDate = new Date(checkin);
-      const checkoutDate = new Date(checkout);
+      checkinDate.setDate(checkinDate.getDate() + 1);
 
+      const checkoutDate = new Date(checkout);
+      checkoutDate.setDate(checkoutDate.getDate() + 1);
       places = await Promise.all(
         places.map(async (place) => {
           const bookingwindows = await getBookingWindows(place.id);
