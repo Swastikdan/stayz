@@ -33,7 +33,7 @@ useEffect(() => {
     } else {
       setMessage(data.message);
       setLoading(false);
-      router.push(data.errorUrl);
+      router.push(data.errorUrl || '/');
     }
   };
 

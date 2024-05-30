@@ -154,7 +154,7 @@ model Tempbookings {
 
 model Payments {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  bookingId String @db.ObjectId
+  bookingId String @db.ObjectId @unique
   booking   Bookings @relation(fields: [bookingId], references: [id])
   userId    String @db.ObjectId
   user      User   @relation(fields: [userId], references: [id])
