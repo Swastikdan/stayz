@@ -525,7 +525,7 @@ export default function DesktopPlace({
               <>
                 <button
                   disabled={bookingLoading}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] disabled:cursor-not-allowed"
                   onClick={onBooking}
                 >
                   <Loader2
