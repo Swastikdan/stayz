@@ -451,31 +451,36 @@ export default function MobilePlace({
               <span className=" fott-medium">₹{price * bookingDays}</span>
             </div>
             <div className="my-5">
-              {isValidBookingWindow ? (
-                <>
-                  <button
-                    disabled={bookingLoading}
-                    className=" inline-flex w-full items-center justify-center gap-2 rounded-lg  bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] disabled:cursor-not-allowed"
-                    onClick={onBooking}
+              {isSameUser ? (
+              <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
+                {`You can't book your own place`}
+              </div>
+            ):
+            isValidBookingWindow ? (
+              <>
+                <button
+                  disabled={bookingLoading}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] disabled:cursor-not-allowed"
+                  onClick={onBooking}
+                >
+                  <Loader2
+                    className={`mr-2 size-[28px] animate-spin ${bookingLoading ? 'block transition-all ease-in-out' : 'hidden transition-all ease-in-out'}`}
+                  />
+                  <span
+                    className={`${bookingLoading ? 'hidden transition-all ease-in-out' : 'block transition-all ease-in-out'}`}
                   >
-                    <Loader2
-                      className={`mr-2 size-[28px] animate-spin ${bookingLoading ? 'block transition-all ease-in-out' : 'hidden transition-all ease-in-out'}`}
-                    />
-                    <span
-                      className={`${bookingLoading ? 'hidden transition-all ease-in-out' : 'block transition-all ease-in-out'}`}
-                    >
-                      Reserve
-                    </span>
-                  </button>
-                  <div className="pt-2 text-center text-sm font-light">
-                    {` You won't be charged yet`}
-                  </div>
-                </>
-              ) : (
-                <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
-                  Dates not available
+                    Reserve
+                  </span>
+                </button>
+                <div className="pt-2 text-center text-sm font-light">
+                  {` You won't be charged yet`}
                 </div>
-              )}
+              </>
+            ) : (
+              <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
+                Dates not available
+              </div>
+            )}
             </div>
           </div>
           <Separator className="my-4 py-[1px]" />
