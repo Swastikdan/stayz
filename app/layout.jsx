@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-title" content="Urban Utopia" />
         <meta name="application-name" content="Urban Utopia" />
         <meta name="msapplication-TileColor" content="#da532c" />
-        <meta name="theme-color" content="#F1FFFF" />
+        <meta name="theme-color" content="#FFFFFF" />
         <link
           rel="manifest"
           href="/site.webmanifest"
