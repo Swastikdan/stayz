@@ -122,9 +122,6 @@ export async function POST(request) {
             }, { status: 500 });
         }
     }
-
-    console.log(redirecturl);
-    console.log(errorurl);
 }
 
 

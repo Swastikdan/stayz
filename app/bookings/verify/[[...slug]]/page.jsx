@@ -2,6 +2,7 @@
 'use client'
 import React , {useState , useEffect} from 'react'
 import { useRouter , notFound} from 'next/navigation';
+import { Check , Loader2 } from 'lucide-react';
 export default function BookingVerify({params}) {
   const [loading, setLoading] = useState(true);
 const [message, setMessage] = useState('Order Processing , Pleae Wait');
@@ -40,19 +41,21 @@ useEffect(() => {
   fetchData();
 });
   return (
-    <div>
-      <div className="flex min-h-[90vh] flex-col">
-        <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
-          <div className="flex justify-center space-x-5 text-lg font-s">
-            <div
-              className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
-              role="status"
-              aria-label="loading"
-            ></div>
-            <span>{message}</span>
-          </div>
-        </div>
+    <div class="relative min-h-screen items-center justify-center bg-white p-4 text-center shadow sm:p-5 py-20">
+      <div class="mx-auto mb-3.5 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 p-2">
+        {loading ? (
+          <Loader2 className="animate-spin" size="24" />
+        ) : (
+          <Check size="24" />
+        )}
+        <span class="sr-only">Success</span>
       </div>
+      <p class="mb-4 text-lg font-semibold text-gray-900 transition-all duration-500 ease-in-out">
+        {message}
+      </p>
+      <p className="text-xs md:text-sm  font-light text-red-600">
+  Please do not navigate away or close this page while the process is ongoing.
+</p>
     </div>
   );
 }
