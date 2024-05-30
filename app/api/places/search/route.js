@@ -13,10 +13,11 @@ export async function GET(request) {
   try {
     const place = await prisma.places.findUnique({
       where: { id: String(id) },
-      include: { owner:{
-        select: { name : true, image: true, id: true }
-      
-      } },
+      include: {
+        owner: {
+          select: { name: true, image: true, id: true },
+        },
+      },
     });
 
     if (!place) return new Response('Place not found', { status: 404 });
@@ -83,7 +84,7 @@ async function getBookingWindows(id) {
     where: {
       placeId: String(id),
       NOT: [
-        { status: 'canceled' },
+        { status: 'cancelled' },
         { status: 'rejected' },
         { status: 'paymentfalse' },
       ],

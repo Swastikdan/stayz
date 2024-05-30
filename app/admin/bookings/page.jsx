@@ -11,7 +11,7 @@ import {
   ListFilter,
   CircleX,
 } from 'lucide-react';
-import React, { useState, useEffect , useCallback , useMemo} from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Table,
   TableBody,
@@ -44,15 +44,15 @@ export default function AdminBooking() {
   const router = useRouter();
   const filter = searchParams.get('filter');
 
-const filters = useMemo(
-  () => ['approved', 'cancelled', 'processing', 'rejected', 'expired'],
-  [],
-);
+  const filters = useMemo(
+    () => ['approved', 'cancelled', 'processing', 'rejected', 'expired'],
+    [],
+  );
 
-const isValidFilter = useCallback(
-  (filter) => filters.includes(filter),
-  [filters],
-);
+  const isValidFilter = useCallback(
+    (filter) => filters.includes(filter),
+    [filters],
+  );
 
   const fetchData = async () => {
     setRefreshing(true);
@@ -84,7 +84,7 @@ const isValidFilter = useCallback(
       filtered = bookings.filter((booking) => booking.status === filter);
     }
     setFilteredBookings(filtered);
-  }, [bookings, filter , isValidFilter]);
+  }, [bookings, filter, isValidFilter]);
 
   const handleRefresh = async () => {
     try {
@@ -158,7 +158,8 @@ const isValidFilter = useCallback(
                       </DropdownMenuItem>
                       {filters &&
                         filters.map((filtername) => (
-                          <DropdownMenuItem key={filtername}
+                          <DropdownMenuItem
+                            key={filtername}
                             className={` capitalize  ${filter == `${filtername}` ? 'bg-gray-100' : ''} `}
                             onClick={() => handleFilter(`${filtername}`)}
                           >
@@ -379,7 +380,7 @@ const isValidFilter = useCallback(
                                           <BadgeX width={20} />
                                           Rejected
                                         </span>
-                                      ) : booking.status === 'canceled' ? (
+                                      ) : booking.status === 'cancelled' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
                                           <BadgeX width={20} />
                                           Canceled
@@ -401,7 +402,7 @@ const isValidFilter = useCallback(
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
-                                      {booking.status === 'canceled' ||
+                                      {booking.status === 'cancelled' ||
                                       booking.status === 'approved' ||
                                       booking.status === 'rejected' ||
                                       new Date(booking.checkin) < new Date() ? (
@@ -473,7 +474,7 @@ const isValidFilter = useCallback(
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
                                       {booking.cancelRequest == false ||
-                                      booking.status === 'canceled' ||
+                                      booking.status === 'cancelled' ||
                                       booking.cancelRejection === true ||
                                       new Date(booking.checkin) < new Date() ? (
                                         <div className="flex items-center space-x-3">
@@ -500,7 +501,7 @@ const isValidFilter = useCallback(
                                             onClick={() =>
                                               handleStatusChange(
                                                 booking.id,
-                                                'canceled',
+                                                'cancelled',
                                               )
                                             }
                                           >

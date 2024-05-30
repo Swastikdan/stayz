@@ -16,7 +16,6 @@ export async function GET(request) {
   }
   const totalGuests = adults + children;
 
-
   try {
     const whereClause = category ? { category: { has: category } } : {};
 
@@ -34,7 +33,6 @@ export async function GET(request) {
         }
       : {};
 
-
     const guestsFilter =
       totalGuests > 0
         ? {
@@ -50,7 +48,6 @@ export async function GET(request) {
       ...guestsFilter,
       status: 'approved',
     };
-
 
     let places = await prisma.places.findMany({
       where: filters,
@@ -96,13 +93,15 @@ async function getBookingWindows(id) {
 
   if (!place) return [];
 
-  const listTillDate = place.listTillDate ? new Date(place.listTillDate) : new Date('2027-12-31');
+  const listTillDate = place.listTillDate
+    ? new Date(place.listTillDate)
+    : new Date('2027-12-31');
 
   const bookings = await prisma.bookings.findMany({
-    where: { 
+    where: {
       placeId: String(id),
       NOT: [
-        { status: 'canceled' },
+        { status: 'cancelled' },
         { status: 'rejected' },
         { status: 'paymentfalse' },
       ],
