@@ -392,7 +392,7 @@ export default function SearchBar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="center"
-                className="w-full space-y-3 rounded-3xl p-3"
+                className="w-full flex items-center space-y-3 rounded-3xl p-3"
               >
                 <Calendar
                   initialFocus
@@ -404,6 +404,7 @@ export default function SearchBar() {
                   selected={date}
                   onSelect={setDate}
                   numberOfMonths={2}
+                  className="w-min"
                 />
               </DropdownMenuContent>
             </DropdownMenu>
@@ -667,7 +668,7 @@ export default function SearchBar() {
                 </div>
               </div>
             </DrawerTrigger>
-            <DrawerContent className="h-full rounded-none bg-gray-200 ">
+            <DrawerContent className="h-full rounded-none bg-[#F6F6F6] ">
               <div className="flex items-end justify-end p-3 px-5">
                 <DrawerClose className="rounded-full bg-white p-2 ring-2 ring-black">
                   <X size={24} />
@@ -697,7 +698,7 @@ export default function SearchBar() {
                             />
                           </div>
                         </DrawerTrigger>
-                        <DrawerContent className="h-full bg-gray-200">
+                        <DrawerContent className="h-full bg-[#F6F6F6]">
                           <div className="mb-5 flex items-start justify-start p-3 px-5">
                             <DrawerClose className="rounded-full bg-white p-2 ring-2 ring-black">
                               <ArrowLeft size={24} />
@@ -1108,7 +1109,7 @@ export default function SearchBar() {
                 </span>
                 <DrawerClose
                   onClick={() => handleSearch()}
-                  className="flex items-center space-x-1 rounded-md bg-blue-500 px-4 py-2 font-semibold text-white "
+                  className="rounded-xl bg-blue-600 px-6 py-3 text-white flex items-center space-x-2"
                 >
                   <Search size={24} />
                   <span>Search</span>
