@@ -335,7 +335,7 @@ const handleBooking = async () => {
       body: JSON.stringify({ order, redirecturl, successurl }),
     });
 
-    const { sessionId, paymnetLink } = await checkoutResponse.json();
+    const { sessionId, paymentLink } = await checkoutResponse.json();
 
     const bookingData = {
       placeId: id,
@@ -348,7 +348,7 @@ const handleBooking = async () => {
       price: state.place.price * state.bookingdays,
       sessionId,
       userId: session.user.id,
-      paymnetLink ,
+      paymentLink,
     };
 
     const response = await fetch('/api/booking', {
@@ -375,6 +375,19 @@ const handleBooking = async () => {
     setState((prevState) => ({ ...prevState, bookingLoading: false }));
   }
 };
+
+
+  const bookingStatus = searchParams.get('bookingStatus');
+
+  useEffect(() => {
+    if (bookingStatus === 'cancelled') {
+      toast.error('Booking Unsuccessful');
+      router.replace(`/place/${id}`);
+    } else if (bookingStatus === 'success') {
+      toast.success('Booking successful');
+      router.replace(`/place/${id}`);
+    }
+  }, [bookingStatus , router , id]);
 
   if (state.placeLoading) {
     return (

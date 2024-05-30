@@ -115,6 +115,10 @@ model Bookings {
   checkIn   DateTime
   checkOut  DateTime
   guests    Int
+  adults    Int
+  childrens  Int? @default(0)
+  infants   Int? @default(0)
+  pets      Int? @default(0) 
   totalPrice Float
   status    String @default("processing")
   date     DateTime @default(now())
@@ -122,9 +126,31 @@ model Bookings {
   cancelRejection  Boolean?  @default(false)
   payment   Payments[]
   sessionId String @unique
-  paymnetLink String?
+  paymentLink String?
 
 }
+
+model Tempbookings {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  placeId   String @db.ObjectId
+  userId    String @db.ObjectId
+  checkIn   DateTime
+  checkOut  DateTime
+  guests    Int
+  adults    Int
+  childrens  Int? @default(0)
+  infants   Int? @default(0)
+  pets      Int? @default(0) 
+  totalPrice Float
+  status    String @default("processing")
+  date     DateTime @default(now())
+  cancelRequest  Boolean?  @default(false)
+  cancelRejection  Boolean?  @default(false)
+  sessionId String @unique
+  paymentLink String?
+}
+
+
 
 model Payments {
   id        String @id @default(auto()) @map("_id") @db.ObjectId

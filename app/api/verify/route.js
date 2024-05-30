@@ -1,8 +1,9 @@
 import stripe from '@/utils/stripe';
 import { headers } from 'next/headers';
 import prisma from '@/lib/prisma';
+
 export async function POST(request) {
- let body = await request.text();
+  let body = await request.text();
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const sig = request.headers.get('stripe-signature');
   console.log(sig);
@@ -18,66 +19,86 @@ export async function POST(request) {
   }
 
   switch (event.type) {
-  case 'checkout.session.async_payment_failed':
-    const checkoutSessionAsyncPaymentFailed = event.data.object;
-    try {
-      // Find the booking with the same sessionId and update its status
-      const updatedBooking = await prisma.bookings.update({
-        where: { sessionId: checkoutSessionAsyncPaymentFailed.id },
-        data: { status: 'paymentfalse' },
-      });
+    case 'checkout.session.async_payment_failed':
+      const checkoutSessionAsyncPaymentFailed = event.data.object;
+      try {
+        // Find the temp booking with the same sessionId
+        const tempBooking = await prisma.tempbookings.findUnique({
+          where: { sessionId: checkoutSessionAsyncPaymentFailed.id },
+        });
 
-      // Create a new payment
-      const newPayment = await prisma.payments.create({
-        data: {
-          bookingId: updatedBooking.id,
-          userId: updatedBooking.userId, // Assuming the userId is in the updatedBooking object
-          amount: checkoutSessionAsyncPaymentFailed.amount_total / 100, // Convert amount from cents to dollars
-          paymentId: checkoutSessionAsyncPaymentFailed.payment_intent, // Use payment_intent as paymentId
-          paymentemail: checkoutSessionAsyncPaymentFailed.customer_email, // Use customer_email as paymentemail
-          invoicename: checkoutSessionAsyncPaymentFailed.customer_details.name, // Use customer_details.name as invoicename
-          status: 'failed',
-          refundRequest: false,
-        },
-      });
+        if (tempBooking) {
+          // Create a new booking with the data from the temp booking
+          const newBooking = await prisma.bookings.create({
+            data: {
+              ...tempBooking,
+              status: 'paymentfalse',
+              paymentLink: null, // Remove the payment link
+            },
+          });
 
-      console.log('Booking status updated and payment created');
-    } catch (e) {
-      console.log(e);
-    }
-    break;
-  case 'checkout.session.async_payment_succeeded':
-  case 'checkout.session.completed':
-    const checkoutSession = event.data.object;
-    try {
-      // Find the booking with the same sessionId and update its status
-      const updatedBooking = await prisma.bookings.update({
-        where: { sessionId: checkoutSession.id },
-        data: { status: 'approved' },
-      });
+          // Create a new payment
+          const newPayment = await prisma.payments.create({
+            data: {
+              bookingId: newBooking.id,
+              userId: newBooking.userId,
+              amount: checkoutSessionAsyncPaymentFailed.amount_total / 100,
+              paymentId: checkoutSessionAsyncPaymentFailed.payment_intent,
+              paymentemail: checkoutSessionAsyncPaymentFailed.customer_email,
+              invoicename: checkoutSessionAsyncPaymentFailed.customer_details.name,
+              status: 'failed',
+              refundRequest: false,
+            },
+          });
 
-      // Create a new payment
-      const newPayment = await prisma.payments.create({
-        data: {
-          bookingId: updatedBooking.id,
-          userId: updatedBooking.userId, // Assuming the userId is in the updatedBooking object
-          amount: checkoutSession.amount_total / 100, // Convert amount from cents to dollars
-          paymentId: checkoutSession.payment_intent, // Use payment_intent as paymentId
-          paymentemail: checkoutSession.customer_email, // Use customer_email as paymentemail
-          invoicename: checkoutSession.customer_details.name, // Use customer_details.name as invoicename
-          status: 'paid',
-          refundRequest: false,
-        },
-      });
+          console.log('Booking created and payment failed');
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      break;
+    case 'checkout.session.async_payment_succeeded':
+    case 'checkout.session.completed':
+      const checkoutSession = event.data.object;
+      try {
+        // Find the temp booking with the same sessionId
+        const tempBooking = await prisma.tempbookings.findUnique({
+          where: { sessionId: checkoutSession.id },
+        });
 
-      console.log('Booking status updated and payment created');
-    } catch (e) {
-      console.log(e);
-    }
-    break;
-  default:
-    console.log(`Unhandled event type ${event.type}`);
-}
+        if (tempBooking) {
+          // Create a new booking with the data from the temp booking
+          const newBooking = await prisma.bookings.create({
+            data: {
+              ...tempBooking,
+              status: 'approved',
+              paymentLink: null, // Remove the payment link
+            },
+          });
+
+          // Create a new payment
+          const newPayment = await prisma.payments.create({
+            data: {
+              bookingId: newBooking.id,
+              userId: newBooking.userId,
+              amount: checkoutSession.amount_total / 100,
+              paymentId: checkoutSession.payment_intent,
+              paymentemail: checkoutSession.customer_email,
+              invoicename: checkoutSession.customer_details.name,
+              status: 'paid',
+              refundRequest: false,
+            },
+          });
+
+          console.log('Booking created and payment succeeded');
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
 
   return new Response('RESPONSE EXECUTE', {
     status: 200,

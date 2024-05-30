@@ -21,7 +21,7 @@ const {
   price,
   sessionId,
   userId,
-  paymnetLink,
+  paymentLink,
 } = data;
 
 if (
@@ -31,7 +31,7 @@ if (
   !checkIn ||
   !checkOut ||
   !adults ||
-  !paymnetLink ||
+  !paymentLink ||
   adults < 1
 ) {
   return NextResponse.json({
@@ -53,16 +53,20 @@ if (checkInDate >= checkOutDate) {
 }
 
 // Create the booking
-const newBooking = await prisma.bookings.create({
+const newBooking = await prisma.Tempbookings.create({
   data: {
     placeId,
     userId: userId,
     checkIn: checkInDate,
     checkOut: checkOutDate,
-    guests: adults + childrens + infants, // Assuming guests is the total of adults, childrens, and infants
+    guests: adults + childrens,
+    adults: adults,
+    childrens: childrens,
+    infants: infants,
+    pets: pets,
     totalPrice: price,
     sessionId: sessionId,
-    paymnetLink: paymnetLink,
+    paymentLink: paymentLink,
   },
 });
 
