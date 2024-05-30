@@ -34,6 +34,7 @@ export default function PlacePage({ params }) {
     isValidDates: true,
     isValidBookingWindow: true,
     bookingLoading: false,
+    isSameUser: false,
   });
 
   const prevDate = useRef();
@@ -396,6 +397,14 @@ const handleBooking = async () => {
     }
   }, [bookingStatus , router , id]);
 
+  // if the session.user.id is equal to the place.ownerId then the isSameUser will be set to true
+  useEffect(() => {
+    if (session && session.user.id === state.place?.ownerId) {
+      setState((prevState) => ({ ...prevState, isSameUser: true }));
+    }
+  }, [session, state.place?.ownerId]);
+
+
   if (state.placeLoading) {
     return (
       <div>
@@ -458,6 +467,7 @@ const handleBooking = async () => {
           isValidBookingWindow={state.isValidBookingWindow}
           isAvailable={state.isValidBookingWindow && state.isValidDates}
           bookingLoading={state.bookingLoading}
+          isSameUser={state.isSameUser}
         />
       </div>
       <div className="hidden px-4 sm:flex ">
@@ -494,6 +504,7 @@ const handleBooking = async () => {
           isValidBookingWindow={state.isValidBookingWindow}
           isAvailable={state.isValidBookingWindow && state.isValidDates}
           bookingLoading={state.bookingLoading}
+          isSameUser={state.isSameUser}
         />
       </div>
     </div>

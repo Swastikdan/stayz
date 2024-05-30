@@ -6,6 +6,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Pagination } from 'swiper/modules';
 import { ChevronLeft, Share, Heart } from 'lucide-react';
+import Image from 'next/image';
 export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,onClick , router }) {
   return (
     <>
@@ -66,7 +67,9 @@ export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,
           {images &&
             images.map((img, index) => (
               <SwiperSlide key={index} className="bg-gray-400">
-                <img
+                <Image
+                  height={200}
+                  width={300}
                   src={img.replace(
                     '/upload/',
                     '/upload/w_1200,c_fill,g_auto/q_auto/f_auto/',

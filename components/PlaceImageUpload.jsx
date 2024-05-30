@@ -198,7 +198,8 @@ export default function PlaceImageUpload({
               value={photoLink}
               onChange={(e) => setPhotoLink(e.target.value)}
               placeholder="Add using a link"
-              className="mr-2 w-full" // Added margin-right for spacing
+              disabled={isUploading}
+              className="mr-2 w-full disabled:cursor-not-allowed disabled:select-none disabled:opacity-50" // Added margin-right for spacing
             />
             <button
               type="button"
@@ -217,18 +218,20 @@ export default function PlaceImageUpload({
         </div>
         <div class="grid grid-cols-1 gap-3  py-5 pt-7 sm:grid-cols-3 lg:grid-cols-4  ">
           <div
-            class="flex w-full items-center justify-center disabled:cursor-not-allowed disabled:select-none disabled:opacity-50"
+            className={`flex w-full items-center justify-center ${isUploading ? 'pointer-events-none cursor-not-allowed opacity-50' : ''}`}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileChange}
-            disabled={isUploading}
           >
             <label
-              for="photos"
-              class="dark:hover:bg-bray-800  flex h-44 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500 bg-gray-50 hover:bg-gray-100 sm:h-40   "
+              htmlFor="photos"
+              className={`dark:hover:bg-bray-800 flex h-44 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-500 bg-gray-50 hover:bg-gray-100 ${isUploading ? 'pointer-events-none' : ''} sm:h-40 `}
             >
-              <div class="flex flex-col items-center justify-center pb-6 pt-5">
+              <div
+                type="button"
+                className={`flex flex-col items-center justify-center pb-6 pt-5 ${isUploading ? 'pointer-events-none' : ''}`}
+              >
                 <svg
-                  class="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
+                  className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -236,26 +239,27 @@ export default function PlaceImageUpload({
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                   />
                 </svg>
-                <p class="mb-2 text-xs text-gray-500 dark:text-gray-400">
-                  <span class="font-semibold">Click to upload</span> or drag and
-                  drop
+                <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
                 </p>
-                <p class="text-[10px] text-gray-500 dark:text-gray-400">
+                <p className="text-[10px] text-gray-500 dark:text-gray-400">
                   PNG, JPG (MIN. 600x400px)
                 </p>
               </div>
               <input
                 type="file"
-                class="hidden"
+                className="hidden"
                 name="photos"
                 id="photos"
                 multiple
+                disabled={isUploading}
                 onChange={handleFileChange}
               />
             </label>
@@ -268,7 +272,10 @@ export default function PlaceImageUpload({
               <NextImage
                 height={400}
                 width={600}
-                src={photo}
+                src={photo.replace(
+                  '/upload/',
+                  '/upload/w_600,h_400,c_fill,g_auto/q_auto/f_auto/',
+                )}
                 loading="lazy"
                 alt="Photo by Rachit Tank"
                 className="h-full w-full object-cover object-center"

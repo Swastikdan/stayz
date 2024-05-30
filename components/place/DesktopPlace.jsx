@@ -98,6 +98,7 @@ export default function DesktopPlace({
   onBooking,
   isvalidDates,
   isValidBookingWindow,
+  isSameUser,
 }) {
   const renderAmenities = (amenities, placeAmenities, include) => {
     return amenities
@@ -402,7 +403,7 @@ export default function DesktopPlace({
             <div className="my-5  rounded-2xl border-[2px] border-gray-400">
               <DropdownMenu>
                 <DropdownMenuTrigger className="w-full rounded-xl">
-                  <div className="flex flex-col lg:flex-row justify-between">
+                  <div className="flex flex-col justify-between lg:flex-row">
                     <div className="flex w-full flex-col border-r-2 border-gray-200 p-3 text-left text-sm">
                       <span className="font-bold capitalize">Check-in</span>
                       <span>
@@ -414,12 +415,9 @@ export default function DesktopPlace({
 
                     <Separator
                       orientation="vertical"
-                      className="h-[1px]  bg-gray-400 hidden lg:block "
+                      className="hidden  h-[1px] bg-gray-400 lg:block "
                     />
-                    <Separator
-                      
-                      className="h-[1px]  bg-gray-400 lg:hidden "
-                    />
+                    <Separator className="h-[1px]  bg-gray-400 lg:hidden " />
 
                     <div className="flex w-full flex-col p-3 text-left text-sm">
                       <span className="font-bold capitalize">Checkout</span>
@@ -518,8 +516,12 @@ export default function DesktopPlace({
                 </DropdownMenu>
               </div>
             </div>
-
-            {isValidBookingWindow ? (
+            {isSameUser ? (
+              <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
+                {`You can't book your own place`}
+              </div>
+            ):
+            isValidBookingWindow ? (
               <>
                 <button
                   disabled={bookingLoading}

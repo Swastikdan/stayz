@@ -133,6 +133,7 @@ const isValidFilter = useCallback(
           }
         };
 
+        
   return (
     <div className="mx-auto flex w-full items-center  justify-center py-10 sm:px-2 lg:px-8 lg:py-14">
       <div className="flex flex-col">
@@ -382,7 +383,7 @@ const isValidFilter = useCallback(
                                           <BadgeX width={20} />
                                           Rejected
                                         </span>
-                                      ) : booking.status === 'canceled' ? (
+                                      ) : booking.status === 'cancelled' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
                                           <BadgeX width={20} />
                                           Canceled
@@ -397,7 +398,13 @@ const isValidFilter = useCallback(
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
-                                      {booking.payment.status === 'paid' ? (
+                                      {booking.payment.status === 'paid' &&
+                                      booking.status === 'cancelled' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
+                                          <BadgeCheck width={20} />
+                                          Refunded
+                                        </span>
+                                      ) : booking.payment.status === 'paid' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
                                           <BadgeCheck width={20} />
                                           Paid
@@ -433,10 +440,24 @@ const isValidFilter = useCallback(
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
                                       {booking.cancelRequest == true ||
-                                      booking.status === 'canceled' ||
+                                      booking.status === 'cancelled' ||
                                       booking.status === 'rejected' ||
                                       booking.cancelRejection === true ||
-                                      new Date(booking.checkin) < new Date() ? (
+                                      (function () {
+                                        const currentDate = new Date();
+                                        const checkInDate = new Date(
+                                          booking.checkIn,
+                                        );
+                                        console.log(checkInDate);
+                                        const diffTime = Math.abs(
+                                          checkInDate - currentDate,
+                                        );
+                                        const diffDays = Math.ceil(
+                                          diffTime / (1000 * 60 * 60 * 24),
+                                        );
+                                        console.log(diffDays);
+                                        return diffDays < 2;
+                                      })() ? (
                                         <div
                                           disabled
                                           className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "

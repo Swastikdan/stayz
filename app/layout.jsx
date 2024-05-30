@@ -138,7 +138,7 @@ export default function RootLayout({ children }) {
           <UserProvider>
             <LikeProvider>
               <NavBar />
-              <main className="mx-auto w-full ">
+              <main className="mx-auto w-full min-h-screen">
                 {children}
 
                 <div className="font-heading">

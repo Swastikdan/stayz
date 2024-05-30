@@ -78,35 +78,36 @@ export async function POST(request) {
   }
 
   try {
-    const booking = await prisma.bookings.findUnique({
-      where: {
-        id: bookingId,
-      },
-    });
+const booking = await prisma.bookings.findUnique({
+  where: {
+    id: bookingId,
+  },
+});
 
-    if (!booking) {
-      return NextResponse.json({ code: 404, message: 'Booking not found' });
-    }
+if (!booking) {
+  return NextResponse.json({ code: 404, message: 'Booking not found' });
+}
 
-    // if (booking.userId !== session?.user.id) {
-    //   return NextResponse.json({ code: 403, message: 'Forbidden' });
-    // }
+const currentDate = new Date();
+const checkInDate = new Date(booking.checkIn);
+const diffTime = Math.abs(checkInDate - currentDate);
+const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (booking.status !== 'processing') {
-      return NextResponse.json({
-        code: 400,
-        message: 'Booking is not in processing state',
-      });
-    }
-
-    await prisma.bookings.update({
-      where: {
-        id: bookingId,
-      },
-      data: {
-        cancelRequest: true,
-      },
-    });
+if (diffDays > 2) {
+  await prisma.bookings.update({
+    where: {
+      id: bookingId,
+    },
+    data: {
+      status: 'cancelled',
+    },
+  });
+} else {
+  return NextResponse.json({
+    code: 400,
+    message: 'Cancellation window passed',
+  });
+}
 
     const user = await prisma.User.findUnique({
       where: {
