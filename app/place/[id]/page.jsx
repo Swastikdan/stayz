@@ -385,7 +385,7 @@ const handleBooking = async () => {
       router.replace(`/place/${id}`);
     } else if (bookingStatus === 'success') {
       toast.success('Booking successful');
-      router.replace(`/dashboard/booking/`);
+      router.replace(`/dashboard/bookings/`);
 
     } 
       else if (bookingStatus === 'error') {
