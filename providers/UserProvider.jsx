@@ -20,6 +20,7 @@ export const UserProvider = ({ children }) => {
     passwordAvailable: false,
   });
 
+  console.log(session);
 
 useEffect(() => {
   if (session && session.user.id) {

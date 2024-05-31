@@ -2,10 +2,27 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { Home, LayoutDashboard, ShieldCheck ,  Plus } from 'lucide-react';
+import { useSession, signOut } from 'next-auth/react';
+import {
+  Home,
+  LayoutDashboard,
+  ShieldCheck,
+  Plus,
+  UserRoundPlus,
+  LogIn,
+  BookHeart,
+  CircleUser,
+} from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUserContext } from '@/providers/UserProvider';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 export default function BottomNav() {
 
   const { data: session } = useSession();
@@ -48,67 +65,115 @@ export default function BottomNav() {
         isVisible ? 'slide-down' : 'slide-up'
       }`}
     >
-      <div className="mx-auto flex  h-full  max-w-[15rem] justify-center space-x-10 py-2 ">
+      <div className="mx-auto flex  h-full  max-w-[15rem] justify-center  py-2 ">
         <Link
           href="/"
-          className={`inline-flex flex-col items-center justify-center ${pathname === '/' ? ' text-primary ' : 'font-light'}`}
+          className={`inline-flex flex-col items-center justify-center rounded-full px-6 ${pathname === '/' ? ' text-primary ' : 'font-light'}}`}
         >
           <Home size={28} className="my-1" />
           <span className="pt-1 text-xs ">Home</span>
         </Link>
 
         <Link
-          href={user ? '/dashboard' : '/login'}
-          className={`inline-flex flex-col items-center justify-center ${pathname === '/dashboard' ? ' text-primary ' : 'font-light'}`}
+          href={user && user.id ? '/account/favorites' : '/login'}
+          className={`inline-flex flex-col items-center justify-center rounded-xl px-6 ${pathname === '/account/favorites' ? ' text-primary ' : 'font-light'}'}`}
         >
-          <LayoutDashboard size={28} className="my-1" />
-          <span className="pt-1 text-xs ">Dashboard</span>
+          <BookHeart size={28} className="my-1" />
+          <span className="pt-1 text-xs ">Favorites</span>
         </Link>
 
-        {user && user.role === 'admin' && (
+        {/* {user && user.role === 'admin' && (
           <Link
             href="/admin"
-            className={`inline-flex flex-col items-center justify-center ${pathname === '/admin/bookings' ? ' text-primary ' : 'font-light'}`}
+            className={`inline-flex flex-col items-center justify-center rounded-xl px-6 ${pathname === '/admin/bookings' ? ' text-primary ' : 'font-light'}`}
           >
             <ShieldCheck size={28} className="my-1" />
             <span className="pt-1 text-xs ">Admin</span>
           </Link>
-        )}
+        )} */}
 
         {user && user.image && user.name ? (
-          <Link
-            href="/account"
-            className={`inline-flex flex-col items-center justify-center ${pathname === '/account' ? ' text-primary ' : 'font-light'}`}
-          >
-            <Avatar
-              className={`h-8 w-8  ${pathname === '/account' ? ' ring-[2px] ring-primary ' : ''}`}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              asChild
+              className="m-auto items-center rounded-3xl "
             >
-              <AvatarImage
-                src={user?.image.replace(
-                  '/upload/',
-                  '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
-                )}
-                alt={`${user.name || 'user'} profile image`}
-              />
-              <AvatarFallback className="bg-black text-white">
-                {user.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <span className="pt-1 text-xs ">Profile</span>
-          </Link>
+              <div
+                className={`inline-flex flex-col items-center justify-center rounded-xl px-6 ${pathname === '/account' ? ' text-primary ' : 'font-light'}`}
+              >
+                <Avatar
+                  className={`h-7 w-7 p-.5  ${pathname === '/account' ? ' ring-[2px] ring-primary ' : ''}`}
+                >
+                  <AvatarImage
+                    src={user?.image.replace(
+                      '/upload/',
+                      '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
+                    )}
+                    alt={`${user.name || 'user'} profile image`}
+                  />
+                  <AvatarFallback className="bg-black text-white">
+                    {user.name.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="pt-1 text-xs ">Profile</span>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className=" min-w-[60vw] rounded-2xl  py-4  drop-shadow-xl "
+            >
+              {user && user?.role === 'admin' ? (
+                <Link href="/admin">
+                  <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
+                    <ShieldCheck width={15} />
+                    <span className="pl-2">Admin Pannel</span>
+                  </DropdownMenuItem>
+                </Link>
+              ) : null}
+
+              <Link href="/account">
+                <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
+                  <CircleUser width={15} />
+                  <span className="pl-2">Profile</span>
+                </DropdownMenuItem>
+              </Link>
+              {/* <Link href="/account/favorites">
+                <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
+                  <BookHeart width={15} />
+                  <span className="pl-2">Favorites</span>
+                </DropdownMenuItem>
+              </Link> */}
+
+              <Link href="/dashboard">
+                <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
+                  <LayoutDashboard width={15} />{' '}
+                  <span className="pl-2">Dashboard</span>
+                </DropdownMenuItem>
+              </Link>
+
+              <Link href="/place/new">
+                <DropdownMenuItem className="flex cursor-pointer items-center rounded-md ">
+                  <Plus width={15} />
+                  <span className="pl-2">
+                    List Your Property‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎
+                  </span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Link
             href="/login"
-            className="inline-flex flex-col  items-center justify-center  "
+            className="inline-flex flex-col items-center  justify-center px-6  "
           >
-            <Avatar className="h-8 w-8 ">
+            <Avatar className="p-.5 h-7 w-7">
               <AvatarImage
                 src="https://res.cloudinary.com/dp5tomvwb/image/upload/placeholder_guest.jpg"
                 alt="Guest profile image"
                 className="rounded-full grayscale"
               />
               <AvatarFallback>
-                <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200"></div>
+                <div className="p-.5 h-7 w-7 animate-pulse rounded-full bg-gray-200"></div>
               </AvatarFallback>
             </Avatar>
             <span className="pt-1 text-xs font-light">Login</span>
