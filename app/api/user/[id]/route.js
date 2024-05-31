@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 async function getUser(request, { params }) {
   const session = await getServerSession();
   const id = params.id;
-  if (!session)  return NextResponse.json('Unauthorized', { status: 401 });
+  if (!session) return NextResponse.json('Unauthorized', { status: 401 });
   const user = await prisma.user.findUnique({
     where: { id: String(id) },
     select: {
@@ -15,8 +15,8 @@ async function getUser(request, { params }) {
       image: true,
       role: true,
       bio: true,
-      hashedPassword: true
-    }
+      hashedPassword: true,
+    },
   });
 
   // Check if password is available and replace the password field
@@ -25,9 +25,9 @@ async function getUser(request, { params }) {
 
   // Add passwordAvailable to the user object
   user.passwordAvailable = passwordAvailable;
-  if (!user)  return NextResponse.json('User not found', { status: 404 });
+  if (!user) return NextResponse.json('User not found', { status: 404 });
   if (user.email !== session.user.email)
-     return NextResponse.json('Unauthorized', { status: 401 });
+    return NextResponse.json('Unauthorized', { status: 401 });
   return NextResponse.json(user, { status: 200 });
 }
 
@@ -35,69 +35,69 @@ async function updateUser(request, { params }) {
   const session = await getServerSession();
   const id = params.id;
 
-  if (!session)  return NextResponse.json("Unauthorized", { status: 401 });
+  if (!session) return NextResponse.json('Unauthorized', { status: 401 });
   const user = await prisma.user.findUnique({ where: { id: String(id) } });
-  if (!user)  return NextResponse.json("User not found", { status: 404 });
-  if(user.email !== session.user.email)  return NextResponse.json("Unauthorized", { status: 401 });
+  if (!user) return NextResponse.json('User not found', { status: 404 });
+  if (user.email !== session.user.email)
+    return NextResponse.json('Unauthorized', { status: 401 });
 
-  const { name, image, bio, accountPassword, newPassword } = await request.json();
+  const { name, image, bio, accountPassword, newPassword } =
+    await request.json();
 
-  // console.log(accountPassword, newPassword);
+  // //console.log(accountPassword, newPassword);
 
-  if (name && (typeof name !== "string" || name.length < 3 || name.length > 50 ))
-     return NextResponse.json({message:"Invalid name"}, { status: 400 });
+  if (name && (typeof name !== 'string' || name.length < 3 || name.length > 50))
+    return NextResponse.json({ message: 'Invalid name' }, { status: 400 });
 
-  if (image && typeof image !== "string")
-     return NextResponse.json({message:"Invalid image"}, { status: 400 });
+  if (image && typeof image !== 'string')
+    return NextResponse.json({ message: 'Invalid image' }, { status: 400 });
 
-  if (bio && typeof bio !== "string")
-     return NextResponse.json({message:"Invalid bio"}, { status: 400 });
+  if (bio && typeof bio !== 'string')
+    return NextResponse.json({ message: 'Invalid bio' }, { status: 400 });
 
-  if(name === user.name && image === user.image && bio === user.bio){
-    return NextResponse.json({message:"No changes made"}, { status: 400 });
-  
+  if (name === user.name && image === user.image && bio === user.bio) {
+    return NextResponse.json({ message: 'No changes made' }, { status: 400 });
   }
 
+  if (accountPassword && newPassword) {
+    if (typeof accountPassword !== 'string' || typeof newPassword !== 'string')
+      return NextResponse.json(
+        { message: 'Invalid password' },
+        { status: 400 },
+      );
 
+    const isMatch = await bcrypt.compare(accountPassword, user.hashedPassword);
+    if (!isMatch)
+      return NextResponse.json(
+        { message: 'Old password is incorrect' },
+        { status: 400 },
+      );
 
-if (accountPassword && newPassword) {
-  if (typeof accountPassword !== 'string' || typeof newPassword !== 'string')
-    return NextResponse.json({ message: 'Invalid password' }, { status: 400 });
+    if (accountPassword === newPassword)
+      return NextResponse.json(
+        { message: 'Old and new password should not be the same' },
+        {
+          status: 400,
+        },
+      );
+  }
 
-  const isMatch = await bcrypt.compare(accountPassword, user.hashedPassword);
-  if (!isMatch)
-    return NextResponse.json(
-      { message: 'Old password is incorrect' },
-      { status: 400 },
-    );
+  let data = { name, image, bio };
 
-  if (accountPassword === newPassword)
-    return NextResponse.json({ message: 'Old and new password should not be the same'}, {
-      status: 400,
-    });
-}
-
-
-
-
-
-let data = { name, image, bio };
-
-if (user.hashedPassword && newPassword) {
-  const hashedPassword = await bcrypt.hash(newPassword, 12);
-  data.hashedPassword = hashedPassword;
-}
-
+  if (user.hashedPassword && newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    data.hashedPassword = hashedPassword;
+  }
 
   const updatedUser = await prisma.user.update({
     where: { id: String(id) },
     data,
   });
 
-  return NextResponse.json( updatedUser , { status: 200 });
+  return NextResponse.json(updatedUser, { status: 200 });
 }
 
-export { getUser as GET  , updateUser as POST };
+export { getUser as GET, updateUser as POST };
 
 // // Function to handle GET requests
 // async function handleGetRequest(user) {

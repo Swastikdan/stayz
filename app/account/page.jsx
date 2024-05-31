@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useRef, useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -7,192 +7,191 @@ import { Eye, EyeOff, Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/providers/UserProvider';
 export default function Account() {
-     const { data: session, loading: sessionLoading } = useSession();
-     const uploadRef = useRef(null);
-     const [loading, setLoading] = useState(false);
-     const [picture, setPicture] = useState('');
-     const { userData, setUserData, userImage, setUserImage } =
-       useUserContext();
-     const [userLoading, setUserLoading] = useState(true);
-     const [showAccountPassword, setShowAccountPassword] = useState(false);
-     const [showNewPassword, setShowNewPassword] = useState(false);
-     let userid = session?.user?.id;
-useEffect(() => {
-  if (session) {
-    const id = session.user.id;
-    fetch(`/api/user/${id}`)
-      .then((res) => res.json())
-      .then((user) => {
+  const { data: session, loading: sessionLoading } = useSession();
+  const uploadRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [picture, setPicture] = useState('');
+  const { userData, setUserData, userImage, setUserImage } = useUserContext();
+  const [userLoading, setUserLoading] = useState(true);
+  const [showAccountPassword, setShowAccountPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  let userid = session?.user?.id;
+  useEffect(() => {
+    if (session) {
+      const id = session.user.id;
+      fetch(`/api/user/${id}`)
+        .then((res) => res.json())
+        .then((user) => {
+          setUserData({
+            name: user.name || '',
+            image: user.image || '',
+            email: user.email || '',
+            accountPassword: '',
+            newPassword: '',
+            bio: user.bio || '',
+            passwordAvailable: user.passwordAvailable,
+          });
+          setUserLoading(false);
+          setUserImage(user.image);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          setUserLoading(false);
+        });
+    }
+  }, [session, setUserData, setUserImage]);
+
+  if (sessionLoading || !session || userLoading) {
+    return (
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <div className="flex min-h-[90vh] flex-col rounded-xl">
+          <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
+            <div className="flex justify-center">
+              <div
+                className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
+                role="status"
+                aria-label="loading"
+              >
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const handleImageClick = () => {
+    uploadRef.current.click();
+  };
+
+  const handlePictureChange = (e) => {
+    const file = e.target.files[0];
+    setPicture(file);
+  };
+
+  const handleUserData = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
+
+  const handleSaveChanges = async () => {
+    setLoading(true);
+    let { name, accountPassword, newPassword, bio } = userData;
+
+    if (name.trim() === '') {
+      setLoading(false);
+      return toast.error("Name can't be empty");
+    } else if (name.trim().length < 3) {
+      setLoading(false);
+      return toast.error('Name must be at least 3 characters');
+    } else if (name.trim().length > 50) {
+      setLoading(false);
+      return toast.error("Name can't be more than 50 characters");
+    }
+
+    if (newPassword) {
+      if (accountPassword.trim() === '') {
+        setLoading(false);
+        return toast.error('Current password is required');
+      } else if (newPassword.trim().length < 8) {
+        setLoading(false);
+        return toast.error('Password too short. Use minimum 8 characters.');
+      } else if (!/[a-z]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one lowercase letter.');
+      } else if (!/[A-Z]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one uppercase letter.');
+      } else if (!/[0-9]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one number.');
+      } else if (!/[!@#$%^&*]/.test(newPassword)) {
+        setLoading(false);
+        return toast.error('Password needs at least one symbol (!@#$%^&*).');
+      }
+    }
+
+    try {
+      let pictureUrl = '';
+      if (picture) {
+        const formData = new FormData();
+        formData.append('photos', picture);
+        const res = await fetch('/api/upload/profile-photo', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        pictureUrl = data.url;
+      }
+
+      let userImage;
+      if (pictureUrl) {
+        userImage = pictureUrl;
+      } else {
+        userImage = userData.image;
+      }
+      const userDetails = {
+        name,
+        accountPassword,
+        newPassword,
+        image: userImage,
+        bio,
+      };
+
+      // //console.log(userDetails);
+      //post request to  /api/user/[id] with userDetails
+      const res = await fetch(`/api/user/${userid}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userDetails),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success('Profile updated successfully');
+        // Reset the form and re-fetch the user data
         setUserData({
-          name: user.name || '',
-          image: user.image || '',
-          email: user.email || '',
+          name: '',
+          image: '',
+          email: '',
           accountPassword: '',
           newPassword: '',
-          bio: user.bio || '',
-          passwordAvailable: user.passwordAvailable,
+          bio: '',
         });
-        setUserLoading(false);
-        setUserImage(user.image);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        setUserLoading(false);
-      });
-  }
-}, [session, setUserData, setUserImage]);
-
-     if (sessionLoading || !session || userLoading) {
-       return (
-         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-         <div className="flex min-h-[90vh] flex-col rounded-xl">
-           <div className="flex flex-auto flex-col items-center justify-center p-4 md:p-5">
-             <div className="flex justify-center">
-               <div
-                 className="inline-block size-9 animate-spin rounded-full border-[3px] border-current border-t-transparent text-blue-600 dark:text-blue-500"
-                 role="status"
-                 aria-label="loading"
-               >
-                 <span className="sr-only">Loading...</span>
-               </div>
-             </div>
-           </div>
-         </div>
-         </div>
-       );
-     }
-
-     const handleImageClick = () => {
-       uploadRef.current.click();
-     };
-
-     const handlePictureChange = (e) => {
-       const file = e.target.files[0];
-       setPicture(file);
-     };
-
-     const handleUserData = (e) => {
-       const { name, value } = e.target;
-       setUserData({ ...userData, [name]: value });
-     };
-
-     const handleSaveChanges = async () => {
-       setLoading(true);
-       let { name, accountPassword, newPassword, bio } = userData;
-
-       if (name.trim() === '') {
-         setLoading(false);
-         return toast.error("Name can't be empty");
-       } else if (name.trim().length < 3) {
-         setLoading(false);
-         return toast.error('Name must be at least 3 characters');
-       } else if (name.trim().length > 50) {
-         setLoading(false);
-         return toast.error("Name can't be more than 50 characters");
-       }
-
-       if (newPassword) {
-         if (accountPassword.trim() === '') {
-           setLoading(false);
-           return toast.error('Current password is required');
-         } else if (newPassword.trim().length < 8) {
-           setLoading(false);
-           return toast.error('Password too short. Use minimum 8 characters.');
-         } else if (!/[a-z]/.test(newPassword)) {
-           setLoading(false);
-           return toast.error('Password needs at least one lowercase letter.');
-         } else if (!/[A-Z]/.test(newPassword)) {
-           setLoading(false);
-           return toast.error('Password needs at least one uppercase letter.');
-         } else if (!/[0-9]/.test(newPassword)) {
-           setLoading(false);
-           return toast.error('Password needs at least one number.');
-         } else if (!/[!@#$%^&*]/.test(newPassword)) {
-           setLoading(false);
-           return toast.error('Password needs at least one symbol (!@#$%^&*).');
-         }
-       }
-
-       try {
-         let pictureUrl = '';
-         if (picture) {
-           const formData = new FormData();
-           formData.append('photos', picture);
-           const res = await fetch('/api/upload/profile-photo', {
-             method: 'POST',
-             body: formData,
-           });
-           const data = await res.json();
-           pictureUrl = data.url;
-         }
-
-         let userImage;
-         if (pictureUrl) {
-           userImage = pictureUrl;
-         } else {
-           userImage = userData.image;
-         }
-         const userDetails = {
-           name,
-           accountPassword,
-           newPassword,
-           image: userImage,
-           bio,
-         };
-
-         // console.log(userDetails);
-         //post request to  /api/user/[id] with userDetails
-         const res = await fetch(`/api/user/${userid}`, {
-           method: 'POST',
-           headers: {
-             'Content-Type': 'application/json',
-           },
-           body: JSON.stringify(userDetails),
-         });
-         const data = await res.json();
-         if (res.ok) {
-           toast.success('Profile updated successfully');
-           // Reset the form and re-fetch the user data
-           setUserData({
-             name: '',
-             image: '',
-             email: '',
-             accountPassword: '',
-             newPassword: '',
-             bio: '',
-           });
-           setPicture('');
-           fetch(`/api/user/${userid}`)
-             .then((res) => res.json())
-             .then((user) => {
-               setUserData({
-                 name: user.name || '',
-                 image: user.image || '',
-                 email: user.email || '',
-                 accountPassword: '',
-                 newPassword: '',
-                 bio: user.bio || '',
-               });
-             })
-             .catch((error) => {
-               console.error('Error:', error);
-             });
-         } else {
-           toast.error(data.message);
-         }
-         setLoading(false);
-       } catch (error) {
-         // console.error(error);
-         setLoading(false);
-         toast.error('Something Went Wrong');
-       }
-     };
-     const toggleAccountPasswordVisibility = () => {
-       setShowAccountPassword(!showAccountPassword);
-     };
-     const toggleNewPasswordVisibility = () => {
-       setShowNewPassword(!showNewPassword);
-     };
+        setPicture('');
+        fetch(`/api/user/${userid}`)
+          .then((res) => res.json())
+          .then((user) => {
+            setUserData({
+              name: user.name || '',
+              image: user.image || '',
+              email: user.email || '',
+              accountPassword: '',
+              newPassword: '',
+              bio: user.bio || '',
+            });
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      } else {
+        toast.error(data.message);
+      }
+      setLoading(false);
+    } catch (error) {
+      // console.error(error);
+      setLoading(false);
+      toast.error('Something Went Wrong');
+    }
+  };
+  const toggleAccountPasswordVisibility = () => {
+    setShowAccountPassword(!showAccountPassword);
+  };
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
       <div className="rounded-xl bg-white p-1 px-4 dark:bg-slate-900  sm:p-7 md:px-8">
@@ -428,4 +427,3 @@ useEffect(() => {
     </div>
   );
 }
-

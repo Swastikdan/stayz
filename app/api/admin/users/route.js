@@ -34,7 +34,7 @@ async function getUser() {
 
       return NextResponse.json({ users }, { status: 200 });
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       return NextResponse.json({ message: err.message }, { status: 500 });
     }
   }
@@ -91,8 +91,11 @@ async function deleteUser(request, { params }) {
         { status: 200 },
       );
     } catch (err) {
-      console.log(err);
-      return NextResponse.json({ message: 'Something went wrong' }, { status: 500 });
+      //console.log(err);
+      return NextResponse.json(
+        { message: 'Something went wrong' },
+        { status: 500 },
+      );
     }
   }
 }
@@ -137,8 +140,6 @@ async function updateUserStatus(request) {
       );
     }
 
-
-
     if (user.role === 'admin') {
       message = 'Updated to User';
       await prisma.user.update({
@@ -173,7 +174,7 @@ async function updateUserStatus(request) {
 
     return NextResponse.json({ message, users });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }

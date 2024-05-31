@@ -13,14 +13,18 @@ export default async function layout({ children }) {
       name: 'Bookings',
       href: '/dashboard/bookings',
     },
-    {
-      name: 'Favorites',
-      href: '/dashboard/favorites',
-    },
+    // {
+    //   name: 'Favorites',
+    //   href: '/dashboard/favorites',
+    // },
     {
       name: 'Listings',
       href: '/dashboard/listings',
     },
+    {
+      name:'Customers',
+      href:'/dashboard/customers'
+    }
   ];
   return (
     <section className="mx-auto h-full min-h-screen w-full max-w-screen-xl items-center  justify-center px-2">

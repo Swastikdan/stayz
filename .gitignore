@@ -12,7 +12,7 @@
 # next.js
 /.next/
 /out/
-
+/servers
 # production
 /build
 
@@ -36,3 +36,4 @@ yarn-error.log*
 next-env.d.ts
 .env
 stripe.js
+/app/servers

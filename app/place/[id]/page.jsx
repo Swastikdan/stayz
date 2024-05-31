@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams , notFound} from 'next/navigation';
+import { useRouter, useSearchParams, notFound } from 'next/navigation';
 import { toast } from 'sonner';
 import { loadStripe } from '@stripe/stripe-js';
 import DesktopPlace from '@/components/place/DesktopPlace';
@@ -55,37 +55,34 @@ export default function PlacePage({ params }) {
   //   "availableTo": "2025-05-18T14:10:30.000Z"
   // },
 
-useEffect(() => {
-  if (state.firstbookingWindow) {
-    const now = new Date();
-    const availableFrom = new Date(state?.firstbookingWindow?.availableFrom);
-    const availableTo = new Date(state?.firstbookingWindow?.availableTo);
-    const minimumStay = Number(state?.place?.minimumStay) || 1; // assuming state.place.minimumStay holds the minimum stay duration
+  useEffect(() => {
+    if (state.firstbookingWindow) {
+      const now = new Date();
+      const availableFrom = new Date(state?.firstbookingWindow?.availableFrom);
+      const availableTo = new Date(state?.firstbookingWindow?.availableTo);
+      const minimumStay = Number(state?.place?.minimumStay) || 1; // assuming state.place.minimumStay holds the minimum stay duration
 
-    if (now < availableFrom) {
-      setState((prevState) => ({
-        ...prevState,
-        date: {
-          from: availableFrom,
-          to: addDays(availableFrom, minimumStay),
-        },
-      }));
-    } else {
-      setState((prevState) => ({
-        ...prevState,
-        date: {
-          from: now,
-          to: addDays(now, minimumStay),
-        },
-      }));
+      if (now < availableFrom) {
+        setState((prevState) => ({
+          ...prevState,
+          date: {
+            from: availableFrom,
+            to: addDays(availableFrom, minimumStay),
+          },
+        }));
+      } else {
+        setState((prevState) => ({
+          ...prevState,
+          date: {
+            from: now,
+            to: addDays(now, minimumStay),
+          },
+        }));
+      }
+
+      setState((prevState) => ({ ...prevState, bookingdays: minimumStay }));
     }
-
-    setState((prevState) => ({ ...prevState, bookingdays: minimumStay }));
-  }
-}, [state?.firstbookingWindow, state?.place?.minimumStay]);
-
-
-
+  }, [state?.firstbookingWindow, state?.place?.minimumStay]);
 
   // Helper function to fetch place data
   const fetchPlaceData = useCallback(async () => {
@@ -176,65 +173,74 @@ useEffect(() => {
     }));
   }, [favorites, id]);
 
-const [adults, setAdults] = useState(searchParams.get('adults')||1);
-const [children, setChildren] = useState(searchParams.get('children')||0);
-const [infants, setInfants] = useState(searchParams.get('infants')||0);
-const [pets, setPets] = useState(searchParams.get('pets')||0);
-const [checkin, setCheckin] = useState(searchParams.get('checkin'));
-const [checkout, setCheckout] = useState(searchParams.get('checkout'));
+  const [adults, setAdults] = useState(searchParams.get('adults') || 1);
+  const [children, setChildren] = useState(searchParams.get('children') || 0);
+  const [infants, setInfants] = useState(searchParams.get('infants') || 0);
+  const [pets, setPets] = useState(searchParams.get('pets') || 0);
+  const [checkin, setCheckin] = useState(searchParams.get('checkin'));
+  const [checkout, setCheckout] = useState(searchParams.get('checkout'));
 
-const validateSearchParams = useCallback(async () => {
-  let newAdults = adults;
-  let newChildren = children;
-  let newCheckin = checkin;
-  let newCheckout = checkout;
+  const validateSearchParams = useCallback(async () => {
+    let newAdults = adults;
+    let newChildren = children;
+    let newCheckin = checkin;
+    let newCheckout = checkout;
 
-  if(newAdults < 1) {
-    newAdults = 1;
-  }
-
-  if((Number(newAdults) + Number(newChildren)) > state.place?.maxGuests) {
-    newChildren = 0;
-    newAdults = 1;
-  }
-
-  // check the validation of the dates
-  const checkinDate = new Date(newCheckin);
-  const checkoutDate = new Date(newCheckout);
-  if (checkinDate.getTime() >= checkoutDate.getTime()) {
-    newCheckin = new Date();
-    newCheckout = addDays(new Date(), Number(state.place?.minimumStay) || 1);
-  }
-
-  setAdults(newAdults);
-  setChildren(newChildren);
-  setCheckin(newCheckin);
-  setCheckout(newCheckout);
-
-  setState(prevState => ({
-    ...prevState,
-    adults: parseInt(newAdults),
-    childrens: parseInt(newChildren),
-    infants: parseInt(infants),
-    pets: parseInt(pets),
-    date: {
-      from: new Date(newCheckin),
-      to: new Date(newCheckout)
+    if (newAdults < 1) {
+      newAdults = 1;
     }
-  }));
-}, [adults, children, infants, pets, checkin, checkout , state.place?.maxGuests , state.place?.minimumStay]);
 
-useEffect(() => {
-  validateSearchParams();
-}, [
-  adults,
-  children,
-  infants,
-  pets,
-  checkin,
-  checkout,
-  validateSearchParams,
-]);
+    if (Number(newAdults) + Number(newChildren) > state.place?.maxGuests) {
+      newChildren = 0;
+      newAdults = 1;
+    }
+
+    // check the validation of the dates
+    const checkinDate = new Date(newCheckin);
+    const checkoutDate = new Date(newCheckout);
+    if (checkinDate.getTime() >= checkoutDate.getTime()) {
+      newCheckin = new Date();
+      newCheckout = addDays(new Date(), Number(state.place?.minimumStay) || 1);
+    }
+
+    setAdults(newAdults);
+    setChildren(newChildren);
+    setCheckin(newCheckin);
+    setCheckout(newCheckout);
+
+    setState((prevState) => ({
+      ...prevState,
+      adults: parseInt(newAdults),
+      childrens: parseInt(newChildren),
+      infants: parseInt(infants),
+      pets: parseInt(pets),
+      date: {
+        from: new Date(newCheckin),
+        to: new Date(newCheckout),
+      },
+    }));
+  }, [
+    adults,
+    children,
+    infants,
+    pets,
+    checkin,
+    checkout,
+    state.place?.maxGuests,
+    state.place?.minimumStay,
+  ]);
+
+  useEffect(() => {
+    validateSearchParams();
+  }, [
+    adults,
+    children,
+    infants,
+    pets,
+    checkin,
+    checkout,
+    validateSearchParams,
+  ]);
   // Check booking availability when date or id changes
   useEffect(() => {
     checkBookingAvailability();
@@ -334,81 +340,82 @@ useEffect(() => {
   //     toast.error(error);
   //   }
   // };
-const handleBooking = async () => {
-  try {
-    setState((prevState) => ({ ...prevState, bookingLoading: true }));
+  const handleBooking = async () => {
+    try {
+      setState((prevState) => ({ ...prevState, bookingLoading: true }));
 
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_TEST_STRIPE_PUBLISHABLE_KEY);
-    if (!stripe) {
-      throw new Error('Stripe failed to initialize.');
-    }
-
-    const order = [
-      {
-        price_data: {
-          currency: 'inr',
-          product_data: {
-            name: state.place.title,
-            images: state.place.photos.slice(0, 8),
-          },
-          unit_amount: Number(state.place.price * state.bookingdays * 100),
-        },
-        quantity: 1,
-      },
-    ];
-
-    const redirecturl = `${window.location.origin}/place/${id}`;
-    const successurl = `${window.location.origin}/place/${id}?`;
-
-    const checkoutResponse = await fetch('/api/checkout_sessions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ order, redirecturl, successurl }),
-    });
-
-    const { sessionId, paymentLink } = await checkoutResponse.json();
-
-    const bookingData = {
-      placeId: id,
-      checkIn: state.date.from,
-      checkOut: state.date.to,
-      adults: state.adults,
-      childrens: state.childrens,
-      infants: state.infants,
-      pets: state.pets,
-      price: state.place.price * state.bookingdays,
-      sessionId,
-      userId: session.user.id,
-      paymentLink,
-    };
-
-    const response = await fetch('/api/booking', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bookingData),
-    });
-
-    const data = await response.json();
-
-    if (data.code === 200) {
-      const stripeError = await stripe.redirectToCheckout({ sessionId });
-      if (stripeError) {
-        throw new Error(stripeError);
+      const stripe = await loadStripe(
+        process.env.NEXT_PUBLIC_TEST_STRIPE_PUBLISHABLE_KEY,
+      );
+      if (!stripe) {
+        throw new Error('Stripe failed to initialize.');
       }
-    } else {
-      throw new Error('Booking Error. Please try again.');
-    }
-  } catch (error) {
-    console.error(error);
-    toast.error(error.message);
-    setState((prevState) => ({ ...prevState, bookingLoading: false }));
-  }
-};
 
+      const order = [
+        {
+          price_data: {
+            currency: 'inr',
+            product_data: {
+              name: state.place.title,
+              images: state.place.photos.slice(0, 8),
+            },
+            unit_amount: Number(state.place.price * state.bookingdays * 100),
+          },
+          quantity: 1,
+        },
+      ];
+
+      const redirecturl = `${window.location.origin}/place/${id}`;
+      const successurl = `${window.location.origin}/place/${id}?`;
+
+      const checkoutResponse = await fetch('/api/checkout_sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ order, redirecturl, successurl }),
+      });
+
+      const { sessionId, paymentLink } = await checkoutResponse.json();
+
+      const bookingData = {
+        placeId: id,
+        checkIn: state.date.from,
+        checkOut: state.date.to,
+        adults: state.adults,
+        childrens: state.childrens,
+        infants: state.infants,
+        pets: state.pets,
+        price: state.place.price * state.bookingdays,
+        sessionId,
+        userId: session.user.id,
+        paymentLink,
+      };
+
+      const response = await fetch('/api/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      const data = await response.json();
+
+      if (data.code === 200) {
+        const stripeError = await stripe.redirectToCheckout({ sessionId });
+        if (stripeError) {
+          throw new Error(stripeError);
+        }
+      } else {
+        throw new Error('Booking Error. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+      setState((prevState) => ({ ...prevState, bookingLoading: false }));
+    }
+  };
 
   const bookingStatus = searchParams.get('bookingStatus');
 
@@ -419,15 +426,12 @@ const handleBooking = async () => {
     } else if (bookingStatus === 'success') {
       toast.success('Booking successful');
       router.replace(`/dashboard/bookings/`);
-
-    } 
-      else if (bookingStatus === 'error') {
+    } else if (bookingStatus === 'error') {
+      toast.error('Booking failed');
+    } else if (bookingStatus) {
       toast.error('Booking failed');
     }
-    else if (bookingStatus) {
-      toast.error('Booking failed');
-    }
-  }, [bookingStatus , router , id]);
+  }, [bookingStatus, router, id]);
 
   // if the session.user.id is equal to the place.ownerId then the isSameUser will be set to true
   useEffect(() => {
@@ -435,7 +439,6 @@ const handleBooking = async () => {
       setState((prevState) => ({ ...prevState, isSameUser: true }));
     }
   }, [session, state.place?.ownerId]);
-
 
   if (state.placeLoading) {
     return (
@@ -460,8 +463,6 @@ const handleBooking = async () => {
   if (state.errorLoading) {
     return notFound();
   }
-
-
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -543,7 +544,8 @@ const handleBooking = async () => {
   );
 }
 
-{/*
+{
+  /*
 const id = params.id;
   const { data: session } = useSession();
   const router = useRouter();
@@ -588,7 +590,7 @@ const id = params.id;
 
 
 
-console.log(place)
+//console.log(place)
 const minimumStay = place?.minimumStay || 1;
 const maxGuests = place?.maxGuests || 16 ;
   
@@ -822,4 +824,5 @@ useEffect(() => {
   //       });
   //   }
   // }, [session_id , router]);
-*/}
+*/
+}

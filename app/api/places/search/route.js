@@ -41,7 +41,7 @@ export async function GET(request) {
       return now < availableFrom;
     });
 
-    if (session && session.user.email) {
+    if (session && session.user.email && place.status != 'approved') {
       const user = await prisma.user.findUnique({
         where: { email: session.user.email },
       });

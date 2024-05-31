@@ -26,6 +26,7 @@ import {
   Plus,
   ShieldCheck,
   AlignJustify,
+  BookHeart,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function NavBar({ className }) {
@@ -184,6 +185,12 @@ export default function NavBar({ className }) {
                     <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
                       <CircleUser width={15} />
                       <span className="pl-2">Profile</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/account/favorites">
+                    <DropdownMenuItem className="flex cursor-pointer items-center rounded-md">
+                      <BookHeart width={15} />
+                      <span className="pl-2">Favorites</span>
                     </DropdownMenuItem>
                   </Link>
 

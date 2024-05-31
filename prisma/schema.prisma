@@ -127,6 +127,7 @@ model Bookings {
   payment   Payments[]
   sessionId String @unique
   paymentLink String?
+  ownerId    String? @db.ObjectId @unique
 
 }
 
@@ -148,6 +149,7 @@ model Tempbookings {
   cancelRejection  Boolean?  @default(false)
   sessionId String @unique
   paymentLink String?
+  ownerId    String? @db.ObjectId @unique
 }
 
 

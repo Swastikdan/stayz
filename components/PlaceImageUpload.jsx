@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { Star, Trash2, Expand, Link } from 'lucide-react';
 import { toast } from 'sonner';
-import { Input } from '@/components/Input'
+import { Input } from '@/components/Input';
 import NextImage from 'next/image';
 export default function PlaceImageUpload({
   files,
@@ -92,14 +92,14 @@ export default function PlaceImageUpload({
         //   }
         //   resolve();
         // };
-          img.onload = () => {
-            validFiles.push(file);
-            resolve();
-          };
+        img.onload = () => {
+          validFiles.push(file);
+          resolve();
+        };
       });
     }
     setPhotosUploading(validFiles.length);
-    // console.log(validFiles.length);
+    // //console.log(validFiles.length);
 
     if (validFiles.length > 0) {
       try {

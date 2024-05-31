@@ -43,14 +43,13 @@ async function getPlaces() {
       }
       return NextResponse.json({ places }, { status: 200 });
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       return NextResponse.json({ message: err.message }, { status: 500 });
     }
   }
 }
 
-async  function updateListing(request){
-
+async function updateListing(request) {
   const session = await getServerSession();
   if (!session) {
     return NextResponse.json({ message: 'you have to login' }, { status: 401 });
@@ -65,9 +64,8 @@ async  function updateListing(request){
       return NextResponse.json({ message: 'admin not found' }, { status: 401 });
     }
 
-    try{
-
-      const {status , id } = await request.json();
+    try {
+      const { status, id } = await request.json();
 
       const place = await prisma.Places.update({
         where: {
@@ -96,17 +94,11 @@ async  function updateListing(request){
         },
       });
       return NextResponse.json({ places }, { status: 200 });
-    
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       return NextResponse.json({ message: err.message }, { status: 500 });
     }
   }
-
-
 }
 
-
-
-
-export { getPlaces as GET , updateListing as POST};
+export { getPlaces as GET, updateListing as POST };

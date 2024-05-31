@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState , useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -29,54 +29,54 @@ export const LikeProvider = ({ children }) => {
         });
     }
   }, [session]);
-  // console.log('Favorites form Context ',favorites  );
-const toggleLike = async (roomId) => {
-  if (!session) {
-    router.push('/login');
-    return;
-  }
-
-  setFavorites((prevFavorites) => {
-    const favoritesIds = prevFavorites.map(favorite => favorite.id);
-    if (favoritesIds.includes(roomId)) {
-      return prevFavorites.filter((favorite) => favorite.id !== roomId);
-    } else {
-      return [...prevFavorites, { id: roomId }];
-    }
-  });
-
-  try {
-    const response = await fetch('/api/user/favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ placeId: roomId }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Something went wrong');
+  // //console.log('Favorites form Context ',favorites  );
+  const toggleLike = async (roomId) => {
+    if (!session) {
+      router.push('/login');
+      return;
     }
 
-    setMessage(data.message);
-    toast.success(data.message);
-  } catch (error) {
-    setMessage(error.message);
-    toast.error(error.message);
-
-    // Revert back to previous state
     setFavorites((prevFavorites) => {
-      const favoritesIds = prevFavorites.map(favorite => favorite.id);
+      const favoritesIds = prevFavorites.map((favorite) => favorite.id);
       if (favoritesIds.includes(roomId)) {
-        return [...prevFavorites, { id: roomId }];
-      } else {
         return prevFavorites.filter((favorite) => favorite.id !== roomId);
+      } else {
+        return [...prevFavorites, { id: roomId }];
       }
     });
-  }
-};
+
+    try {
+      const response = await fetch('/api/user/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ placeId: roomId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong');
+      }
+
+      setMessage(data.message);
+      toast.success(data.message);
+    } catch (error) {
+      setMessage(error.message);
+      toast.error(error.message);
+
+      // Revert back to previous state
+      setFavorites((prevFavorites) => {
+        const favoritesIds = prevFavorites.map((favorite) => favorite.id);
+        if (favoritesIds.includes(roomId)) {
+          return [...prevFavorites, { id: roomId }];
+        } else {
+          return prevFavorites.filter((favorite) => favorite.id !== roomId);
+        }
+      });
+    }
+  };
 
   return (
     <LikeContext.Provider
@@ -132,7 +132,7 @@ export const LikeProvider = ({ children }) => {
     }
   }, [session]);
 
-  //console.log('Favorites form Context ',favorites  );
+  ////console.log('Favorites form Context ',favorites  );
   return (
     <LikeContext.Provider
       value={{ favorites, favoriteLoading, setFavorites }}

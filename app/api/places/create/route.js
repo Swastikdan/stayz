@@ -68,6 +68,9 @@ export async function createPlace(request) {
      },
    },
  });
+
+ // copy the user data and copy that to the Owners 
+
   return NextResponse.json({ message: 'Place created successfully' , place:{
     id:place.id,
   }  });

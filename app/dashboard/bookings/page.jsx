@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import {
   Ban,
   Badge,
@@ -36,104 +36,99 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 
 export default function DashboardBooking() {
+  const [bookings, setBookings] = useState([]);
+  const [pageloading, setPageLoading] = useState(true);
+  const [loading, setLoading] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const filter = searchParams.get('filter');
 
-    const [bookings, setBookings] = useState([]);
-    const [pageloading, setPageLoading] = useState(true);
-    const [loading, setLoading] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
-    const [error, setError] = useState(null);
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    const filter = searchParams.get('filter');
+  const filters = useMemo(() => ['approved', 'processing', 'rejected'], []);
 
-const filters = useMemo(() => ['approved', 'processing', 'rejected'], []);
+  const isValidFilter = useCallback(
+    (filter) => filters.includes(filter),
+    [filters],
+  );
+  // filter the data on client side
 
-const isValidFilter = useCallback(
-  (filter) => filters.includes(filter),
-  [filters],
-);
-    // filter the data on client side
-
-    const fetchBookings = async () => {
-      setRefreshing(true);
-      try {
-        const response = await fetch('/api/user/bookings');
-        const data = await response.json();
-        if (response.ok) {
-          setBookings(data);
-        } else {
-          throw new Error('Failed to load bookings');
-        }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setPageLoading(false);
-        setRefreshing(false);
+  const fetchBookings = async () => {
+    setRefreshing(true);
+    try {
+      const response = await fetch('/api/user/bookings');
+      const data = await response.json();
+      if (response.ok) {
+        setBookings(data);
+      } else {
+        throw new Error('Failed to load bookings');
       }
-    };
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setPageLoading(false);
+      setRefreshing(false);
+    }
+  };
   useEffect(() => {
     fetchBookings();
   }, []);
 
+  const [filteredBookings, setFilteredBookings] = useState([]);
 
+  useEffect(() => {
+    let filtered = bookings;
+    if (filter && isValidFilter(filter)) {
+      filtered = bookings.filter((booking) => booking.status === filter);
+    }
+    setFilteredBookings(filtered);
+  }, [bookings, filter, isValidFilter]);
 
-    const [filteredBookings, setFilteredBookings] = useState([]);
+  const handleRefresh = async () => {
+    try {
+      fetchBookings();
+      toast.success('Bookings refreshed successfully');
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
-    useEffect(() => {
-      let filtered = bookings;
-      if (filter && isValidFilter(filter)) {
-        filtered = bookings.filter((booking) => booking.status === filter);
+  const handleCancelBooking = async (bookingId) => {
+    setLoading((prev) => [...prev, bookingId]);
+    try {
+      const response = await fetch(`/api/user/bookings`, {
+        method: 'POST',
+        body: JSON.stringify({ id: bookingId }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setBookings(data);
+        toast.success('Booking cancelled Requested');
+      } else {
+        throw new Error('Something went wrong, please try again later');
       }
-      setFilteredBookings(filtered);
-    }, [bookings, filter , isValidFilter]);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading((prev) => prev.filter((id) => id !== bookingId));
+    }
+  };
 
-      const handleRefresh = async () => {
-        try {
-          fetchBookings();
-          toast.success('Bookings refreshed successfully');
-        } catch (error) {
-          setError(error.message);
-        }
-      };
+  //     for that booking here to fix this "payment": [
+  //   {
+  //     "status": "paid"
+  //   }
+  // ],
 
-      const handleCancelBooking = async (bookingId) => {
-        setLoading((prev) => [...prev, bookingId]);
-        try {
-          const response = await fetch(`/api/user/bookings`, {
-            method: 'POST',
-            body: JSON.stringify({ id: bookingId }),
-          });
+  const handleFilter = (filter) => {
+    if (isValidFilter(filter)) {
+      router.push(`/dashboard/bookings?filter=${filter}`);
+    } else {
+      router.push(`/dashboard/bookings`);
+    }
+  };
 
-          const data = await response.json();
-          if (response.ok) {
-            setBookings(data);
-            toast.success('Booking cancelled Requested');
-          } else {
-            throw new Error('Something went wrong, please try again later');
-          }
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading((prev) => prev.filter((id) => id !== bookingId));
-        }
-      }
-
-
-    //     for that booking here to fix this "payment": [
-    //   {
-    //     "status": "paid"
-    //   }
-    // ],
-
-        const handleFilter = (filter) => {
-          if (isValidFilter(filter)) {
-            router.push(`/dashboard/bookings?filter=${filter}`);
-          } else {
-            router.push(`/dashboard/bookings`);
-          }
-        };
-
-        
   return (
     <div className="mx-auto flex w-full items-center  justify-center py-10 sm:px-2 lg:px-8 lg:py-14">
       <div className="flex flex-col">
@@ -229,7 +224,7 @@ const isValidFilter = useCallback(
                                   </span>
                                 </div>
                               </TableHead>
-                              <TableHead
+                              {/* <TableHead
                                 scope="col"
                                 className="px-2 py-1 text-start"
                               >
@@ -238,7 +233,7 @@ const isValidFilter = useCallback(
                                     Owner
                                   </span>
                                 </div>
-                              </TableHead>
+                              </TableHead> */}
                               <TableHead
                                 scope="col"
                                 className="px-2 py-1 text-start"
@@ -326,7 +321,7 @@ const isValidFilter = useCallback(
                                       </Link>
                                     </div>
                                   </TableCell>
-                                  <TableCell className="size-px whitespace-nowrap">
+                                  {/* <TableCell className="size-px whitespace-nowrap">
                                     <div className="flex items-center space-x-2 px-2 py-1 font-medium">
                                       <Avatar>
                                         <AvatarImage
@@ -346,7 +341,7 @@ const isValidFilter = useCallback(
                                         {booking.user.name}
                                       </span>
                                     </div>
-                                  </TableCell>
+                                  </TableCell> */}
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1 ">
                                       <span className="pl-2 text-sm">
@@ -448,14 +443,14 @@ const isValidFilter = useCallback(
                                         const checkInDate = new Date(
                                           booking.checkIn,
                                         );
-                                        console.log(checkInDate);
+                                        //console.log(checkInDate);
                                         const diffTime = Math.abs(
                                           checkInDate - currentDate,
                                         );
                                         const diffDays = Math.ceil(
                                           diffTime / (1000 * 60 * 60 * 24),
                                         );
-                                        console.log(diffDays);
+                                        //console.log(diffDays);
                                         return diffDays < 2;
                                       })() ? (
                                         <div

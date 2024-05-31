@@ -15,19 +15,18 @@
 //     receipt: 'rcp1',
 //   };
 //   const order = await razorpay.orders.create(options);
-//   console.log(order);
+//   //console.log(order);
 //   return NextResponse.json({ orderId: order.id }, { status: 200 });
 // }
 
-
-import {NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 import shortid from 'shortid';
 
 export async function POST(request) {
-//   const { amount } = await request.json();
-const amount = 1;
-const currency = 'INR'; 
+  //   const { amount } = await request.json();
+  const amount = 1;
+  const currency = 'INR';
   const razorpay = new Razorpay({
     key_id: process.env.key_id,
     key_secret: process.env.key_secret,
@@ -52,13 +51,10 @@ const currency = 'INR';
       { status: 200 },
     );
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return NextResponse.json(err, { status: 400 });
   }
 }
-
-
-
 
 // const Razorpay = require('razorpay');
 // const shortid = require('shortid');
@@ -91,12 +87,10 @@ const currency = 'INR';
 //         amount: response.amount,
 //       });
 //     } catch (err) {
-//       console.log(err);
+//       //console.log(err);
 //       res.status(400).json(err);
 //     }
 //   } else {
 //     // Handle any other HTTP method
 //   }
 // }
-
-

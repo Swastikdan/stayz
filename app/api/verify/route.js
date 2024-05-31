@@ -6,13 +6,13 @@ export async function POST(request) {
   let body = await request.text();
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const sig = request.headers.get('stripe-signature');
-  console.log(sig);
+  //console.log(sig);
 
   let event;
   try {
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
-    console.log(`Webhook Error: ${err.message}`);
+    //console.log(`Webhook Error: ${err.message}`);
     return new Response(`Webhook Error: ${err}`, {
       status: 400,
     });
@@ -45,16 +45,17 @@ export async function POST(request) {
               amount: checkoutSessionAsyncPaymentFailed.amount_total / 100,
               paymentId: checkoutSessionAsyncPaymentFailed.payment_intent,
               paymentemail: checkoutSessionAsyncPaymentFailed.customer_email,
-              invoicename: checkoutSessionAsyncPaymentFailed.customer_details.name,
+              invoicename:
+                checkoutSessionAsyncPaymentFailed.customer_details.name,
               status: 'failed',
               refundRequest: false,
             },
           });
 
-          console.log('Booking created and payment failed');
+          //console.log('Booking created and payment failed');
         }
       } catch (e) {
-        console.log(e);
+        //console.log(e);
       }
       break;
     case 'checkout.session.async_payment_succeeded':
@@ -90,14 +91,14 @@ export async function POST(request) {
             },
           });
 
-          console.log('Booking created and payment succeeded');
+          //console.log('Booking created and payment succeeded');
         }
       } catch (e) {
-        console.log(e);
+        //console.log(e);
       }
       break;
     default:
-      console.log(`Unhandled event type ${event.type}`);
+    //console.log(`Unhandled event type ${event.type}`);
   }
 
   return new Response('RESPONSE EXECUTE', {

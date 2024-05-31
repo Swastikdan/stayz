@@ -32,7 +32,7 @@ useEffect(() => {
 }, [session]);
 
   return (
-    <UserContext.Provider value={{ user: session?.user, userImage, userData, setUserData }}>
+    <UserContext.Provider value={{ user: session?.user, userImage, userData, setUserData , setUserImage }}>
       {children}
     </UserContext.Provider>
   );

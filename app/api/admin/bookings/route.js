@@ -50,7 +50,7 @@ async function getBooking() {
     return NextResponse.json({ bookings }, { status: 200 });
     // return NextResponse.json({ message: 'hi' });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }
@@ -129,7 +129,7 @@ async function statusUpdate(request) {
     });
     return NextResponse.json({ bookings });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return NextResponse.json({ message: err.message }, { status: 500 });
   }
 }

@@ -10,9 +10,6 @@ import {
   ArrowDownUp,
   ListFilter,
   CircleX,
-  Plus,
-  HelpCircle,
-  PenSquare,
 } from 'lucide-react';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
@@ -38,8 +35,8 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import Link from 'next/link';
 
-export default function UserListings() {
-  const [listings, setListings] = useState([]);
+export default function DashboardBooking() {
+  const [bookings, setBookings] = useState([]);
   const [pageloading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -47,20 +44,22 @@ export default function UserListings() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const filter = searchParams.get('filter');
+
   const filters = useMemo(() => ['approved', 'processing', 'rejected'], []);
 
   const isValidFilter = useCallback(
     (filter) => filters.includes(filter),
     [filters],
   );
+  // filter the data on client side
 
-  const fetchListings = async () => {
+  const fetchBookings = async () => {
     setRefreshing(true);
     try {
-      const response = await fetch('/api/user/listings');
+      const response = await fetch('/api/user/bookings/customers');
       const data = await response.json();
       if (response.ok) {
-        setListings(data);
+        setBookings(data);
       } else {
         throw new Error('Failed to load bookings');
       }
@@ -72,63 +71,43 @@ export default function UserListings() {
     }
   };
   useEffect(() => {
-    fetchListings();
+    fetchBookings();
   }, []);
 
-  const [filteredListings, setFilteredListings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
+
   useEffect(() => {
-    if (!filter) {
-      setFilteredListings(listings);
-    } else if (isValidFilter(filter)) {
-      setFilteredListings(
-        listings.filter((listing) => listing.status === filter),
-      );
-    } else {
-      router.replace('/dashboard/bookings');
+    let filtered = bookings;
+    if (filter && isValidFilter(filter)) {
+      filtered = bookings.filter((booking) => booking.status === filter);
     }
-  }, [listings, filter, isValidFilter, router]);
+    setFilteredBookings(filtered);
+  }, [bookings, filter, isValidFilter]);
 
   const handleRefresh = async () => {
     try {
-      fetchListings();
+      fetchBookings();
+      toast.success('Bookings refreshed successfully');
     } catch (error) {
       setError(error.message);
-    } finally {
-      toast.success('Listings refreshed successfully');
     }
   };
 
-  const handleRemoveRequest = async (id) => {
-    setLoading((prev) => [...prev, id]);
-    try {
-      const response = await fetch(`/api/user/listings`, {
-        method: 'POST',
-        body: JSON.stringify({ id: id }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setListings(data);
-        toast.success('Listing Removal reqiuest sent successfully');
-      } else {
-        toast.error(data.message);
-        throw new Error('Something went wrong, please try again later');
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading((prev) => prev.filter((listing) => listing !== id));
-    }
-  };
+
+  //     for that booking here to fix this "payment": [
+  //   {
+  //     "status": "paid"
+  //   }
+  // ],
 
   const handleFilter = (filter) => {
     if (isValidFilter(filter)) {
-      router.push(`/dashboard/listings?filter=${filter}`);
+      router.push(`/dashboard/bookings?filter=${filter}`);
     } else {
-      router.push(`/dashboard/listings`);
+      router.push(`/dashboard/bookings`);
     }
   };
 
-  //console.log(filteredListings)
   return (
     <div className="mx-auto flex w-full items-center  justify-center py-10 sm:px-2 lg:px-8 lg:py-14">
       <div className="flex flex-col">
@@ -137,7 +116,7 @@ export default function UserListings() {
             <div className="w-min overflow-hidden  rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-slate-900 ">
               <div className="flex items-center justify-between gap-3 border-b border-gray-200 px-2 py-4 dark:border-gray-700 md:px-5">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                  Listings
+                  Customers Bookings
                 </h2>
 
                 <div className="flex items-center space-x-2">
@@ -181,13 +160,6 @@ export default function UserListings() {
                     />
                     <span className="hidden md:flex">Refresh</span>
                   </button>
-                  <Link
-                    href="/place/new"
-                    className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-blue-600 bg-blue-600 px-2 py-1 text-sm text-blue-50 shadow-sm hover:bg-blue-700 disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    <Plus width={20} />
-                    <span className="hidden md:flex">Add new</span>
-                  </Link>
                 </div>
               </div>
               {pageloading ? (
@@ -206,8 +178,8 @@ export default function UserListings() {
                 </div>
               ) : (
                 <>
-                  {!Array.isArray(filteredListings) ||
-                  filteredListings.length === 0 ? (
+                  {!Array.isArray(filteredBookings) ||
+                  filteredBookings.length === 0 ? (
                     <div className="col-span-4 flex   h-56 flex-1 items-center justify-center py-8 lg:py-16  ">
                       <div className="mx-auto w-[80vw] max-w-2xl px-4 py-8 text-center">
                         <p className=" mt-4 text-gray-500">
@@ -237,6 +209,26 @@ export default function UserListings() {
                               >
                                 <div className="flex items-center gap-x-2 ps-6">
                                   <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Customer
+                                  </span>
+                                </div>
+                              </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-2 py-1 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
+                                    Check In - Check Out
+                                  </span>
+                                </div>
+                              </TableHead>
+                              <TableHead
+                                scope="col"
+                                className="px-2 py-1 text-start"
+                              >
+                                <div className="flex items-center gap-x-2 ps-6">
+                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
                                     Status
                                   </span>
                                 </div>
@@ -247,7 +239,7 @@ export default function UserListings() {
                               >
                                 <div className="flex items-center gap-x-2 ps-6">
                                   <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                    Price
+                                    Payment
                                   </span>
                                 </div>
                               </TableHead>
@@ -257,35 +249,28 @@ export default function UserListings() {
                               >
                                 <div className="flex items-center gap-x-2 ps-6">
                                   <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200">
-                                    Removal Request
+                                    Invoice
                                   </span>
                                 </div>
                               </TableHead>
-                              <TableHead
-                                scope="col"
-                                className="px-2 py-1 text-start"
-                              >
-                                <div className="flex items-center gap-x-2 ps-6">
-                                  <span className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-200"></span>
-                                </div>
-                              </TableHead>
+
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {filteredListings &&
-                              filteredListings.map((listing) => (
-                                <TableRow key={listing.id}>
+                            {filteredBookings &&
+                              filteredBookings.map((booking) => (
+                                <TableRow key={booking.place.id}>
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="py-3 pe-6 ps-6 lg:ps-3 xl:ps-0">
                                       <Link
                                         target="_blank"
-                                        href={`/place/${listing.id}`}
+                                        href={`/place/${booking.place.id}`}
                                         className="flex items-center gap-x-3"
                                       >
                                         <Avatar className="h-10 w-12 rounded-lg md:h-12 md:w-16 xl:h-16 xl:w-20">
                                           <AvatarImage
                                             className="h-10 w-12 md:h-12 md:w-16 xl:h-16 xl:w-20 "
-                                            src={listing.photos[0]}
+                                            src={booking.place.photos[0]}
                                             alt="property Image"
                                             width={100}
                                             height={80}
@@ -296,98 +281,125 @@ export default function UserListings() {
                                         </Avatar>
                                         <div className="grow">
                                           <span className="block text-sm font-semibold text-gray-800  md:text-base ">
-                                            {listing.title}
+                                            {booking.place.title}
                                           </span>
                                           <span className="block text-xs text-gray-500 md:text-sm">
-                                            {listing.city} ,{listing.state}
+                                            {booking.place.city} ,
+                                            {booking.place.state}
                                           </span>
                                         </div>
                                       </Link>
                                     </div>
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
+                                    <div className="flex items-center space-x-2 px-2 py-1 font-medium">
+                                      <Avatar>
+                                        <AvatarImage
+                                          src={booking.user.image.replace(
+                                            '/upload/',
+                                            '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
+                                          )}
+                                          alt="User Image"
+                                        />
+                                        <AvatarFallback>
+                                          {booking.user.name
+                                            .charAt(0)
+                                            .toUpperCase()}
+                                        </AvatarFallback>
+                                      </Avatar>
+                                      <span className="pl-2 text-sm">
+                                        {booking.user.name}
+                                      </span>
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="size-px whitespace-nowrap">
+                                    <div className="px-2 py-1 ">
+                                      <span className="pl-2 text-sm">
+                                        {format(
+                                          new Date(booking.checkIn),
+                                          'dd MMM yyyy',
+                                        ) +
+                                          ' - ' +
+                                          format(
+                                            new Date(booking.checkOut),
+                                            'dd MMM yyyy',
+                                          )}
+                                      </span>
+                                    </div>
+                                  </TableCell>
+
+                                  <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
-                                      {listing.status === 'approved' ? (
+                                      {booking.status === 'approved' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
                                           <BadgeCheck width={20} />
-                                          Approved
+                                          {new Date(booking.checkOut) <
+                                          new Date()
+                                            ? 'Completed'
+                                            : 'Approved'}
                                         </span>
-                                      ) : listing.status === 'processing' ? (
+                                      ) : booking.status === 'processing' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
                                           <Loader width={20} />
                                           Processing
                                         </span>
-                                      ) : listing.status === 'rejected' ? (
+                                      ) : booking.status === 'rejected' ? (
                                         <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
                                           <BadgeX width={20} />
                                           Rejected
+                                        </span>
+                                      ) : booking.status === 'cancelled' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
+                                          <BadgeX width={20} />
+                                          Canceled
+                                        </span>
+                                      ) : booking.checkOut < new Date() ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
+                                          <Badge width={20} />
+                                          Completed
                                         </span>
                                       ) : null}
                                     </div>
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
-                                      <span className="pl-2 text-sm">
-                                        {listing.price}
-                                      </span>
-                                    </div>
-                                  </TableCell>
-                                  <TableCell className="size-px whitespace-nowrap">
-                                    <div className="px-2 py-1">
-                                      {listing.deleterequst == true ||
-                                      listing.status === 'rejected' ? (
-                                        <div
-                                          disabled
-                                          className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "
-                                        >
-                                          <Ban width={20} />
-                                          Request Removal
-                                        </div>
+                                      {booking.payment.status === 'paid' &&
+                                      booking.status === 'cancelled' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
+                                          <BadgeCheck width={20} />
+                                          Refunded
+                                        </span>
+                                      ) : booking.payment.status === 'paid' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800 dark:bg-green-500/10 dark:text-green-500">
+                                          <BadgeCheck width={20} />
+                                          Paid
+                                        </span>
+                                      ) : booking.payment.status ===
+                                        'processing' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500">
+                                          <Loader width={20} />
+                                          Pending
+                                        </span>
+                                      ) : booking.payment.status ===
+                                        'failed' ? (
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800 dark:bg-red-500/10 dark:text-red-500">
+                                          <BadgeX width={20} />
+                                          Payment Failed
+                                        </span>
                                       ) : (
-                                        <button
-                                          disabled={loading.includes(
-                                            listing.id,
-                                          )}
-                                          className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50"
-                                          onClick={() =>
-                                            handleRemoveRequest(listing.id)
-                                          }
-                                        >
-                                          {loading.includes(listing.id) ? (
-                                            <LoaderCircle
-                                              width={20}
-                                              className="animate-spin"
-                                            />
-                                          ) : (
-                                            <Ban width={20} />
-                                          )}
-                                          Request Removal
-                                        </button>
+                                        <span className="inline-flex items-center gap-x-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-500/10 dark:text-gray-500">
+                                          <Badge width={20} />
+                                          Unpaid
+                                        </span>
                                       )}
                                     </div>
                                   </TableCell>
+
                                   <TableCell className="size-px whitespace-nowrap">
-                                    <div className="px-6 py-3">
-                                      <Link
-                                        href={
-                                          listing.status === 'rejected'
-                                            ? '/pages/help'
-                                            : `/place/edit/${listing.id}`
-                                        }
-                                        className="inline-flex items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-700 dark:bg-slate-900 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                      >
-                                        {listing.status === 'rejected' ? (
-                                          <>
-                                            <HelpCircle width={16} />
-                                            Help
-                                          </>
-                                        ) : (
-                                          <>
-                                            <PenSquare width={16} />
-                                            Edit
-                                          </>
-                                        )}
-                                      </Link>
+                                    <div className="px-2 py-1">
+                                      <span className="pl-2 text-sm">
+                                        {booking.totalPrice}
+                                      </span>
                                     </div>
                                   </TableCell>
                                 </TableRow>

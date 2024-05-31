@@ -33,12 +33,12 @@ export default async function layout({ children, params }) {
     where: {
       email: session.user.email,
     },
-    select:{
-      role: true
-    }
+    select: {
+      role: true,
+    },
   });
 
-  console.log(user);
+  //console.log(user);
 
   // If the user is not the owner of the place and is not an admin, return not found
   if (place.ownerId !== session.user.id && user?.role !== 'admin') {

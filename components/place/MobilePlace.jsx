@@ -97,6 +97,8 @@ export default function MobilePlace({
   isValidBookingWindow,
   isSameUser,
 }) {
+
+  console.log(id);
   const router = useRouter();
   const renderAmenities = (amenities, placeAmenities, include) => {
     return amenities

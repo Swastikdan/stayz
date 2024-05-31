@@ -8,6 +8,7 @@ import {
   DrawerHeader,
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 import { ScrollArea } from '@/components/ui/scroll-area';
 export default function ImageGalaryDesktop({ images, id, isFavoritePlace, onClick }) {
   return (
@@ -21,7 +22,7 @@ export default function ImageGalaryDesktop({ images, id, isFavoritePlace, onClic
             onClick={onClick}
             className="relative col-span-1 rounded-xl bg-black/15 md:rounded-none md:rounded-l-xl  "
           >
-            <img
+            <Image
               src={
                 images && images.length > 0
                   ? images[0].replace(
@@ -31,9 +32,9 @@ export default function ImageGalaryDesktop({ images, id, isFavoritePlace, onClic
                   : ''
               }
               width="1200"
-              height="auto"
+              height="800"
               alt=""
-              className="cursor-pointer rounded-xl bg-gray-400 hover:mix-blend-multiply md:rounded-none md:rounded-l-xl"
+              className="cursor-pointer rounded-xl bg-gray-200 hover:mix-blend-multiply md:rounded-none md:rounded-l-xl"
             />
             <span className="absolute bottom-2 right-2 hidden items-center space-x-3 rounded-md bg-white px-3 py-2 text-xs font-semibold ring-1 ring-black sm:flex md:hidden">
               <Grip size={15} />
@@ -51,13 +52,15 @@ export default function ImageGalaryDesktop({ images, id, isFavoritePlace, onClic
                   key={index}
                   className={`bg-black/15 ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'relative rounded-br-xl' : ''}`}
                 >
-                  <img
+                  <Image
                     src={img.replace(
                       '/upload/',
                       '/upload/w_600,h_400,c_fill,g_auto/q_auto/f_auto/',
                     )}
                     alt=""
-                    className={`h-full cursor-pointer bg-gray-400 object-fill hover:mix-blend-multiply ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'rounded-br-xl' : ''}`}
+                    width="600"
+                    height="400"
+                    className={`h-full cursor-pointer bg-gray-200 object-fill hover:mix-blend-multiply ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'rounded-br-xl' : ''}`}
                   />
 
                   {index === 3 && (
@@ -144,7 +147,9 @@ export function AllPhotos({
               <div className="w-1/2">
                 {firstHalf.map((img, index) => (
                   <div key={index} className="m-2 mx-1">
-                    <img
+                    <Image
+                      height={400}
+                      width={600}
                       className="h-auto w-full rounded-lg object-cover"
                       src={img}
                       alt=""
@@ -155,7 +160,9 @@ export function AllPhotos({
               <div className="w-1/2">
                 {secondHalf.map((img, index) => (
                   <div key={index} className="m-2 mx-1">
-                    <img
+                    <Image
+                      height={400}
+                      width={600}
                       className="h-auto w-full rounded-lg object-cover"
                       src={img}
                       alt=""

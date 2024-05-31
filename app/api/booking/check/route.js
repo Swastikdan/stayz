@@ -20,7 +20,7 @@ export async function GET(request) {
 
   try {
     const bookingWindows = await getBookingWindows(placeid);
-    console.log(new Date());
+    //console.log(new Date());
     if (checkin && checkout) {
       const checkinDate = new Date(checkin);
       checkinDate.setDate(checkinDate.getDate() + 1);
