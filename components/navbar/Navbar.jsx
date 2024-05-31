@@ -29,9 +29,9 @@ import {
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function NavBar({ className }) {
-const { data: session } = useSession();
+  const { data: session } = useSession();
 
-const user = session?.user;
+  const user = session?.user;
   const { userData } = useUserContext();
   const path = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -63,7 +63,7 @@ const user = session?.user;
         >
           <Image
             src="/Logo_Transparent.png"
-            alt="Urban Utopia"
+            alt="Stayz"
             width={512}
             height={512}
             priority={true}

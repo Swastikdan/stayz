@@ -1,6 +1,6 @@
 {
-  "name": "Urban Utopia | Holiday rentals, cabins, beach houses &amp; more",
-  "short_name": "Urban Utopia",
+  "name": "Stayz | Holiday rentals, cabins, beach houses &amp; more",
+  "short_name": "Stayz",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -18,7 +18,7 @@
   "theme_color": "#fafafa",
   "display": "standalone",
   "orientation": "portrait",
-  "description": "Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.",
+  "description": "Stayz is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.",
   "categories": [
     "travel",
     "accommodation"

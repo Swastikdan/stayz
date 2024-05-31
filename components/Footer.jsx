@@ -6,8 +6,7 @@ export default function Footer() {
     <footer className=" mt-10  border-t-[1px] px-10 py-5">
       <div className=" flex flex-col items-center sm:flex-row sm:justify-between">
         <p className="font-sora text-sm ">
-          &copy; {year}. <Link href="/">Urban Utopia</Link> . All rights
-          reserved.
+          &copy; {year}. <Link href="/">Stayz</Link> . All rights reserved.
         </p>
 
         <ul className="mt-8 flex flex-wrap justify-start gap-4  text-xs sm:mt-0 sm:text-sm lg:justify-end">

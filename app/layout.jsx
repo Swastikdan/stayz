@@ -9,20 +9,20 @@ import BottomNav from '@/components/BottomNav';
 
 export async function metadata() {
   return {
-    title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+    title: 'Stayz | Holiday rentals, cabins, beach houses &amp; more',
     description:
-      'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+      'Stayz is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
     openGraph: {
-      title: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+      title: 'Stayz | Holiday rentals, cabins, beach houses &amp; more',
       description:
-        'Urban Utopia is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
+        'Stayz is a web application that helps users find the best home deals in their desired location. We offer a wide range of homes to choose from, with competitive prices and excellent customer service.',
       url: 'https://urbanutopia.vercel.app/',
       images: [
         {
           url: 'https://res.cloudinary.com/debewnh29/image/upload/w_1200,h_630,c_fill,g_auto/q_auto/f_auto/nestly/public/OGImage.webp',
           width: 1200,
           height: 630,
-          alt: 'Urban Utopia | Holiday rentals, cabins, beach houses &amp; more',
+          alt: 'Stayz | Holiday rentals, cabins, beach houses &amp; more',
         },
       ],
     },
@@ -42,8 +42,8 @@ export default function RootLayout({ children }) {
           content="max-snippet:-1, max-image-preview:large, max-video-preview:-1"
         />
         <meta name="robots" content="noodp " />
-        <meta name="apple-mobile-web-app-title" content="Urban Utopia" />
-        <meta name="application-name" content="Urban Utopia" />
+        <meta name="apple-mobile-web-app-title" content="Stayz" />
+        <meta name="application-name" content="Stayz" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#FFFFFF" />
         <link
@@ -110,11 +110,21 @@ export default function RootLayout({ children }) {
           href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/favicon-128.png"
           sizes="128x128"
         />
-        <link rel="shortcut icon" href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/favicon.ico" type="image/x-icon" />
+        <link
+          rel="shortcut icon"
+          href="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/favicon.ico"
+          type="image/x-icon"
+        />
         <meta name="application-name" content="&nbsp;" />
         <meta name="msapplication-TileColor" content="#FFFFFF" />
-        <meta name="msapplication-TileImage" content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-144x144.png" />
-        <meta name="msapplication-square70x70logo" content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-70x70.png" />
+        <meta
+          name="msapplication-TileImage"
+          content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-144x144.png"
+        />
+        <meta
+          name="msapplication-square70x70logo"
+          content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-70x70.png"
+        />
         <meta
           name="msapplication-square150x150logo"
           content="https://res.cloudinary.com/debewnh29/image/upload/nestly/public/mstile-150x150.png"
@@ -138,7 +148,7 @@ export default function RootLayout({ children }) {
           <UserProvider>
             <LikeProvider>
               <NavBar />
-              <main className="mx-auto w-full min-h-screen">
+              <main className="mx-auto min-h-screen w-full">
                 {children}
 
                 <div className="font-heading">

@@ -2,7 +2,7 @@ import React from 'react';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
-export default async function layout({ children}) {
+export default async function layout({ children }) {
   const session = await getServerSession();
 
   if (!session) {
@@ -13,7 +13,7 @@ export default async function layout({ children}) {
       <div className="flex flex-col space-y-2 pb-10 pt-5">
         <h2 className=" text-3xl font-semibold text-gray-800  md:text-4xl xl:text-5xl">
           {/*   Write a tile to add places to my air ben clione      */}
-          Add to Urban Utopia
+          Add to Stayz
         </h2>
         <span className="px-3 text-right text-sm text-gray-600">
           For more information visit{' '}
@@ -26,7 +26,7 @@ export default async function layout({ children}) {
         </span>
       </div>
 
-     {children}
+      {children}
     </section>
   );
 }
