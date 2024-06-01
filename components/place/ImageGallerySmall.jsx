@@ -67,7 +67,7 @@ export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,
           {images &&
             images.map((img, index) => (
               <SwiperSlide key={index} className="bg-gray-400">
-                <Image
+                <img
                   height={200}
                   width={300}
                   src={img.replace(

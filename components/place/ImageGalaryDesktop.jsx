@@ -22,7 +22,7 @@ export default function ImageGalaryDesktop({ images, id, isFavoritePlace, onClic
             onClick={onClick}
             className="relative col-span-1 rounded-xl bg-black/15 md:rounded-none md:rounded-l-xl  "
           >
-            <Image
+            <img
               src={
                 images && images.length > 0
                   ? images[0].replace(
@@ -52,7 +52,7 @@ export default function ImageGalaryDesktop({ images, id, isFavoritePlace, onClic
                   key={index}
                   className={`bg-black/15 ${index === 1 ? 'rounded-tr-xl' : ''} ${index === 3 ? 'relative rounded-br-xl' : ''}`}
                 >
-                  <Image
+                  <img
                     src={img.replace(
                       '/upload/',
                       '/upload/w_600,h_400,c_fill,g_auto/q_auto/f_auto/',
@@ -147,7 +147,7 @@ export function AllPhotos({
               <div className="w-1/2">
                 {firstHalf.map((img, index) => (
                   <div key={index} className="m-2 mx-1">
-                    <Image
+                    <img
                       height={400}
                       width={600}
                       className="h-auto w-full rounded-lg object-cover"
@@ -160,7 +160,7 @@ export function AllPhotos({
               <div className="w-1/2">
                 {secondHalf.map((img, index) => (
                   <div key={index} className="m-2 mx-1">
-                    <Image
+                    <img
                       height={400}
                       width={600}
                       className="h-auto w-full rounded-lg object-cover"
