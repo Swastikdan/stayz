@@ -13,7 +13,7 @@ export const LikeProvider = ({ children }) => {
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const [message, setMessage] = useState('');
   useEffect(() => {
-    if (session && session.user) {
+    if (session?.user && session?.user?.id) {
       setFavoriteLoading(true);
       fetch('/api/user/favorites')
         .then((res) => res.json())
@@ -28,7 +28,7 @@ export const LikeProvider = ({ children }) => {
           setFavoriteLoading(false);
         });
     }
-  }, [session]);
+  }, [session?.user]);
   // //console.log('Favorites form Context ',favorites  );
   const toggleLike = async (roomId) => {
     if (!session) {

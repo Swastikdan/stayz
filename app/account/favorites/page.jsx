@@ -120,9 +120,7 @@ export default function UserFavorites() {
                             src={place.image}
                             alt={place.title}
                           />
-                          <AvatarFallback className="h-20 w-32 rounded-lg">
-                            {place.title[0]}
-                          </AvatarFallback>
+                          <AvatarFallback className="h-20 w-32 animate-pulse rounded-lg  bg-gray-200 object-cover"></AvatarFallback>
                         </Avatar>
 
                         <div class="flex flex-col items-start">

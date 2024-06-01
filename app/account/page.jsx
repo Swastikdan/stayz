@@ -30,6 +30,7 @@ export default function Account() {
             newPassword: '',
             bio: user.bio || '',
             passwordAvailable: user.passwordAvailable,
+            role: user.role,
           });
           setUserLoading(false);
           setUserImage(user.image);

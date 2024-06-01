@@ -18,19 +18,20 @@ export const UserProvider = ({ children }) => {
     newPassword: '',
     bio: '',
     passwordAvailable: false,
+    role :''
   });
 
   console.log(session);
 
 useEffect(() => {
-  if (session && session.user.id) {
-    fetch(`/api/user/${session.user.id}`)
+  if (session?.user && session?.user?.id) {
+    fetch(`/api/user/${session?.user?.id}`)
       .then((res) => res.json())
       .then((data) => {
         setUserData(data);
       });
   }
-}, [session]);
+}, [session?.user]);
 
   return (
     <UserContext.Provider value={{ user: session?.user, userImage, userData, setUserData , setUserImage }}>
