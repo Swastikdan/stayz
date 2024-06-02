@@ -226,8 +226,8 @@ export default function DesktopPlace({
         </div>
       </div>
 
-      <div className="grid grid-cols-5 gap-10 xl:gap-16">
-        <div className="col-span-3 w-full ">
+      <div className="md:grid flex flex-col  md:grid-cols-5 gap-10 xl:gap-16">
+        <div className="md:col-span-3 w-full ">
           <Separator className="w-full " />
           <div className="flex items-center space-x-5 py-3">
             <Avatar>
@@ -395,7 +395,7 @@ export default function DesktopPlace({
           </div>
         </div>
 
-        <div className="col-span-2 w-full">
+        <div className="md:col-span-2 w-full">
           <div className="rounded-xl border border-gray-200 p-5 shadow-md">
             <div className="py-3 text-xl font-semibold tabular-nums">
               ₹ {price} night

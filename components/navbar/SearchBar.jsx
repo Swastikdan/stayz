@@ -240,7 +240,7 @@ export default function SearchBar() {
         </div>
       </div>
       {/* Mobile SearchBar   */}
-      <div className="flex w-full pt-4 md:hidden">
+      <div className="flex w-full pt-5 md:hidden">
         <div className="ml-2 flex w-full items-center  rounded-full bg-gray-100  p-1 md:hidden md:w-auto">
           <div className="mr-2 rounded-full bg-white px-3 py-3">
             <Search width={20} height={20} />
@@ -392,7 +392,7 @@ export default function SearchBar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="center"
-                className="w-full flex items-center space-y-3 rounded-3xl p-3"
+                className="flex w-full items-center space-y-3 rounded-3xl p-3"
               >
                 <Calendar
                   initialFocus
@@ -668,8 +668,8 @@ export default function SearchBar() {
                 </div>
               </div>
             </DrawerTrigger>
-            <DrawerContent className="h-full rounded-none bg-[#F6F6F6] ">
-              <div className="flex items-end justify-end p-3 px-5">
+            <DrawerContent className=" h-full rounded-none bg-[#F6F6F6]">
+              <div className="-mt-5 flex items-end justify-end p-3 px-5">
                 <DrawerClose className="rounded-full bg-white p-2 ring-2 ring-black">
                   <X size={24} />
                 </DrawerClose>
@@ -698,8 +698,8 @@ export default function SearchBar() {
                             />
                           </div>
                         </DrawerTrigger>
-                        <DrawerContent className="h-full bg-[#F6F6F6]">
-                          <div className="mb-5 flex items-start justify-start p-3 px-5">
+                        <DrawerContent className="h-full rounded-none bg-[#F6F6F6]">
+                          <div className="-mt-5 mb-5 flex items-start justify-start p-3  px-5">
                             <DrawerClose className="rounded-full bg-white p-2 ring-2 ring-black">
                               <ArrowLeft size={24} />
                             </DrawerClose>
@@ -756,7 +756,7 @@ export default function SearchBar() {
                                           size={32}
                                           className="rounded-xl bg-gray-100 p-1 text-gray-600 "
                                         />
-                                        <span>{`${city.city} , ${city.state}`}</span>
+                                        <span className="w-full text-start">{`${city.city} , ${city.state}`}</span>
                                       </DrawerClose>
                                     ))
                                   ) : (
@@ -1109,7 +1109,8 @@ export default function SearchBar() {
                 </span>
                 <DrawerClose
                   onClick={() => handleSearch()}
-                  className="rounded-xl bg-blue-600 px-6 py-3 text-white flex items-center space-x-2"
+                  disabled={searchState.adults+ searchState.children === 0}
+                  className="flex items-center space-x-2 rounded-xl bg-blue-600 disabled:opacity-70 px-6 py-3 text-white"
                 >
                   <Search size={24} />
                   <span>Search</span>

@@ -57,7 +57,7 @@ export default function NavBar({ className }) {
         className,
       )}
     >
-      <nav className=" flex h-full w-full max-w-screen-xl items-center justify-between  px-2">
+      <nav className=" flex h-full w-full max-w-[1360px] items-center justify-between px-2 md:px-8">
         <Link
           href="/"
           className="hidden items-center space-x-2 text-sm font-bold md:flex   "
@@ -248,7 +248,7 @@ export default function NavBar({ className }) {
         </div>
       </nav>
       {path === '/' ? (
-        <div className="w-full  pt-5">
+        <div className="w-full  pt-2">
           <CatagoryWithSort />
         </div>
       ) : null}

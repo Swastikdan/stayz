@@ -83,13 +83,13 @@ useEffect(() => {
 }, [checkin, checkout, adults, children, infants, pets]);
   if(loading) {
     return (
-      <div className="mx-auto   my-5 max-w-[1440px] px-4 md:px-8  ">
-        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mx-auto   my-5 max-w-[1368px] px-6  sm:px-8   ">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2  md:gap-x-6 lg:grid-cols-3 ">
           {Array(12)
             .fill()
             .map((_, i) => (
               <div key={i}>
-                <div className="mb-2 block h-[300px] animate-pulse overflow-hidden rounded-xl  bg-gray-200 lg:mb-3 "></div>
+                <div className="mb-2 block h-[280px] animate-pulse overflow-hidden rounded-xl  bg-gray-200 lg:mb-3 "></div>
                 <div className="flex flex-col space-y-2 px-2 ">
                   <div className="flex items-center justify-between  ">
                     <div className="h-[18px] w-4/6 animate-pulse rounded bg-gray-200 "></div>
@@ -105,7 +105,7 @@ useEffect(() => {
   }
 
   return (
-    <div className="mx-auto  my-5 max-w-[1440px]  px-4 md:px-8">
+    <div className="mx-auto   my-5 max-w-[1368px] px-6  sm:px-8 ">
       {!Array.isArray(places) || places.length === 0 ? (
         <div className="mx-auto flex h-[70vh] w-full flex-col items-center justify-center space-y-3 text-center md:space-y-5">
           <h1 className="text-2xl font-semibold text-gray-700 md:text-3xl">
@@ -121,7 +121,7 @@ useEffect(() => {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4">
           {places.map((place) => (
             <div key={place.id}>
               <div className="relative">
@@ -149,7 +149,8 @@ useEffect(() => {
                 </div> */}
                   </div>
                   <span className="  text-[15px] font-light text-gray-500">
-                    {place.title.substring(0, 60)}
+                    {place.title.substring(0, 40) +
+                      (place.title.length > 40 ? '...' : '')}
                   </span>
                   {/* <span className="py-0.5 text-[15px] font-light text-gray-500">
                 10-12 Mar

@@ -33,7 +33,7 @@ export default function ImageSlider({ customButton, images, id , link }) {
 
   return (
     <>
-      <div className="group relative z-0 m-1 flex h-full min-h-[300px] items-center justify-center overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-600">
+      <div className="group relative z-0 m-1 flex h-full min-h-[280px] items-center justify-center overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-600">
         <button
           className={`prevButton${customButton} absolute left-5 -z-10 -mr-10 cursor-pointer rounded-full bg-white py-[6px] pl-[5px] pr-[6px] text-black opacity-0 shadow-xl transition-all duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 group-hover:z-10 md:opacity-100`}
         >
@@ -54,19 +54,19 @@ export default function ImageSlider({ customButton, images, id , link }) {
             prevEl: `.prevButton${customButton}`,
           }}
           modules={[Navigation, Pagination]}
-          className="mySwiper z-0"
+          className="mySwiper z-0 h-full w-full overflow-hidden rounded-xl"
         >
           {images.map((img, index) => (
-            <SwiperSlide key={index} className="overflow-hidden">
-              <Link href={link}>
+            <SwiperSlide key={index} className="overflow-hidden rounded-xl">
+              <Link href={link} className="rounded-xl">
                 <Avatar className="flex h-full w-full rounded-none">
                   <AvatarImage
-                    className="h-[300px] w-full rounded-none object-cover"
+                    className="h-[280px] w-full rounded-none object-cover"
                     src={img.replace('/upload/', '/upload/w_800/')}
                     alt="property Image"
                   />
-                  <AvatarFallback>
-                    <div className="h-[300px] w-full animate-pulse rounded-none bg-gray-200 object-cover"></div>
+                  <AvatarFallback className="rounded-xl">
+                    <div className="h-[280px] w-full animate-pulse rounded-xl bg-gray-200 object-cover"></div>
                   </AvatarFallback>
                 </Avatar>
               </Link>

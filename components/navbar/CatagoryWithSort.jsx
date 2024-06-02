@@ -40,18 +40,18 @@ export default function CatagoryWithSort() {
         return () => clearTimeout(timer);
       }, []);
   return (
-    <div className="mx-auto flex max-w-screen-2xl items-center justify-center md:px-8 ">
+    <div className="mx-auto flex max-w-[1360px] items-center justify-center md:px-8 ">
       <div className="w-full md:w-11/12 md:pr-5  ">
         <div className="relative flex items-center ">
           {loading ? (
             <div className="mx-4 w-full   rounded-xl ">
-              <div className="  mb-1 h-[50px] w-full animate-pulse rounded-xl bg-gray-200 pb-3  "></div>
+              <div className="  mb-1 h-[50px] w-full animate-pulse rounded-xl bg-gray-200 pb-1  "></div>
             </div>
           ) : (
             <>
               <button
                 ref={prevButtonRef}
-                className="prevButton absolute left-3 z-10 mb-3  hidden cursor-pointer rounded-full bg-white p-1.5 shadow-xl ring-[1.5px] ring-gray-500 transition-transform duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 md:flex"
+                className="prevButton absolute left-3 z-10 mb-1  hidden cursor-pointer rounded-full bg-white p-1.5 shadow-xl ring-[1.5px] ring-gray-500 transition-transform duration-200 hover:scale-105 hover:transition-all disabled:opacity-0 md:flex"
               >
                 <ChevronLeft strokeWidth={3} width={19} height={19} />
                 <span className="sr-only">Previous</span>
@@ -110,9 +110,9 @@ export default function CatagoryWithSort() {
                           </Avatar>
                         </div>
                         <span
-                          className={`pb-3 text-[10px]  text-gray-700 group-hover:border-b-2 group-hover:border-black/40   sm:text-xs ${
+                          className={`pb-1 text-[10px]  text-gray-700 group-hover:border-b-2 group-hover:border-black/40   sm:text-xs ${
                             category.value === cat
-                              ? 'border-b-2 border-black pb-3 font-bold'
+                              ? 'border-b-2 border-black pb-1 font-bold'
                               : 'border-b-2 border-white/0 font-medium'
                           }`}
                         >
