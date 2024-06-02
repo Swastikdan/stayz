@@ -180,7 +180,7 @@ export default function DesktopPlace({
           >
             <Heart
               size={20}
-              className={` transition-all duration-200 ease-in-out hover:scale-[1.1] active:scale-[.9] ${isFavoritePlace ? 'text-[#FF385C]' : 'text-black'}`}
+              className={` transition-all duration-200 ease-in-out hover:scale-[1.1] active:scale-[.9] text-black`}
               fill={isFavoritePlace ? 'rgb(255,56,92)' : 'rgb(255 255 255)'}
               focusable="true"
               strokeWidth={1}
