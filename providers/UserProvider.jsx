@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
     role :''
   });
 
-  console.log(session);
+
 
 useEffect(() => {
 if (session?.user && session?.user?.id) {

@@ -85,12 +85,12 @@ export default function ImageSlider({ customButton, images, id , link }) {
           onClick={handleFavoriteClick}
         >
           <Heart
-            width={35}
-            height={35}
-            className={`m-2 text-white transition-all duration-200 active:scale-[.8] md:h-7 md:w-7`}
+            size={26}
+            className={`m-2  transition-all duration-200 ease-in-out hover:scale-[1.1]  active:scale-[.9] ${isFavoritePlace ? 'text-[#FF385C]' : 'text-white'} `}
             fill={isFavoritePlace ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'}
             focusable="true"
-            strokeWidth={1}
+            strokeWidth={1.5}
+           
           />
         </div>
       </div>

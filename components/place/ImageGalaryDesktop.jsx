@@ -94,50 +94,50 @@ export function AllPhotos({
   return (
     <Drawer>
       <DrawerTrigger className={cn(className)}>{children}</DrawerTrigger>
-      <DrawerContent className="max-h-[99vh]">
-        <DrawerHeader className="flex w-full justify-between px-10 ">
+      <DrawerContent className="max-h-[99vh] max-auto items-center justify-center">
+        <DrawerHeader className="flex w-full max-w-screen-xl items-center justify-between  px-10 ">
           <DrawerClose className="">
             <button className="-ml-1 items-start ">
               <ChevronLeft strokeWidth={1.25} size={30} />
             </button>
           </DrawerClose>
-          <div className=" flex items-center space-x-8">
+          <div className="flex items-center ">
             <div
-              className="  flex cursor-pointer items-center  gap-1.5 text-center"
+              className="flex cursor-pointer items-center gap-1 rounded-sm px-1.5 py-1 text-center hover:bg-gray-200/70"
               onClick={onClick}
             >
               <Heart
-                width={20}
-                height={20}
-                className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
-                fill={
-                  isFavoritePlace === true
-                    ? 'rgb(255,56,92)'
-                    : 'rgb(0 0 0 / 0.6)'
-                }
+                size={20}
+                className={` transition-all duration-200 ease-in-out hover:scale-[1.1] active:scale-[.9] ${isFavoritePlace ? 'text-[#FF385C]' : 'text-black'}`}
+                fill={isFavoritePlace ? 'rgb(255,56,92)' : 'rgb(255 255 255)'}
                 focusable="true"
                 strokeWidth={1}
               />
-
-              <span className=" font-semibold underline ">
+              <span
+                className=" w-min min-w-2 text-start text-[14px] underline"
+                style={{ width: '50px', textAlign: 'left' }}
+              >
                 {isFavoritePlace === true ? 'Saved' : 'Save'}
               </span>
             </div>
             <button
-              className=" text-centerr flex items-center  gap-1.5 "
+              className=" flex cursor-pointer items-center gap-1 rounded-sm px-1.5 py-1 text-center hover:bg-gray-200/70"
               onClick={() => {
                 if (navigator.share) {
-                  navigator.share({
-                    url: window.location.href,
-                  });
+                  navigator
+                    .share({
+                      url: window.location.href,
+                    })
+                    .catch((error) => alert('Something went wrong '));
                 } else {
                   alert('Web Share API is not supported in your browser');
                 }
               }}
             >
-              <Share size={20} />
-
-              <span className=" font-semibold underline ">Share</span>
+              <Share size={18} focusable="true" strokeWidth={1} />
+              <span className="w-min min-w-2 text-start text-[14px] underline">
+                Share
+              </span>
             </button>
           </div>
         </DrawerHeader>

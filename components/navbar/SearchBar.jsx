@@ -343,7 +343,7 @@ export default function SearchBar() {
                     </div>
                   </ScrollArea>
                 ) : (
-                  <div className="grid grid-cols-3 gap-5 ">
+                  <div className="grid grid-cols-3 gap-5 pt-3 ">
                     {topcities.map((city, index) => (
                       <div
                         key={index}

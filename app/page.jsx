@@ -84,7 +84,7 @@ useEffect(() => {
   if(loading) {
     return (
       <div className="mx-auto   my-5 max-w-[1368px] px-6  sm:px-8   ">
-        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2  md:gap-x-6 lg:grid-cols-3 ">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4">
           {Array(12)
             .fill()
             .map((_, i) => (

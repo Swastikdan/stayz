@@ -98,7 +98,6 @@ export default function MobilePlace({
   isSameUser,
 }) {
 
-  console.log(id);
   const router = useRouter();
   const renderAmenities = (amenities, placeAmenities, include) => {
     return amenities
@@ -739,7 +738,7 @@ export default function MobilePlace({
           !isNaN(date.to.getTime()) ? (
             <div className="flex flex-col space-y-3 ">
               <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
-                <span className=" w-20 text-start  font-medium">
+                <span className="pr-2 min-w-max text-start  font-medium">
                   {new Date(
                     date.to.getTime() - 24 * 60 * 60 * 1000,
                   ).toLocaleDateString(undefined, {
@@ -753,7 +752,7 @@ export default function MobilePlace({
                 </span>
               </div>
               <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
-                <span className=" w-20 text-start  font-medium">
+                <span className="pr-2 min-w-max text-start  font-medium">
                   {new Date(date.to.getTime()).toLocaleDateString(
                     undefined,
                     {

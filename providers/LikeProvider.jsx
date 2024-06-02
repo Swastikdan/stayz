@@ -29,7 +29,6 @@ export const LikeProvider = ({ children }) => {
         });
     }
   }, [session?.user]);
-  // //console.log('Favorites form Context ',favorites  );
   const toggleLike = async (roomId) => {
     if (!session) {
       router.push('/login');
@@ -88,61 +87,3 @@ export const LikeProvider = ({ children }) => {
 };
 
 export const useLikeContext = () => useContext(LikeContext);
-
-/*
-    const [likedRooms, setLikedRooms] = useState([]);
-
-    const toggleLike = (roomId) => {
-      setLikedRooms((prevLikedRooms) => {
-        if (prevLikedRooms.includes(roomId)) {
-          return prevLikedRooms.filter((id) => id !== roomId);
-        } else {
-          return [...prevLikedRooms, roomId];
-        }
-      });
-    };
-
-
-
-
-'use client';
-import React, { createContext, useEffect, useContext, useState } from 'react';
-import { useSession } from 'next-auth/react';
-const LikeContext = createContext();
-export const LikeProvider = ({ children }) => {
-  const { data: session } = useSession();
-  const [favoriteLoading, setFavoriteLoading] = useState(false);
-  const [favorites, setFavorites] = useState([]);
-  useEffect(() => {
-    if (session) {
-      setFavoriteLoading(true);
-      fetch('/api/user/favorites')
-        .then((res) => res.json())
-        .then((data) => {
-          const modifiedData = data.map((item) => {
-            return {
-                id: item.place.id,
-                photos: item.place.photos.slice(0, 1),
-                title: item.place.title,
-            };
-          });
-          setFavorites(modifiedData);
-          setFavoriteLoading(false);
-        });
-    }
-  }, [session]);
-
-  ////console.log('Favorites form Context ',favorites  );
-  return (
-    <LikeContext.Provider
-      value={{ favorites, favoriteLoading, setFavorites }}
-    >
-      {children}
-    </LikeContext.Provider>
-  );
-};
-
-export const useLikeContext = () => useContext(LikeContext);
-
-
-*/

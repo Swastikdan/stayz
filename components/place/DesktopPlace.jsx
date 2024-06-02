@@ -173,27 +173,27 @@ export default function DesktopPlace({
         <h1 className="pb-5 pt-1 text-lg font-semibold lg:text-xl xl:text-2xl">
           {title}
         </h1>
-        <div className="flex items-center space-x-8 ">
+        <div className="flex items-center ">
           <div
-            className="  flex cursor-pointer items-center  gap-1.5 text-center"
+            className="flex cursor-pointer items-center gap-1 rounded-sm px-1.5 py-1 text-center hover:bg-gray-200/70"
             onClick={onFavoriteClick}
           >
             <Heart
-              width={20}
-              height={20}
-              className={`m-2  text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
-              fill={
-                isFavoritePlace === true ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'
-              }
+              size={20}
+              className={` transition-all duration-200 ease-in-out hover:scale-[1.1] active:scale-[.9] ${isFavoritePlace ? 'text-[#FF385C]' : 'text-black'}`}
+              fill={isFavoritePlace ? 'rgb(255,56,92)' : 'rgb(255 255 255)'}
               focusable="true"
               strokeWidth={1}
             />
-            <span className="font-semibold underline ">
+            <span
+              className=" w-min min-w-2 text-start text-[14px] underline"
+              style={{ width: '50px', textAlign: 'left' }}
+            >
               {isFavoritePlace === true ? 'Saved' : 'Save'}
             </span>
           </div>
           <button
-            className=" text-centerr flex items-center  gap-1.5 "
+            className=" flex cursor-pointer items-center gap-1 rounded-sm px-1.5 py-1 text-center hover:bg-gray-200/70"
             onClick={() => {
               if (navigator.share) {
                 navigator
@@ -206,8 +206,10 @@ export default function DesktopPlace({
               }
             }}
           >
-            <Share size={20} />
-            <span className="font-semibold underline ">Share</span>
+            <Share size={18} focusable="true" strokeWidth={1} />
+            <span className="w-min min-w-2 text-start text-[14px] underline">
+              Share
+            </span>
           </button>
         </div>
       </div>
@@ -226,8 +228,8 @@ export default function DesktopPlace({
         </div>
       </div>
 
-      <div className="md:grid flex flex-col  md:grid-cols-5 gap-10 xl:gap-16">
-        <div className="md:col-span-3 w-full ">
+      <div className="flex flex-col gap-10  md:grid md:grid-cols-5 xl:gap-16">
+        <div className="w-full md:col-span-3 ">
           <Separator className="w-full " />
           <div className="flex items-center space-x-5 py-3">
             <Avatar>
@@ -395,7 +397,7 @@ export default function DesktopPlace({
           </div>
         </div>
 
-        <div className="md:col-span-2 w-full">
+        <div className="w-full md:col-span-2">
           <div className="rounded-xl border border-gray-200 p-5 shadow-md">
             <div className="py-3 text-xl font-semibold tabular-nums">
               ₹ {price} night
@@ -520,8 +522,7 @@ export default function DesktopPlace({
               <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
                 {`You can't book your own place`}
               </div>
-            ):
-            isValidBookingWindow ? (
+            ) : isValidBookingWindow ? (
               <>
                 <button
                   disabled={bookingLoading}

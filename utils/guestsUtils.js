@@ -7,6 +7,5 @@ export const formatGuests = (guests, options) => {
   let template = `${total} guest`;
   if (total >= 2) template = `${total} guests`;
   if (infants && !noInfants) template += `, ${infants} infant`;
-  //console.log(template);
   return template;
 };

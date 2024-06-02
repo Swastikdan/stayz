@@ -21,8 +21,6 @@ export default function PlaceImageUpload({
   setFormData,
   formdata,
 }) {
-  // if photos ave;ave then add them to addedPhotos and only change it wnen the photos chanes and rin it once
-
   useEffect(() => {
     if (photos && photos.length > 0) {
       setAddedPhotos(photos);
@@ -34,7 +32,6 @@ export default function PlaceImageUpload({
     setIsUploading(true);
 
     try {
-      // Split the photoLink string into an array of links
       const links = photoLink.split(',').map((link) => link.trim());
       setPhotosUploading(links.length);
       const res = await fetch('/api/upload/upload-by-link', {
@@ -81,17 +78,6 @@ export default function PlaceImageUpload({
       img.src = URL.createObjectURL(file);
 
       await new Promise((resolve) => {
-        // img.onload = () => {
-        //   const aspectRatio = img.width / img.height;
-        //   if (img.width < 600 || img.height < 400) {
-        //     toast.error('Requried minimum resolution of 600x400');
-        //   } else if (aspectRatio < 4 / 3) {
-        //     toast.error('Requried an aspect ratio of 4:3 or higher');
-        //   } else {
-        //     validFiles.push(file);
-        //   }
-        //   resolve();
-        // };
         img.onload = () => {
           validFiles.push(file);
           resolve();
@@ -99,8 +85,6 @@ export default function PlaceImageUpload({
       });
     }
     setPhotosUploading(validFiles.length);
-    // //console.log(validFiles.length);
-
     if (validFiles.length > 0) {
       try {
         await addPhotoFromLocal(validFiles);
@@ -199,7 +183,7 @@ export default function PlaceImageUpload({
               onChange={(e) => setPhotoLink(e.target.value)}
               placeholder="Add using a link"
               disabled={isUploading}
-              className="mr-2 w-full disabled:cursor-not-allowed disabled:select-none disabled:opacity-50" // Added margin-right for spacing
+              className="mr-2 w-full disabled:cursor-not-allowed disabled:select-none disabled:opacity-50" 
             />
             <button
               type="button"

@@ -31,7 +31,6 @@ export default function CreatePlace() {
   const [photosUploading, setPhotosUploading] = useState(0);
   const [wordCount, setWordCount] = useState(0);
   const [showCustomOptions, setShowCustomOptions] = useState(false);
-  // const [selectedState, setSelectedState] = useState('');
   const { data: session } = useSession();
 
   const ownerId = session?.user?.id;
@@ -63,17 +62,13 @@ export default function CreatePlace() {
     additionalRules: '',
     numberOfRooms: null,
   });
-  // //console.log(formdata);
   const states = Indian_states_cities_list.STATES_OBJECT;
 
   const handleStateChnage = (value) => {
     setFormData({ ...formdata, state: value });
   };
 
-  // const cities = Indian_states_cities_list.STATE_WISE_CITIES[formdata.state] || [];
-
   const [cities, setCities] = useState([]);
-  // //console.log((formdata.state).replace(' ', ''));
   useEffect(() => {
     if (formdata.state) {
       setCities(
@@ -84,13 +79,10 @@ export default function CreatePlace() {
     }
   }, [formdata.state]);
 
-  //console.log(formdata);
 
   const handleCitiesChnage = (value) => {
     setFormData({ ...formdata, city: value });
   };
-  // //console.log('states', states)
-  // //console.log('cities',cities);
 
   const pathname = usePathname();
 

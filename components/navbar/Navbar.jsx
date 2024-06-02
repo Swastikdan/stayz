@@ -57,7 +57,7 @@ export default function NavBar({ className }) {
         className,
       )}
     >
-      <nav className=" flex h-full w-full max-w-[1360px] items-center justify-between px-2 md:px-8">
+      <nav className=" flex h-full w-full max-w-[1360px] items-center justify-between px-2 md:px-8 ">
         <Link
           href="/"
           className="hidden items-center space-x-2 text-sm font-bold md:flex   "
@@ -167,7 +167,7 @@ export default function NavBar({ className }) {
               className=" rounded-xl    drop-shadow-xl "
             >
               <DropdownMenuLabel className="text-md ">
-                Hello ,‎ {userData?.name?.split(' ')[0] || 'Guest'}
+                Hello ,‎ {userData?.name?.split(' ')[0] || 'Guest'} ‎ 👋
               </DropdownMenuLabel>
               <DropdownMenuSeparator className="h-[.5px]  bg-black dark:bg-white" />
 

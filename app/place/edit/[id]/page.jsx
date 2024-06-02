@@ -84,8 +84,6 @@ export default function EditPlace() {
     }
   }, [formdata.state]);
 
-  //  //console.log(formdata);
-
   const handleCitiesChnage = (value) => {
     setFormData({ ...formdata, city: value });
   };
@@ -644,104 +642,6 @@ export default function EditPlace() {
                   </li>
                 ))}
               </ul>
-              {/* <div className="py-3 font-semibold  text-gray-700 ">
-                 {' '}
-                 Checking in and out
-               </div> */}
-
-              {/* <div>
-                 <input
-                   className="peer hidden"
-                   required=""
-                   type="checkbox"
-                   id="customOptions"
-                   name="customOptions"
-                   onChange={() => setShowCustomOptions(!showCustomOptions)}
-                 />
-                 <label
-                   htmlFor="customOptions"
-                   className="inline-flex w-auto cursor-pointer items-center justify-between rounded-lg border-2 border-gray-200 bg-white p-2 px-3 text-gray-500 hover:bg-gray-50 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-blue-100 peer-checked:text-gray-600 "
-                 >
-                   <div className="flex items-center space-x-3 ">
-                     <div className="w-full text-xs font-semibold text-black md:text-sm ">
-                       Add Custom check-in/check-out times
-                     </div>
-                   </div>
-                 </label>
-                 <div className="py-2 text-xs font-light text-gray-600 md:text-sm">
-                   * Without custom time, check-in/out is unrestricted.
-                 </div>
-                 {showCustomOptions && (
-                   <ul className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                     <li>
-                       <label
-                         htmlFor="timePicker"
-                         className="block text-sm font-medium text-gray-700"
-                       >
-                         Check-in after
-                       </label>
-                       <select
-                         id="timePicker"
-                         name="timePicker"
-                         className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                         value={formdata.checkInTime}
-                         onChange={(e) =>
-                           handleChange('checkInTime', e.target.value)
-                         }
-                       >
-                         {Array.from({ length: 24 }, (_, i) => i).map(
-                           (hour) => {
-                             const isPM = hour >= 12;
-                             const displayHour =
-                               hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-                             const displayPeriod = isPM ? 'pm' : 'am';
-                             return (
-                               <option
-                                 key={hour}
-                                 value={hour}
-                                 className="py-2"
-                               >{`${displayHour}  ${displayPeriod}`}</option>
-                             );
-                           },
-                         )}
-                       </select>
-                     </li>
-                     <li>
-                       <label
-                         htmlFor="timePicker"
-                         className="block text-sm font-medium text-gray-700"
-                       >
-                         Checkout before
-                       </label>
-                       <select
-                         id="timePicker"
-                         name="timePicker"
-                         className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                         value={formdata.checkOutTime}
-                         onChange={(e) =>
-                           handleChange('checkOutTime', e.target.value)
-                         }
-                       >
-                         {Array.from({ length: 24 }, (_, i) => i).map(
-                           (hour) => {
-                             const isPM = hour >= 12;
-                             const displayHour =
-                               hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-                             const displayPeriod = isPM ? 'pm' : 'am';
-                             return (
-                               <option
-                                 key={hour}
-                                 value={hour}
-                                 className="py-2"
-                               >{`${displayHour}  ${displayPeriod}`}</option>
-                             );
-                           },
-                         )}
-                       </select>
-                     </li>
-                   </ul>
-                 )}
-               </div> */}
               <div className="flex w-full items-center justify-start space-x-10 py-3">
                 <div className=" w-full  max-w-max font-semibold text-gray-700">
                   {' '}
@@ -807,10 +707,6 @@ export default function EditPlace() {
                 placeholder="Enter your additional house rules here ...  "
               />
             </div>
-            {/* <button className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-green-500 bg-white px-3 py-2 text-sm text-green-600 shadow-sm hover:bg-green-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50">
-               <LoaderCircle width={20} className="animate-spin" />
-               Approve
-             </button> */}
             <button
               type="submit"
               disabled={loading}

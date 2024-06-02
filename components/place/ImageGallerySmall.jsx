@@ -13,34 +13,30 @@ export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,
       <div className=" relative flex w-full">
         <div className="absolute top-5 z-20 mx-5  flex w-full justify-between">
           <button
-            className="rounded-full bg-white  p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"
+            className="rounded-full bg-white  p-2 text-center shadow-md transition-all duration-200 active:scale-90"
             onClick={() => {
               router.back();
             }}
           >
-            <ChevronLeft size={25} />
+            <ChevronLeft size={25} strokeWidth={2} />
           </button>
           <div className="mr-10 flex space-x-3">
             <div
-              className="cursor-pointer rounded-full  bg-white  p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"
+              className="p-2 cursor-pointer  rounded-full  bg-white text-center shadow-md transition-all duration-200 active:scale-90"
               onClick={onClick}
             >
               {/* <Heart size={20} /> */}
               <Heart
                 size={25}
-                className={` text-white transition-all duration-200  active:scale-[.8] md:h-7 md:w-7`}
-                fill={
-                  isFavoritePlace === true
-                    ? 'rgb(255,56,92)'
-                    : 'rgb(0 0 0 / 0.6)'
-                }
+                className={`transition-all duration-200 ease-in-out hover:scale-[1.1]  active:scale-[.9] ${isFavoritePlace ? 'text-[#FF385C]' : 'text-white'} `}
+                fill={isFavoritePlace ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'}
                 focusable="true"
                 strokeWidth={1}
               />
             </div>
 
             <div
-              className="rounded-full bg-white p-1.5 text-center shadow-md transition-all duration-200 active:scale-90"
+              className="rounded-full bg-white p-2 justify-center text-center shadow-md transition-all duration-200 active:scale-90"
               onClick={() => {
                 if (navigator.share) {
                   navigator.share({
@@ -52,7 +48,7 @@ export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,
                 }
               }}
             >
-              <Share size={25} />
+              <Share size={25} strokeWidth={1} />
             </div>
           </div>
         </div>
