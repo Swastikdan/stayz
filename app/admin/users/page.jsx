@@ -26,7 +26,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from '@/components/ui/dialog';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 
@@ -274,26 +283,80 @@ export default function AdminUser() {
                                   </TableCell>
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="flex items-center space-x-2 px-2 py-1">
-                                      <button
-                                        disabled={
-                                          statusLoading.includes(user.id) ||
-                                          deleteLoading.includes(user.id)
-                                        }
-                                        className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
-                                        onClick={() =>
-                                          handleDeleteUser(user.id)
-                                        }
-                                      >
-                                        {deleteLoading.includes(user.id) ? (
-                                          <LoaderCircle
-                                            width={20}
-                                            className="animate-spin"
-                                          />
-                                        ) : (
-                                          <Trash width={20} />
-                                        )}
-                                        Delete
-                                      </button>
+                                      <Dialog>
+                                        <DialogTrigger>
+                                          <button
+                                            disabled={
+                                              statusLoading.includes(user.id) ||
+                                              deleteLoading.includes(user.id)
+                                            }
+                                            className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
+                                          >
+                                            <Trash width={20} />
+                                            Delete
+                                          </button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                          <DialogHeader>
+                                            <DialogTitle>
+                                              Are you absolutely sure?
+                                            </DialogTitle>
+                                            <DialogDescription>
+                                              This action cannot be undone. This
+                                              will permanently delete your
+                                              account and remove all data from
+                                              the servers.
+                                            </DialogDescription>
+                                          </DialogHeader>
+                                          <DialogFooter>
+                                            <div className="flex items-center space-x-3">
+                                              <button
+                                                disabled={
+                                                  statusLoading.includes(
+                                                    user.id,
+                                                  ) ||
+                                                  deleteLoading.includes(
+                                                    user.id,
+                                                  )
+                                                }
+                                                className="inline-flex items-center gap-x-2 rounded-lg border-2 border-red-500 bg-white px-3 py-2 text-sm text-red-600 shadow-sm hover:bg-red-50 disabled:pointer-events-none disabled:opacity-50"
+                                                onClick={() =>
+                                                  handleDeleteUser(user.id)
+                                                }
+                                              >
+                                                {deleteLoading.includes(
+                                                  user.id,
+                                                ) ? (
+                                                  <LoaderCircle
+                                                    width={20}
+                                                    className="animate-spin"
+                                                  />
+                                                ) : (
+                                                  <Trash width={20} />
+                                                )}
+                                                Delete
+                                              </button>
+
+                                              <DialogClose>
+                                                <button
+                                                  disabled={statusLoading.includes(
+                                                    user.id,
+                                                  )}
+                                                  className="inline-flex items-center gap-x-2 rounded-lg border-2 border-blue-500 bg-white px-3 py-2 text-sm text-blue-600 shadow-sm hover:bg-blue-50 disabled:pointer-events-none disabled:opacity-50"
+                                                >
+                                                  <CircleX
+                                                    width={20}
+                                                    
+                                                  />
+                                                
+                                                  Naver mind
+                                                </button>
+                                              </DialogClose>
+                                            </div>
+                                          </DialogFooter>
+                                        </DialogContent>
+                                      </Dialog>
+
                                       {user.role === 'admin' ? (
                                         <button
                                           disabled={

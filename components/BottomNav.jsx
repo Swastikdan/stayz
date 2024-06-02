@@ -27,7 +27,6 @@ export default function BottomNav() {
   const { data: session } = useSession();
   const { userData: user } = useUserContext();
   const pathname = usePathname();
-  console.log('User from BottomNav', user);
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 

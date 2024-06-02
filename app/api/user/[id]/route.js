@@ -15,16 +15,16 @@ async function getUser(request, { params }) {
       image: true,
       role: true,
       bio: true,
-      hashedPassword: true,
+      // hashedPassword: true,
     },
   });
 
   // Check if password is available and replace the password field
-  const passwordAvailable = user.hashedPassword !== null;
-  delete user.hashedPassword;
+  // const passwordAvailable = user.hashedPassword !== null;
+  // delete user.hashedPassword;
 
   // Add passwordAvailable to the user object
-  user.passwordAvailable = passwordAvailable;
+  // user.passwordAvailable = passwordAvailable;
   if (!user) return NextResponse.json('User not found', { status: 404 });
   if (user.email !== session.user.email)
     return NextResponse.json('Unauthorized', { status: 401 });

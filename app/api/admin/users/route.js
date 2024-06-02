@@ -54,7 +54,7 @@ async function deleteUser(request, { params }) {
     if (user.role != 'admin') {
       return NextResponse.json({ message: 'admin not found' }, { status: 401 });
     }
-
+    
     try {
       const searchParams = request.nextUrl.searchParams;
       const id = searchParams.get('id');
@@ -65,7 +65,25 @@ async function deleteUser(request, { params }) {
           { status: 400 },
         );
       }
+      const deleteUser = await prisma.user.findUnique({
+        where: { id: id },
+      });
 
+      if (!deleteUser) {
+        return NextResponse.json(
+          { message: 'User not found' },
+          { status: 404 },
+        );
+      }
+
+      if (deleteUser.role === 'admin') {
+        return NextResponse.json(
+          { message: 'You cannot delete an admin user' },
+          { status: 400 },
+        );
+      }
+
+      
       // Delete the user based on the id
       await prisma.user.delete({
         where: { id: id },

@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useSession } from 'next-auth/react';
-
+import { signOut } from 'next-auth/react';
 // Create UserContext
 export const UserContext = createContext();
 
@@ -24,13 +24,17 @@ export const UserProvider = ({ children }) => {
   console.log(session);
 
 useEffect(() => {
-  if (session?.user && session?.user?.id) {
-    fetch(`/api/user/${session?.user?.id}`)
-      .then((res) => res.json())
-      .then((data) => {
+if (session?.user && session?.user?.id) {
+  fetch(`/api/user/${session?.user?.id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data === 'User not found') {
+        signOut();
+      } else {
         setUserData(data);
-      });
-  }
+      }
+    });
+}
 }, [session?.user]);
 
   return (
