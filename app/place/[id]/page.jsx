@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams, notFound } from 'next/navigation';
+import { useRouter, useSearchParams, notFound, redirect } from 'next/navigation';
 import { toast } from 'sonner';
 import { loadStripe } from '@stripe/stripe-js';
 import DesktopPlace from '@/components/place/DesktopPlace';
@@ -341,6 +341,24 @@ export default function PlacePage({ params }) {
   //   }
   // };
   const handleBooking = async () => {
+
+
+    if (!state.isValidDates) {
+      toast.error('Invalid Dates');
+      return;
+    }
+    if(!state.isValidBookingWindow){
+      toast.error('Booking window is not available');
+      return;
+    }
+    if (!session) {
+      // toast.error('You must be logged in to make a purchase');
+      router.push('/login');
+      return;
+    }
+
+
+
     try {
       setState((prevState) => ({ ...prevState, bookingLoading: true }));
 
