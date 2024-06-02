@@ -18,7 +18,7 @@ export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,
               router.back();
             }}
           >
-            <ChevronLeft size={25} strokeWidth={2} />
+            <ChevronLeft size={20} strokeWidth={2} />
           </button>
           <div className="mr-10 flex space-x-3">
             <div
@@ -27,7 +27,7 @@ export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,
             >
               {/* <Heart size={20} /> */}
               <Heart
-                size={25}
+                size={20}
                 className={`transition-all duration-200 ease-in-out hover:scale-[1.1]  active:scale-[.9] ${isFavoritePlace ? 'text-[#FF385C]' : 'text-white'} `}
                 fill={isFavoritePlace ? 'rgb(255,56,92)' : 'rgb(0 0 0 / 0.6)'}
                 focusable="true"
@@ -48,7 +48,7 @@ export default function ImageGallerySmall({ images, title, id, isFavoritePlace ,
                 }
               }}
             >
-              <Share size={25} strokeWidth={1} />
+              <Share size={20} strokeWidth={1} />
             </div>
           </div>
         </div>

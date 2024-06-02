@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React , {useEffect} from 'react';
 import ImageGallerySmall from './ImageGallerySmall';
 import { ChevronRight, ChevronLeft, Plus, Minus, Loader2 } from 'lucide-react';
 
@@ -98,6 +98,8 @@ export default function MobilePlace({
   isSameUser,
 }) {
 
+
+
   const router = useRouter();
   const renderAmenities = (amenities, placeAmenities, include) => {
     return amenities
@@ -165,7 +167,7 @@ export default function MobilePlace({
     </div>
   );
   return (
-    <section>
+    <section id="mobile-top">
       <div className="w-full max-w-[100vw] overflow-hidden sm:hidden ">
         <ImageGallerySmall
           images={photos}
