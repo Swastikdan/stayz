@@ -1,5 +1,5 @@
 'use client';
-import React , {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import ImageGallerySmall from './ImageGallerySmall';
 import { ChevronRight, ChevronLeft, Plus, Minus, Loader2 } from 'lucide-react';
 
@@ -97,9 +97,9 @@ export default function MobilePlace({
   isValidBookingWindow,
   isSameUser,
 }) {
-
-
-
+   useEffect(() => {
+     window.scrollTo(0, 0);
+   }, []);
   const router = useRouter();
   const renderAmenities = (amenities, placeAmenities, include) => {
     return amenities
@@ -117,7 +117,7 @@ export default function MobilePlace({
       ));
   };
   const GuestSelector = ({ label, age, count, setCount, min, max }) => (
-    <div className="w-full">
+    <div className="top-0 w-full ">
       <div className="flex w-full justify-between">
         <div className="flex flex-col">
           <span className="text-base font-medium">{label}</span>
@@ -168,7 +168,7 @@ export default function MobilePlace({
   );
   return (
     <section id="mobile-top">
-      <div className="w-full max-w-[100vw] overflow-hidden sm:hidden ">
+      <div className="w-full max-w-[100vw] overflow-hidden object-top   align-top sm:hidden  top-0">
         <ImageGallerySmall
           images={photos}
           title={title}
@@ -235,7 +235,6 @@ export default function MobilePlace({
               <DrawerDescription className="text-wrap pt-5 text-start text-base">
                 <ScrollArea className="h-[100vh] w-full  pb-40 ">
                   <div className="pb-40">
-        
                     <MarkdownViewer markdown={description} />
                   </div>
                 </ScrollArea>
@@ -347,145 +346,135 @@ export default function MobilePlace({
             </DrawerContent>
           </Drawer>
         </div>
+        <div className="flex flex-col pt-3">
+          <span className="pb-1 text-base font-medium">
+            {bookingDays} {bookingDays === 1 ? 'Night' : 'Nights'} in {title}
+          </span>
+          <span className="text-sm text-gray-500 md:text-base">
+            {date?.from instanceof Date && !isNaN(date.from)
+              ? format(date.from, 'dd/MM/yyyy')
+              : 'Add Date '}{' '}
+            -{' '}
+            {date?.to instanceof Date && !isNaN(date.to)
+              ? format(date.to, 'dd/MM/yyyy')
+              : 'Add Date'}
+          </span>
 
-        <div className="pt-3">
-          <div className="flex flex-col">
-            <span className="pb-1 text-base font-medium">
-              {bookingDays} {bookingDays === 1 ? 'Night' : 'Nights'} in {title}
-            </span>
-            <span className="text-sm text-gray-500 md:text-base">
-              {date?.from instanceof Date && !isNaN(date.from)
-                ? format(date.from, 'dd/MM/yyyy')
-                : 'Add Date '}{' '}
-              -{' '}
-              {date?.to instanceof Date && !isNaN(date.to)
-                ? format(date.to, 'dd/MM/yyyy')
-                : 'Add Date'}
-            </span>
-
-            <div className="top-full mx-auto my-auto flex  min-h-[337px] w-full items-center justify-center pt-3">
-              <Calendar
-                initialFocus
-                mode="range"
-                pagedNavigation={true}
-                defaultMonth={date?.from}
-                fromMonth={new Date()}
-                disabled={{ before: new Date() }}
-                selected={date}
-                onSelect={setDate}
-                className="w-min"
-              />
-            </div>
-            <div className="flex items-end justify-end pt-3">
-              {/* <span
-                className="flex items-end px-5 text-sm font-light underline underline-offset-4"
-                onClick={() => {
-                  setDate({ from: null, to: null });
-                }}
+          <div className="top-full mx-auto my-auto flex  min-h-[337px] w-full items-center justify-center pt-3">
+            <Calendar
+              initialFocus
+              mode="range"
+              pagedNavigation={true}
+              defaultMonth={date?.from}
+              fromMonth={new Date()}
+              disabled={{ before: new Date() }}
+              selected={date}
+              onSelect={setDate}
+              className="w-min"
+            />
+          </div>
+          <div className="flex items-end justify-end pt-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="rounded-lg border border-black bg-background px-[10vw] py-1.5 hover:bg-accent hover:text-accent-foreground">
+                {Number(adults) + Number(childrens) >= 16
+                  ? `16+  Guests`
+                  : Number(adults) + Number(childrens) > 1
+                    ? Number(adults) + Number(childrens) + ' Guests'
+                    : Number(adults) + Number(childrens) === 1
+                      ? '1 Guest'
+                      : 'Add Guests'}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-full max-w-[90vw] space-y-3 rounded-2xl p-3 "
               >
-                Clear Dates
-              </span> */}
+                <div className=" space-y-3 p-3">
+                  <GuestSelector
+                    label="Adults"
+                    age="Age 13+"
+                    count={adults}
+                    setCount={setAdults}
+                    min={1}
+                    max={maxGuests - childrens}
+                  />
+                  <GuestSelector
+                    label="Childrens"
+                    age="Ages 2-12"
+                    count={childrens}
+                    setCount={setChildrens}
+                    min={0}
+                    max={maxGuests - adults}
+                  />
+                  <GuestSelector
+                    label="Infants"
+                    age="Under 2"
+                    count={infants}
+                    setCount={setInfants}
+                    min={0}
+                    max={5}
+                  />
+                  <GuestSelector
+                    label="Pets"
+                    count={pets}
+                    setCount={setPets}
+                    min={0}
+                    max={5}
+                  />
 
-              <DropdownMenu>
-                <DropdownMenuTrigger className="rounded-lg border border-black bg-background px-[10vw] py-1.5 hover:bg-accent hover:text-accent-foreground">
-                  {Number(adults) + Number(childrens) >= 16
-                    ? `16+  Guests`
-                    : Number(adults) + Number(childrens) > 1
-                      ? Number(adults) + Number(childrens) + ' Guests'
-                      : Number(adults) + Number(childrens) === 1
-                        ? '1 Guest'
-                        : 'Add Guests'}
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="w-full max-w-[90vw] space-y-3 rounded-2xl p-3 "
-                >
-                  <div className=" space-y-3 p-3">
-                    <GuestSelector
-                      label="Adults"
-                      age="Age 13+"
-                      count={adults}
-                      setCount={setAdults}
-                      min={1}
-                      max={maxGuests - childrens}
-                    />
-                    <GuestSelector
-                      label="Childrens"
-                      age="Ages 2-12"
-                      count={childrens}
-                      setCount={setChildrens}
-                      min={0}
-                      max={maxGuests - adults}
-                    />
-                    <GuestSelector
-                      label="Infants"
-                      age="Under 2"
-                      count={infants}
-                      setCount={setInfants}
-                      min={0}
-                      max={5}
-                    />
-                    <GuestSelector
-                      label="Pets"
-                      count={pets}
-                      setCount={setPets}
-                      min={0}
-                      max={5}
-                    />
-
-                    <div className="text-[10px] font-light">
-                      {`This place has a maximum of ${maxGuests} guests, not
+                  <div className="text-[10px] font-light">
+                    {`This place has a maximum of ${maxGuests} guests, not
                         including infants. If you're bringing more than 2 pets,
                         please let your Host know.`}
-                    </div>
                   </div>
+                </div>
 
-                  <DropdownMenuItem className="w-fit cursor-pointer items-center border border-input px-5 text-center text-base">
-                    Close
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="flex items-center justify-end space-x-5 pt-2 text-base">
-              <span className="underline underline-offset-4">
-                {bookingDays < 30
-                  ? `₹${price} x ${bookingDays} ${bookingDays > 1 ? 'nights' : 'night'}`
-                  : `Total for ${bookingDays} nights`}
-              </span>
-              <span className=" fott-medium">₹{price * bookingDays}</span>
-            </div>
-            <div className="my-5">
-              {isSameUser ? (
-                <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
-                  {`You can't book your own place`}
-                </div>
-              ) : isValidBookingWindow ? (
-                <>
-                  <button
-                    disabled={bookingLoading}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] disabled:cursor-not-allowed"
-                    onClick={onBooking}
-                  >
-                    <Loader2
-                      className={`mr-2 size-[28px] animate-spin ${bookingLoading ? 'block transition-all ease-in-out' : 'hidden transition-all ease-in-out'}`}
-                    />
-                    <span
-                      className={`${bookingLoading ? 'hidden transition-all ease-in-out' : 'block transition-all ease-in-out'}`}
-                    >
-                      Reserve
-                    </span>
-                  </button>
-                  <div className="pt-2 text-center text-sm font-light">
-                    {` You won't be charged yet`}
-                  </div>
-                </>
-              ) : (
-                <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
-                  Dates not available
-                </div>
-              )}
-            </div>
+                <DropdownMenuItem className="w-fit cursor-pointer items-center border border-input px-5 text-center text-base">
+                  Close
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
+          <div className="flex items-center justify-end space-x-5 pt-2 text-base">
+            <span className="underline underline-offset-4">
+              {bookingDays < 30
+                ? `₹${price} x ${bookingDays} ${bookingDays > 1 ? 'nights' : 'night'}`
+                : `Total for ${bookingDays} nights`}
+            </span>
+            <span className=" fott-medium">₹{price * bookingDays}</span>
+          </div>
+          <div className="my-5">
+            {isSameUser ? (
+              <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
+                {`You can't book your own place`}
+              </div>
+            ) : isValidBookingWindow ? (
+              <>
+                <button
+                  disabled={bookingLoading}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 py-3 text-lg font-bold text-white shadow-md duration-200 active:scale-[99%] disabled:cursor-not-allowed"
+                  onClick={onBooking}
+                >
+                  <Loader2
+                    className={`mr-2 size-[28px] animate-spin ${bookingLoading ? 'block transition-all ease-in-out' : 'hidden transition-all ease-in-out'}`}
+                  />
+                  <span
+                    className={`${bookingLoading ? 'hidden transition-all ease-in-out' : 'block transition-all ease-in-out'}`}
+                  >
+                    Reserve
+                  </span>
+                </button>
+                <div className="pt-2 text-center text-sm font-light">
+                  {` You won't be charged yet`}
+                </div>
+              </>
+            ) : (
+              <div className="w-full rounded-lg  bg-gray-500 bg-gradient-to-r py-3 text-center text-lg font-bold text-white opacity-30 shadow-md ">
+                Dates not available
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="pt-3">
           <Separator className="my-4 py-[1px]" />
           <div className="">
             <span className="pb-5 text-xl font-semibold">House Rules</span>
@@ -704,83 +693,82 @@ export default function MobilePlace({
               Cancellation policy
             </span>
             <Drawer>
-  <div className="flex max-w-md flex-col text-left text-[13px]">
-    <span>Free cancellation for 48 hours.</span>
-    <span className="text-wrap pt-3">
-      Review the full cancellation policy which applies even if you
-      cancel for illness or disruptions caused by COVID-19.
-    </span>
-  </div>
-  <DrawerTrigger className="w-full">
-    <div className="gap-.5 mt-2 flex items-center font-medium underline">
-      Show More <ChevronRight strokeWidth={1.25} size={20} />
-    </div>
-  </DrawerTrigger>
-  <DrawerContent className="h-full max-h-[95vh] px-4">
-    <DrawerClose className="flex w-full">
-      <div className="-ml-1 items-start ">
-        <ChevronLeft strokeWidth={1.25} size={30} />
-      </div>
-    </DrawerClose>
-    <DrawerTitle className="pt-5 text-start text-2xl font-bold ">
-      Cancellation policy
-    </DrawerTitle>
-    <span className="pb-5 pt-1 text-sm font-light">
-      {`Before you book, make sure you're comfortable with this Host's cancellation policy. Keep in mind that Airbnb's Extenuating Circumstances policy doesn't cover cancellations due to illness or travel disruptions caused by COVID-19.`}
-    </span>
-    <DrawerDescription className="text-wrap pt-5 text-start text-base">
-      <ScrollArea className="h-[90vh] w-full">
-        <div className="py-5">
-          <span className="pb-3 text-lg font-semibold text-black">
-            Cancel By{' '}
-          </span>
-          {date &&
-          date.to &&
-          date.to instanceof Date &&
-          !isNaN(date.to.getTime()) ? (
-            <div className="flex flex-col space-y-3 ">
-              <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
-                <span className="pr-2 min-w-max text-start  font-medium">
-                  {new Date(
-                    date.to.getTime() - 24 * 60 * 60 * 1000,
-                  ).toLocaleDateString(undefined, {
-                    day: 'numeric',
-                    month: 'short',
-                  })}
-                </span>
-
-                <span>
-                  Full refund: Get back 100% of what you paid.
+              <div className="flex max-w-md flex-col text-left text-[13px]">
+                <span>Free cancellation for 48 hours.</span>
+                <span className="text-wrap pt-3">
+                  Review the full cancellation policy which applies even if you
+                  cancel for illness or disruptions caused by COVID-19.
                 </span>
               </div>
-              <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
-                <span className="pr-2 min-w-max text-start  font-medium">
-                  {new Date(date.to.getTime()).toLocaleDateString(
-                    undefined,
-                    {
-                      day: 'numeric',
-                      month: 'short',
-                    },
-                  )}
+              <DrawerTrigger className="w-full">
+                <div className="gap-.5 mt-2 flex items-center font-medium underline">
+                  Show More <ChevronRight strokeWidth={1.25} size={20} />
+                </div>
+              </DrawerTrigger>
+              <DrawerContent className="h-full max-h-[95vh] px-4">
+                <DrawerClose className="flex w-full">
+                  <div className="-ml-1 items-start ">
+                    <ChevronLeft strokeWidth={1.25} size={30} />
+                  </div>
+                </DrawerClose>
+                <DrawerTitle className="pt-5 text-start text-2xl font-bold ">
+                  Cancellation policy
+                </DrawerTitle>
+                <span className="pb-5 pt-1 text-sm font-light">
+                  {`Before you book, make sure you're comfortable with this Host's cancellation policy. Keep in mind that Airbnb's Extenuating Circumstances policy doesn't cover cancellations due to illness or travel disruptions caused by COVID-19.`}
                 </span>
+                <DrawerDescription className="text-wrap pt-5 text-start text-base">
+                  <ScrollArea className="h-[90vh] w-full">
+                    <div className="py-5">
+                      <span className="pb-3 text-lg font-semibold text-black">
+                        Cancel By{' '}
+                      </span>
+                      {date &&
+                      date.to &&
+                      date.to instanceof Date &&
+                      !isNaN(date.to.getTime()) ? (
+                        <div className="flex flex-col space-y-3 ">
+                          <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
+                            <span className="min-w-max pr-2 text-start  font-medium">
+                              {new Date(
+                                date.to.getTime() - 24 * 60 * 60 * 1000,
+                              ).toLocaleDateString(undefined, {
+                                day: 'numeric',
+                                month: 'short',
+                              })}
+                            </span>
 
-                <span>
-                  Partial refund: Get back every night but the
-                  first one. No refund of the first night or the
-                  service fee.
-                </span>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </ScrollArea>
-    </DrawerDescription>
-  </DrawerContent>
-</Drawer>
+                            <span>
+                              Full refund: Get back 100% of what you paid.
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-3 border-b border-gray-300 py-5 text-base font-light text-black ">
+                            <span className="min-w-max pr-2 text-start  font-medium">
+                              {new Date(date.to.getTime()).toLocaleDateString(
+                                undefined,
+                                {
+                                  day: 'numeric',
+                                  month: 'short',
+                                },
+                              )}
+                            </span>
+
+                            <span>
+                              Partial refund: Get back every night but the first
+                              one. No refund of the first night or the service
+                              fee.
+                            </span>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  </ScrollArea>
+                </DrawerDescription>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
       </div>
     </section>
   );
 }
-

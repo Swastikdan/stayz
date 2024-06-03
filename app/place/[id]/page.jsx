@@ -489,7 +489,43 @@ export default function PlacePage({ params }) {
   }
 
   return (
-    <>
+    <><div className="flex w-full sm:hidden min-h-screen items-start justify-start align-top object-top ">
+        <MobilePlace
+          place={state.place}
+          isFavoritePlace={state.isFavoritePlace}
+          onFavoriteClick={handleFavoriteClick}
+          adults={state.adults}
+          setAdults={(value) =>
+            setState((prevState) => ({ ...prevState, adults: value }))
+          }
+          childrens={state.childrens}
+          setChildrens={(value) =>
+            setState((prevState) => ({ ...prevState, childrens: value }))
+          }
+          infants={state.infants}
+          setInfants={(value) =>
+            setState((prevState) => ({ ...prevState, infants: value }))
+          }
+          pets={state.pets}
+          setPets={(value) =>
+            setState((prevState) => ({ ...prevState, pets: value }))
+          }
+          date={state.date}
+          setDate={(value) =>
+            setState((prevState) => ({ ...prevState, date: value }))
+          }
+          bookingDays={state.bookingdays}
+          setBookingDays={(value) =>
+            setState((prevState) => ({ ...prevState, bookingdays: value }))
+          }
+          onBooking={handleBooking}
+          isValidDates={state.isValidDates}
+          isValidBookingWindow={state.isValidBookingWindow}
+          isAvailable={state.isValidBookingWindow && state.isValidDates}
+          bookingLoading={state.bookingLoading}
+          isSameUser={state.isSameUser}
+        />
+      </div>
       <div className="flex w-full flex-col items-center justify-start">
         <div className="hidden px-4 sm:flex ">
           <DesktopPlace
@@ -529,43 +565,7 @@ export default function PlacePage({ params }) {
           />
         </div>
       </div>
-      <div className="flex w-full sm:hidden min-h-screen items-start justify-start align-top object-top ">
-        <MobilePlace
-          place={state.place}
-          isFavoritePlace={state.isFavoritePlace}
-          onFavoriteClick={handleFavoriteClick}
-          adults={state.adults}
-          setAdults={(value) =>
-            setState((prevState) => ({ ...prevState, adults: value }))
-          }
-          childrens={state.childrens}
-          setChildrens={(value) =>
-            setState((prevState) => ({ ...prevState, childrens: value }))
-          }
-          infants={state.infants}
-          setInfants={(value) =>
-            setState((prevState) => ({ ...prevState, infants: value }))
-          }
-          pets={state.pets}
-          setPets={(value) =>
-            setState((prevState) => ({ ...prevState, pets: value }))
-          }
-          date={state.date}
-          setDate={(value) =>
-            setState((prevState) => ({ ...prevState, date: value }))
-          }
-          bookingDays={state.bookingdays}
-          setBookingDays={(value) =>
-            setState((prevState) => ({ ...prevState, bookingdays: value }))
-          }
-          onBooking={handleBooking}
-          isValidDates={state.isValidDates}
-          isValidBookingWindow={state.isValidBookingWindow}
-          isAvailable={state.isValidBookingWindow && state.isValidDates}
-          bookingLoading={state.bookingLoading}
-          isSameUser={state.isSameUser}
-        />
-      </div>
+      
     </>
   );
 }

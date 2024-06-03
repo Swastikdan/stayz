@@ -83,5 +83,5 @@ export default async function layout({ params, children }) {
     }
   }
 
-  return <main className="min-h-screen">{children}</main>;
+  return <main className="min-h-screen align-top object-top">{children}</main>;
 }

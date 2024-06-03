@@ -140,7 +140,7 @@ export default function RootLayout({ children }) {
       </>
       <head />
       <body
-        className={`${GeistSans.className}  overflow-y-auto 
+        className={`${GeistSans.className}  
           scroll-smooth 
      `}
       >
