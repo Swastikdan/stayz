@@ -93,7 +93,6 @@ export default function DashboardBooking() {
     }
   };
 
-
   //     for that booking here to fix this "payment": [
   //   {
   //     "status": "paid"
@@ -253,7 +252,6 @@ export default function DashboardBooking() {
                                   </span>
                                 </div>
                               </TableHead>
-
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -295,10 +293,16 @@ export default function DashboardBooking() {
                                     <div className="flex items-center space-x-2 px-2 py-1 font-medium">
                                       <Avatar>
                                         <AvatarImage
-                                          src={booking.user.image.replace(
-                                            '/upload/',
-                                            '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
-                                          )}
+                                          src={
+                                            booking.user.image.includes(
+                                              '/upload/',
+                                            )
+                                              ? booking.user.image.replace(
+                                                  '/upload/',
+                                                  '/upload/w_200,h_200,c_fill,g_auto/q_auto/f_auto/',
+                                                )
+                                              : booking.user.image
+                                          }
                                           alt="User Image"
                                         />
                                         <AvatarFallback>

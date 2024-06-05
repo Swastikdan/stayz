@@ -251,7 +251,7 @@ export default function UserListings() {
                                   </span>
                                 </div>
                               </TableHead>
-                              <TableHead
+                              {/* <TableHead
                                 scope="col"
                                 className="px-2 py-1 text-start"
                               >
@@ -260,7 +260,7 @@ export default function UserListings() {
                                     Removal Request
                                   </span>
                                 </div>
-                              </TableHead>
+                              </TableHead> */}
                               <TableHead
                                 scope="col"
                                 className="px-2 py-1 text-start"
@@ -332,7 +332,7 @@ export default function UserListings() {
                                       </span>
                                     </div>
                                   </TableCell>
-                                  <TableCell className="size-px whitespace-nowrap">
+                                  {/* <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-2 py-1">
                                       {listing.deleterequst == true ||
                                       listing.status === 'rejected' ? (
@@ -365,7 +365,7 @@ export default function UserListings() {
                                         </button>
                                       )}
                                     </div>
-                                  </TableCell>
+                                  </TableCell> */}
                                   <TableCell className="size-px whitespace-nowrap">
                                     <div className="px-6 py-3">
                                       <Link
