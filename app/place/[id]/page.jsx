@@ -380,21 +380,22 @@ const handleFavoriteClick = async () => {
     }
   };
 
-  const bookingStatus = searchParams.get('bookingStatus');
+  
 
   useEffect(() => {
-    if (bookingStatus && bookingStatus === 'cancel') {
+    const bookingStatus = searchParams.get('bookingStatus');
+    if (bookingStatus && bookingStatus === 'success') {
+      toast.success('Booking successful');
+      router.push(`/dashboard/bookings/`);
+    }else if (bookingStatus && bookingStatus === 'cancel') {
       toast.error('Booking Unsuccessful');
       router.replace(`/place/${id}`);
-    } else if (bookingStatus && bookingStatus === 'success') {
-      toast.success('Booking successful');
-      router.replace(`/dashboard/bookings/`);
     } else if (bookingStatus && bookingStatus === 'error') {
       toast.error('Booking failed');
     } else if (bookingStatus && bookingStatus) {
       toast.error('Booking failed');
     }
-  }, [bookingStatus, router, id]);
+  }, [searchParams, router, id]);
 
   // if the session.user.id is equal to the place.ownerId then the isSameUser will be set to true
   useEffect(() => {

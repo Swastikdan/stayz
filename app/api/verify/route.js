@@ -72,7 +72,7 @@ export async function POST(request) {
           const newBooking = await prisma.bookings.create({
             data: {
               ...tempBooking,
-              status: 'approved',
+              status: 'processing',
               paymentLink: null, // Remove the payment link
             },
           });

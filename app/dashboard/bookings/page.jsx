@@ -437,22 +437,9 @@ export default function DashboardBooking() {
                                       {booking.cancelRequest == true ||
                                       booking.status === 'cancelled' ||
                                       booking.status === 'rejected' ||
-                                      booking.cancelRejection === true ||
-                                      (function () {
-                                        const currentDate = new Date();
-                                        const checkInDate = new Date(
-                                          booking.checkIn,
-                                        );
-                                        //console.log(checkInDate);
-                                        const diffTime = Math.abs(
-                                          checkInDate - currentDate,
-                                        );
-                                        const diffDays = Math.ceil(
-                                          diffTime / (1000 * 60 * 60 * 24),
-                                        );
-                                        //console.log(diffDays);
-                                        return diffDays < 2;
-                                      })() ? (
+                                      booking.cancelRejection === true || 
+                                      new Date(booking.checkIn) < new Date()
+                                      ? (
                                         <div
                                           disabled
                                           className="inline-flex select-none items-center gap-x-2 rounded-lg border-2 border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 opacity-50 shadow-sm hover:bg-gray-50 disabled:pointer-events-none disabled:cursor-none disabled:opacity-50 "

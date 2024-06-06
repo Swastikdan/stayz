@@ -272,7 +272,6 @@ export default function CreatePlace() {
       return;
     } else {
       toast.success('Place created successfully');
-      router.push(`/places/new/${formdata.id}/`);
       setLoading(false);
     }
   };

@@ -99,7 +99,7 @@ if (diffDays > 2) {
       id: bookingId,
     },
     data: {
-      status: 'cancelled',
+      cancelRequest: true,
     },
   });
 } else {

@@ -152,6 +152,11 @@ export async function POST(request) {
         },
         { status: 500 },
       );
+    } finally{
+      // delte the temp booking
+      await prisma.tempbookings.delete({
+        where: { sessionId },
+      });
     }
   }
 }

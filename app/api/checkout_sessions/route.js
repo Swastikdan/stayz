@@ -18,20 +18,20 @@ export async function POST(request) {
 
   try {
     // Check if customer already exists
-    let customers = await stripe.customers.list({ email: user.email });
-    let customerId;
+    // let customers = await stripe.customers.list({ email: user.email });
+    // let customerId;
 
-    if (customers.data.length) {
-      customerId = customers.data[0].id;
-    } else {
-      // Create customer if not exists
-      const customer = await stripe.customers.create({
-        email: user.email,
-        name: user.name,
-      });
+    // if (customers.data.length) {
+    //   customerId = customers.data[0].id;
+    // } else {
+    //   // Create customer if not exists
+    //   const customer = await stripe.customers.create({
+    //     email: user.email,
+    //     name: user.name,
+    //   });
 
-      customerId = customer.id;
-    }
+    //   customerId = customer.id;
+    // }
     // log the customer data
     // Create checkout session
     // Create checkout session
