@@ -53,41 +53,8 @@ export default function PlacePage({ params }) {
     }
   }, [state.adults]);
 
-  // get the firstbookingWindow for the state  firstbookingWindow and set the dates to that with the correct formateing if needed
+ 
 
-  //  "firstbookingWindow": {
-  //   "availableFrom": "2024-05-30T18:30:00.000Z",
-  //   "availableTo": "2025-05-18T14:10:30.000Z"
-  // },
-
-  useEffect(() => {
-    if (state.firstbookingWindow) {
-      const now = new Date();
-      const availableFrom = new Date(state?.firstbookingWindow?.availableFrom);
-      const availableTo = new Date(state?.firstbookingWindow?.availableTo);
-      const minimumStay = Number(state?.place?.minimumStay) || 1; // assuming state.place.minimumStay holds the minimum stay duration
-
-      if (now < availableFrom) {
-        setState((prevState) => ({
-          ...prevState,
-          date: {
-            from: availableFrom,
-            to: addDays(availableFrom, minimumStay),
-          },
-        }));
-      } else {
-        setState((prevState) => ({
-          ...prevState,
-          date: {
-            from: now,
-            to: addDays(now, minimumStay),
-          },
-        }));
-      }
-
-      setState((prevState) => ({ ...prevState, bookingdays: minimumStay }));
-    }
-  }, [state?.firstbookingWindow, state?.place?.minimumStay]);
 
   // Helper function to fetch place data
   const fetchPlaceData = useCallback(async () => {
@@ -168,7 +135,7 @@ export default function PlacePage({ params }) {
   // Fetch place data on mount and when id changes
   useEffect(() => {
     fetchPlaceData();
-  }, [id, fetchPlaceData]);
+  }, [id, fetchPlaceData ]);
 
   // Check if place is favorite when favorites or id changes
   useEffect(() => {
@@ -260,91 +227,68 @@ export default function PlacePage({ params }) {
       }));
     }
   }, [state.date]);
+useEffect(() => {
+  if (state?.firstbookingWindow) {
+    const now = new Date();
+    const availableFrom = new Date(state.firstbookingWindow.availableFrom);
+    const availableTo = new Date(state.firstbookingWindow.availableTo);
+    const minimumStay = Number(state?.place?.minimumStay) || 1;
 
-  // Handle favorite click
-  const handleFavoriteClick = () => {
-    if (session) {
+    // Convert to local time
+    availableFrom.setMinutes(
+      availableFrom.getMinutes() - availableFrom.getTimezoneOffset(),
+    );
+    availableTo.setMinutes(
+      availableTo.getMinutes() - availableTo.getTimezoneOffset(),
+    );
+
+    if (now < availableFrom) {
+      console.log('now:', now);
+      console.log('availableFrom:', availableFrom);
+      console.log('minimumStay:', minimumStay);
+      const newToDate = addDays(availableFrom, minimumStay);
+ 
+
       setState((prevState) => ({
         ...prevState,
-        isFavoritePlace: !prevState.isFavoritePlace,
+        date: {
+          from: availableFrom,
+          to: newToDate,
+        },
+      }));
+      console.log('this runs');
+    } else if (now <= availableTo) {
+      setState((prevState) => ({
+        ...prevState,
+        date: {
+          from: now,
+          to: addDays(now, minimumStay),
+        },
       }));
     }
-    toggleLike(id);
-  };
 
-  // Handle booking
-  // const handleBooking = async () => {
-  //   setState((prevState) => ({ ...prevState, bookingLoading: true }));
-  //   try {
-  //     const stripe = await loadStripe(
-  //       process.env.NEXT_PUBLIC_TEST_STRIPE_PUBLISHABLE_KEY,
-  //     );
-  //     if (!stripe) {
-  //       toast.error('Something went wrong. Please try again.');
-  //       throw new Error('Stripe failed to initialize.');
-  //     }
-  //     const order = [
-  //       {
-  //         price_data: {
-  //           currency: 'inr',
-  //           product_data: {
-  //             name: state.place.title,
-  //             images: state.place.photos.slice(0, 8),
-  //           },
-  //           unit_amount: Number(state.place.price * state.bookingdays * 100),
-  //         },
-  //         quantity: 1,
-  //       },
-  //     ];
-  //     const redirecturl = `${window.location.origin}/place/${id}`;
-  //     const successurl = `${window.location.origin}/place/${id}?`;
-  //     const checkoutResponse = await fetch('/api/checkout_sessions', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ order, redirecturl, successurl }),
-  //     });
-  //     const { sessionId } = await checkoutResponse.json();
-  //     const bookingData = {
-  //       placeId: id,
-  //       checkIn: state.date.from,
-  //       checkOut: state.date.to,
-  //       adults: state.adults,
-  //       childrens: state.childrens,
-  //       infants: state.infants,
-  //       pets: state.pets,
-  //       price: state.place.price * state.bookingdays,
-  //       sessionId,
-  //       userId: session.user.id,
-  //     };
-  //     try {
-  //       const response = await fetch('/api/booking', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(bookingData),
-  //       });
-  //       const data = await response.json();
-  //       if (data.code === 200) {
-  //         const stripeError = await stripe.redirectToCheckout({ sessionId });
-  //         if (stripeError) {
-  //           toast.error(stripeError);
-  //           console.error(stripeError, 'Stripe error');
-  //         }
-  //       } else {
-  //         toast.error('Booking Error. Please try again.');
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast.error(error);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error(error);
-  //   }
-  // };
+    setState((prevState) => ({ ...prevState, bookingdays: minimumStay }));
+  }
+}, [state.firstbookingWindow, state?.place?.minimumStay]);
+  // Handle favorite click
+const handleFavoriteClick = async () => {
+  if (session && session.user) {
+    let newFavoriteState = !state.isFavoritePlace;
+    const response = await toggleLike(id);
+    if (response == 'error') {
+      newFavoriteState = state.isFavoritePlace;
+    }
+    setState((prevState) => {
+      return {
+        ...prevState,
+        isFavoritePlace: newFavoriteState,
+      };
+    });
+  }else {
+    router.push('/login');
+ }
+};
+
   const handleBooking = async () => {
     if (!state.isValidDates) {
       toast.error('Invalid Dates');
@@ -439,15 +383,15 @@ export default function PlacePage({ params }) {
   const bookingStatus = searchParams.get('bookingStatus');
 
   useEffect(() => {
-    if (bookingStatus === 'cancel') {
+    if (bookingStatus && bookingStatus === 'cancel') {
       toast.error('Booking Unsuccessful');
       router.replace(`/place/${id}`);
-    } else if (bookingStatus === 'success') {
+    } else if (bookingStatus && bookingStatus === 'success') {
       toast.success('Booking successful');
       router.replace(`/dashboard/bookings/`);
-    } else if (bookingStatus === 'error') {
+    } else if (bookingStatus && bookingStatus === 'error') {
       toast.error('Booking failed');
-    } else if (bookingStatus) {
+    } else if (bookingStatus && bookingStatus) {
       toast.error('Booking failed');
     }
   }, [bookingStatus, router, id]);

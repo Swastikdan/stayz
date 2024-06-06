@@ -149,8 +149,8 @@ useEffect(() => {
                 </div> */}
                   </div>
                   <span className="  text-[15px] font-light text-gray-500">
-                    {place.title.substring(0, 40) +
-                      (place.title.length > 40 ? '...' : '')}
+                    {place.title.substring(0, 36) +
+                      (place.title.length > 36 ? '...' : '')}
                   </span>
                   {/* <span className="py-0.5 text-[15px] font-light text-gray-500">
                 10-12 Mar

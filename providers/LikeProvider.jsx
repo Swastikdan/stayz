@@ -29,53 +29,54 @@ export const LikeProvider = ({ children }) => {
         });
     }
   }, [session?.user]);
-  const toggleLike = async (roomId) => {
-    if (!session) {
-      router.push('/login');
-      return;
-    }
 
-    setFavorites((prevFavorites) => {
-      const favoritesIds = prevFavorites.map((favorite) => favorite.id);
-      if (favoritesIds.includes(roomId)) {
-        return prevFavorites.filter((favorite) => favorite.id !== roomId);
-      } else {
-        return [...prevFavorites, { id: roomId }];
-      }
+
+  const toggleLike = async (roomId) => {
+  if (!session && !session.user) {
+    router.push('/login');
+    return;
+  }
+
+  let previousState;
+  setFavorites((prevFavorites) => {
+    previousState = [...prevFavorites]; // Keep a copy of the previous state
+
+    const favoritesIds = prevFavorites.map((favorite) => favorite.id);
+    if (favoritesIds.includes(roomId)) {
+      return prevFavorites.filter((favorite) => favorite.id !== roomId);
+    } else {
+      return [...prevFavorites, { id: roomId }];
+    }
+  });
+
+  try {
+    const response = await fetch('/api/user/favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ placeId: roomId }),
     });
 
-    try {
-      const response = await fetch('/api/user/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ placeId: roomId }),
-      });
+    const data = await response.json();
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
-
-      setMessage(data.message);
-      toast.success(data.message);
-    } catch (error) {
-      setMessage(error.message);
-      toast.error(error.message);
-
-      // Revert back to previous state
-      setFavorites((prevFavorites) => {
-        const favoritesIds = prevFavorites.map((favorite) => favorite.id);
-        if (favoritesIds.includes(roomId)) {
-          return [...prevFavorites, { id: roomId }];
-        } else {
-          return prevFavorites.filter((favorite) => favorite.id !== roomId);
-        }
-      });
+    if (!response.ok) {
+      throw new Error(data.message || 'Something went wrong');
     }
-  };
+
+    setMessage(data.message);
+    toast.success(data.message);
+    return 'success'
+  } catch (error) {
+    setMessage(error.message);
+    toast.error(error.message);
+    
+
+    // Revert back to previous state
+    setFavorites(previousState);
+    return 'error';
+  }
+};
 
   return (
     <LikeContext.Provider
@@ -87,3 +88,50 @@ export const LikeProvider = ({ children }) => {
 };
 
 export const useLikeContext = () => useContext(LikeContext);
+  // const toggleLike = async (roomId) => {
+  //   if (!session) {
+  //     router.push('/login');
+  //     return;
+  //   }
+
+  //   setFavorites((prevFavorites) => {
+  //     const favoritesIds = prevFavorites.map((favorite) => favorite.id);
+  //     if (favoritesIds.includes(roomId)) {
+  //       return prevFavorites.filter((favorite) => favorite.id !== roomId);
+  //     } else {
+  //       return [...prevFavorites, { id: roomId }];
+  //     }
+  //   });
+
+  //   try {
+  //     const response = await fetch('/api/user/favorites', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ placeId: roomId }),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (!response.ok) {
+  //       throw new Error(data.message || 'Something went wrong');
+  //     }
+
+  //     setMessage(data.message);
+  //     toast.success(data.message);
+  //   } catch (error) {
+  //     setMessage(error.message);
+  //     toast.error(error.message);
+
+  //     // Revert back to previous state
+  //     setFavorites((prevFavorites) => {
+  //       const favoritesIds = prevFavorites.map((favorite) => favorite.id);
+  //       if (favoritesIds.includes(roomId)) {
+  //         return [...prevFavorites, { id: roomId }];
+  //       } else {
+  //         return prevFavorites.filter((favorite) => favorite.id !== roomId);
+  //       }
+  //     });
+  //   }
+  // };

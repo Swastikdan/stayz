@@ -11,11 +11,12 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLikeContext } from '@/providers/LikeProvider';
+import { useRouter } from 'next/navigation';
 
 export default function ImageSlider({ customButton, images, id , link }) {
   const { data: session } = useSession();
   const { favorites, toggleLike } = useLikeContext();
-
+  const router = useRouter();
   const [isFavoritePlace, setIsFavoritePlace] = useState(false);
 
   useEffect(() => {
@@ -24,12 +25,19 @@ export default function ImageSlider({ customButton, images, id , link }) {
     }
   }, [favorites, id]);
 
-  const handleFavoriteClick = () => {
-    if (session) {
-      setIsFavoritePlace(!isFavoritePlace);
+const handleFavoriteClick = async () => {
+ if(session && session.user) {
+    let newFavoriteState = !isFavoritePlace;
+    setIsFavoritePlace(newFavoriteState);
+    const response = await toggleLike(id);
+    console.log(response);
+    if (response == 'error') {
+      setIsFavoritePlace(!newFavoriteState);
     }
-    toggleLike(id);
-  };
+ } else {
+    router.push('/login');
+ }
+};
 
   return (
     <>

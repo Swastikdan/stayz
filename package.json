@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.1.0",
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.15.0",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
@@ -41,7 +41,7 @@
     "next-themes": "^0.3.0",
     "path": "^0.12.7",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "prisma": "^5.14.0",
+    "prisma": "^5.15.0",
     "razorpay": "^2.9.4",
     "react": "^19.0.0-rc-6d3110b4d9-20240531",
     "react-day-picker": "^8.10.1",
