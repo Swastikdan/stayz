@@ -12,7 +12,7 @@
 # next.js
 /.next/
 /out/
-/servers
+
 # production
 /build
 
@@ -35,7 +35,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
-stripe.js
-/app/servers
-test.js
-app/api/hello/route.js

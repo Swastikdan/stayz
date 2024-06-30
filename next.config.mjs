@@ -35,9 +35,6 @@ const nextConfig = {
       //   permanent: true,
       // },
     ];
-  },
-  experimental: {
-    reactCompiler: true,
-  },
+  }
 };
 export default nextConfig;
