@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import validator from 'validator';
-import axios from 'axios';
+// import axios from 'axios';
 import { toast } from 'sonner';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 export default function Register() {
@@ -113,44 +113,48 @@ export default function Register() {
        return knownEmailAliases.includes(email);
      };
 
-     const handleSubmit = async (e) => {
-       e.preventDefault();
-       // Check if there are any validation errors
-       const hasErrors = Object.values(validationErrors).some(
-         (error) => error !== '',
-       );
-       if (hasErrors) {
-         toast.error('Please correct the validation errors before submitting.');
-         return;
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+     // Check if there are any validation errors
+     const hasErrors = Object.values(validationErrors).some(
+       (error) => error !== '',
+     );
+     if (hasErrors) {
+       toast.error('Please correct the validation errors before submitting.');
+       return;
+     }
+
+     try {
+       setLoading(true);
+       const response = await fetch('/api/auth/register', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({
+           name: formData.name,
+           email: formData.email,
+           password: formData.password,
+         }),
+       });
+
+       if (!response.ok) {
+         throw response;
        }
 
-       try {
-         setLoading(true);
-         await axios.post(
-           '/api/auth/register',
-           {
-             name: formData.name,
-             email: formData.email,
-             password: formData.password,
-           },
-           {
-             headers: {
-               'Content-Type': 'application/json',
-             },
-           },
-         );
-         setLoading(false);
-         toast.success('User registered successfully.');
-         router.push('/login');
-       } catch (error) {
-         setLoading(false);
-         if (error.response.status === 401) {
-           toast.error('User already exists.');
-         } else {
-           toast.error('Error registering user.');
-         }
+       setLoading(false);
+       toast.success('User registered successfully.');
+       router.push('/login');
+     } catch (error) {
+       setLoading(false);
+       if (error.status === 401) {
+         toast.error('User already exists.');
+       } else {
+         const errorMessage = await error.text();
+         toast.error(`Error registering user: ${errorMessage}`);
        }
-     };
+     }
+   };
        async function handleOauthSignin(
          provider,
          callbackUrl = `${window.location.origin}?type=${provider}&login=true`,
